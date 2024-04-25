@@ -1,1 +1,6 @@
 git_notes.txt
+.DS_store
+commands.txt
+readline.c
+sigset.c
+test.c
