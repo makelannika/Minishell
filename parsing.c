@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/04/27 17:13:51 by amakela          ###   ########.fr       */
+/*   Updated: 2024/04/28 17:24:40 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ char	*get_redir(char *string)
 	return (NULL);
 }
 
-// makes the 2d array to store all redirections of a process
+// makes the 2d array to store all redirections of a single process
 void	get_redirs(char	*string, t_node *node)
 {
 	int	i;
@@ -132,9 +132,9 @@ void	get_redirs(char	*string, t_node *node)
 	in_quotes = -1;
 	in_double_quotes = -1;
 	count = counter(string, '<') + counter(string, '>');
-	if (count == 0)
+	node->redirs = malloc(sizeof(char *) * (count + 1));
+	if (!node->redirs)
 		return ;
-	node->redirs = malloc(sizeof(char *) * (count + 1)); // check malloc
 	while (string[i])
 	{
 		if (string[i] == '\'')
@@ -142,10 +142,58 @@ void	get_redirs(char	*string, t_node *node)
 		else if (string[i] == '\"')
 			in_double_quotes *= -1;
 		if ((string[i] == '<' || string[i] == '>') && (in_quotes == -1 & in_double_quotes == -1))
-			node->redirs[j++] = get_redir(&string[i]); // check malloc
+		{
+			node->redirs[j++] = get_redir(&string[i]); 
+			if (!node->redirs[j - 1])
+			{
+				free_str_array(node->redirs);
+				return ;
+			}
+		}
 		i++;
 	}
 	node->redirs[j] = NULL;
+}
+
+// frees the array of redirs
+void	free_str_array(char **array)
+{
+	ft_printf(1, "in free_str_array\n");
+	int	i;
+
+	i = 0;
+	while (array[i])
+		free(array[i++]);
+	free(array);
+}
+
+// frees a single process node
+void	free_node(t_node *node)
+{
+	if (node->redirs)
+		free_str_array(node->redirs);
+	if (node->cmd)
+		free(node->cmd);
+	free(node);
+}
+
+// frees the list of process nodes
+void	free_list(t_node **processes)
+{
+	t_node	*temp;
+	if (processes == NULL || *processes == NULL)
+	{
+		ft_printf(1, "processes == NULL");
+		return ;
+	}
+	while ((*processes)->next != NULL)
+	{
+		temp = *processes;
+		*processes = (*processes)->next;
+		free_node(temp);
+	}
+	free_node(*processes);
+	processes = NULL;
 }
 
 // creates a node to store information of a single process
@@ -165,7 +213,7 @@ t_node	*create_node()
 }
 
 // parses one process at a time
-void	parse_process(char	*string, t_node **processes)
+t_node	*parse_process(char	*string, t_node **processes)
 {
 	int	i;
 	int	j;
@@ -176,18 +224,25 @@ void	parse_process(char	*string, t_node **processes)
 	node = create_node();
 	if(!node)
 	{
-		// free processes
-		return ;
+		free(string);
+		free_list(processes);
+		return (NULL);
 	}
+	add_back(processes, node);
 	get_redirs(string, node);
 	remove_redirs(string);
 	node->cmd = ft_strtrim(string, " ");
 	free(string);
-	add_back(processes, node);
+	if (!node->redirs || !node->cmd)
+	{
+		free_list(processes);
+		return (NULL);
+	}
+	return (node);
 }
 
 // parses the complete line returned from readline
-void	parse_input(char *line, t_node **processes)
+t_node	**parse_input(char *line, t_node **processes)
 {
 	int	i;
 	int	start;
@@ -204,15 +259,17 @@ void	parse_input(char *line, t_node **processes)
 			in_quotes *= -1;
 		else if (line[i] == '\"')
 			in_double_quotes *= -1;
-		if (line[i] == '|' && (in_quotes == -1 & in_double_quotes == -1))
+		if (line[i] == '|' && in_quotes == -1 && in_double_quotes == -1)
 		{
-			parse_process(ft_substr(line, start, i - start), processes);
+			if (!parse_process(ft_substr(line, start, i - start), processes))
+				return (NULL);
 			start = i + 1;
 		}
-		if (line[i]) 
-			i++;
+		i++;
 	}
-	parse_process(ft_substr(line, start, i - start), processes);
+	if (!parse_process(ft_substr(line, start, i - start), processes))
+		return (NULL);
+	return (processes);
 }
 
 // test main for parsing
@@ -223,16 +280,19 @@ int	main()
 	line = readline("enter a line: ");
 	if (count_quotes(line) % 2 != 0)
 		ft_printf(2, "Error\nUnclosed quotes\n");
-	parse_input(line, &processes);
-	int	i = 0;
-	while (processes != NULL)
-	{
-		i = 0;
-		while (processes->redirs[i])
-			ft_printf(1, "%s\n", processes->redirs[i++]);
-		ft_printf(1, "%s\n", processes->cmd);
-		ft_printf(1, "\n");
-		processes = processes->next;
-	}
+	if (!parse_input(line, &processes))
+		return (-1);
+	free(line);
+	// int	i = 0;
+	// while (processes != NULL)
+	// {
+	// 	i = 0;
+	// 	while (processes->redirs[i])
+	// 		ft_printf(1, "%s\n", processes->redirs[i++]);
+	// 	ft_printf(1, "%s\n", processes->cmd);
+	// 	ft_printf(1, "\n");
+	// 	processes = processes->next;
+	// }
+	free_list(&processes);
 	return (0);
 }
