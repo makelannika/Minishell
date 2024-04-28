@@ -6,7 +6,7 @@
 #    By: amakela <amakela@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/04/24 20:17:12 by amakela          ###   ########.fr        #
+#    Updated: 2024/04/28 17:57:25 by amakela          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ CFLAGS		=	-Wall -Wextra -Werror
 DEBUGFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
 CC			=	cc
 
-CFILES		=	readline.c
+CFILES		=	parsing.c	freeing_utils.c
 
 OFILES		=	$(CFILES:.c=.o)
 

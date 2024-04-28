@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/04/28 17:24:40 by amakela          ###   ########.fr       */
+/*   Updated: 2024/04/28 18:00:19 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	count_quotes(char *string)
 	return (count);
 }
 
-// returns the number of character c outside quotes and single quotes
+// returns the number of character c outside of quotes and single quotes in a string
 int	counter(char *string, char c)
 {
 	int	i;
@@ -118,7 +118,7 @@ char	*get_redir(char *string)
 	return (NULL);
 }
 
-// makes the 2d array to store all redirections of a single process
+// makes a 2d array to store all redirections of a single process
 void	get_redirs(char	*string, t_node *node)
 {
 	int	i;
@@ -153,47 +153,6 @@ void	get_redirs(char	*string, t_node *node)
 		i++;
 	}
 	node->redirs[j] = NULL;
-}
-
-// frees the array of redirs
-void	free_str_array(char **array)
-{
-	ft_printf(1, "in free_str_array\n");
-	int	i;
-
-	i = 0;
-	while (array[i])
-		free(array[i++]);
-	free(array);
-}
-
-// frees a single process node
-void	free_node(t_node *node)
-{
-	if (node->redirs)
-		free_str_array(node->redirs);
-	if (node->cmd)
-		free(node->cmd);
-	free(node);
-}
-
-// frees the list of process nodes
-void	free_list(t_node **processes)
-{
-	t_node	*temp;
-	if (processes == NULL || *processes == NULL)
-	{
-		ft_printf(1, "processes == NULL");
-		return ;
-	}
-	while ((*processes)->next != NULL)
-	{
-		temp = *processes;
-		*processes = (*processes)->next;
-		free_node(temp);
-	}
-	free_node(*processes);
-	processes = NULL;
 }
 
 // creates a node to store information of a single process
