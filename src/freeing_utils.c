@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   freeing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 17:52:16 by amakela           #+#    #+#             */
-/*   Updated: 2024/04/28 17:53:32 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/01 14:20:20 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "minishell.h"
+ #include "../include/minishell.h"
 
 // frees the array of redirs
 void	free_str_array(char **array)

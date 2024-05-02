@@ -1,39 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/31 12:21:12 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/02 18:55:31 by linhnguy         ###   ########.fr       */
+/*   Created: 2024/05/02 16:33:21 by linhnguy          #+#    #+#             */
+/*   Updated: 2024/05/02 18:48:48 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	*ft_memmove(void *dst, const void *src, size_t len)
+void print_in_alpha(char**env)
 {
-	size_t	i;
+	int	i;
+	char *tmp;
+	int array_len;
 
 	i = 0;
-	if ((!dst) && (!src))
-		return (dst);
-	if (dst < src)
+	array_len = array_len(env);
+	while (env[i])
 	{
-		while (i < len)
-		{
-			*((char *)dst + i) = *((char *)src + i);
-			i ++;
-		}
+		
 	}
+}
+//FIXME: DO WE PUT INTO ALPH OR NOT?
+void do_export(char **env, char *cmd)
+{
+	int	i;
+	
+	i = 0;
+	if ((ft_strncmp(cmd, "export", 7) == 0) || (ft_strncmp(cmd, "EXPORT", 7) == 0))
+		execute_export(env)
 	else
-	{
-		while (len > 0)
-		{
-			*((char *)dst + len - 1) = *((char *)src + len - 1);
-			len --;
-		}
-	}
-	return (dst);
+		putstr_in_array(env, cmd);
 }

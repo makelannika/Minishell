@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/04/28 18:00:19 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/02 14:26:40 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 // adds a node to the back of the process list
 void	add_back(t_node **lst, t_node *new)
@@ -236,22 +236,24 @@ int	main()
 {
 	char	*line;
 	t_node	*processes = NULL;
-	line = readline("enter a line: ");
+	extern	char **environ;
+	
+	line = readline("minishell: ");
 	if (count_quotes(line) % 2 != 0)
 		ft_printf(2, "Error\nUnclosed quotes\n");
 	if (!parse_input(line, &processes))
 		return (-1);
 	free(line);
-	// int	i = 0;
-	// while (processes != NULL)
-	// {
-	// 	i = 0;
-	// 	while (processes->redirs[i])
-	// 		ft_printf(1, "%s\n", processes->redirs[i++]);
-	// 	ft_printf(1, "%s\n", processes->cmd);
-	// 	ft_printf(1, "\n");
-	// 	processes = processes->next;
-	// }
+	int	i = 0;
+	while (processes != NULL)
+	{
+		i = 0;
+		while (processes->redirs[i])
+			ft_printf(1, "%s\n", processes->redirs[i++]);
+		ft_printf(1, "%s\n", processes->cmd);
+		ft_printf(1, "\n");
+		processes = processes->next;
+	}
 	free_list(&processes);
 	return (0);
 }
