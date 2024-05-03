@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:25:34 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/02 14:27:15 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:24:24 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,16 @@
 // 	int i; 
 	
 // 	i = 0;
-// 	if (a[1][0] != '-')
+// 	while (a[i])
 // 	{
-// 		ft_printf(2, a[1]);
-// 		return ;
+// 		if (a[1][0] != '-')
+// 		{
+// 			ft_printf(2, a[1]);
+// 			return ;
+// 		}
+// 		else
 // 	}
-// 	else
-	
+// }
 // }
 // echo -nnnnnnnnnnnnnn hello
 // echo -nnnnnnnnnnnnnn-n hello

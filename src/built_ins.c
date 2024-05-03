@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in.c                                         :+:      :+:    :+:   */
+/*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/02 18:47:19 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/03 21:44:32 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,33 @@ void put_pwd(void)
 	ft_printf(1, "%s\n", s);
 }
 
-// TODO: #include <sys/stat.h>
-void do_cd(char *path)
-{
-	if (chdir(path) == -1)
-		ft_printf(2, "%s\n", strerror(errno));
-	
-	//FIXME: change the home directory in the env array too
-	// TODO: mkdir("test", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-}
 
-static void	remove_string(char **src, int index)
+
+void do_cd(char *path, char**environ)
 {
-	free(src[index]);
-	while (src[index + 1])
+    
+	int	i;
+	char *tmp;
+	char *pwd1;
+	char *pwd2;
+	
+    pwd1 = getcwd(NULL, 0);
+	i = 0;
+	if (chdir(path) == -1)
+		dprintf(2, "%s\n", strerror(errno));
+	while (environ[i])
 	{
-		src[index] = src[index + 1];
-		index++;
+		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
+		{
+			pwd2 = getcwd(NULL, 0);
+			tmp = environ[i];
+			environ[i] = ft_strjoin("PWD=", pwd2);
+			free(tmp);
+			break ;
+		}
+		i++;
 	}
-	src[index] = NULL;
+	//FIXME: change old pwd do this in one while loop don't separte function cause you are smart
 }
 
 // FIXME: unset $(env | awk -F= '{print $1}')

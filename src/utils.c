@@ -6,11 +6,11 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 17:38:41 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/02 18:47:43 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/03 19:47:39 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int	array_len(char **a)
 {
@@ -20,4 +20,15 @@ int	array_len(char **a)
 	while(a[i])
 		i++;
 	return (i);
+}
+
+void	remove_string(char **src, int index)
+{
+	free(src[index]);
+	while (src[index + 1])
+	{
+		src[index] = src[index + 1];
+		index++;
+	}
+	src[index] = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/02 17:43:47 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/03 19:48:02 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ typedef	struct node
 
 void	put_env(char **env);
 void	put_pwd(void);
-void	do_cd(char *path);
+void	do_cd(char *path, char **env);
 void	do_unset(char **env, char *key);
+void	sort_strings(char **arr);
 
 /**********************************--LIST_FT--*************************************/
 
@@ -48,8 +49,9 @@ void	free_list(t_node **processes);
 void	free_node(t_node *node);
 void	free_str_array(char **array);
 
-/**********************************--Utils--***************************************/
+/**********************************--UTILS--***************************************/
 
 int		array_len(char **a);
+void	remove_string(char **src, int index);
 
 #endif

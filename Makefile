@@ -6,7 +6,7 @@
 #    By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/05/01 14:25:06 by linhnguy         ###   ########.fr        #
+#    Updated: 2024/05/03 15:35:20 by linhnguy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,18 +17,20 @@ LIBFT		=	$(LIBFTDIR)/libft.a
 
 READLINEH	=	-I ~/.brew/Cellar/readline/8.2.10/include
 READLINELIB	=	-L ~/.brew/Cellar/readline/8.2.10/lib/ -lreadline
+INCLUDE		=	-I /include
 NCURSESLIB	=	-lncurses
 
 CFLAGS		=	-Wall -Wextra -Werror
 DEBUGFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
 CC			=	cc
 
-CFILES		=	src/parsing.c src/freeing_utils.c src/built_in.c src/echo.c
+CFILES		=	src/parsing.c src/freeing_utils.c src/built_ins.c src/echo.c \
+				src/export.c src/utils.c
 
 OFILES		=	$(CFILES:.c=.o)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(READLINEH)
+	$(CC) $(CFLAGS) -c $< -o $@ $(READLINEH) $(INCLUDE)
 
 all: $(NAME)
 

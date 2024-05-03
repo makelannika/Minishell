@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/02 14:26:40 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/03 18:29:41 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,7 @@ int	main()
 	extern	char **environ;
 	
 	line = readline("minishell: ");
+	printf("line: %s\n", line);
 	if (count_quotes(line) % 2 != 0)
 		ft_printf(2, "Error\nUnclosed quotes\n");
 	if (!parse_input(line, &processes))
