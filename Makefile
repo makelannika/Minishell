@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amakela <amakela@student.42.fr>            +#+  +:+       +#+         #
+#    By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/04/24 20:17:12 by amakela          ###   ########.fr        #
+#    Updated: 2024/05/01 14:25:06 by linhnguy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ CFLAGS		=	-Wall -Wextra -Werror
 DEBUGFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
 CC			=	cc
 
-CFILES		=	readline.c
+CFILES		=	src/parsing.c src/freeing_utils.c src/built_in.c src/echo.c
 
 OFILES		=	$(CFILES:.c=.o)
 
