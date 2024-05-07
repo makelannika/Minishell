@@ -5,3 +5,6 @@ readline.c
 sigset.c
 test.c
 test1.c
+echo_test.c
+echo_test.sh
+pseudocode.txt

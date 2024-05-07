@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/02 18:47:19 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/05 21:00:40 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,35 @@ void put_pwd(void)
 	ft_printf(1, "%s\n", s);
 }
 
-// TODO: #include <sys/stat.h>
-void do_cd(char *path)
+void do_cd(char *path, char**environ)
 {
-	if (chdir(path) == -1)
-		ft_printf(2, "%s\n", strerror(errno));
+	int	i;
+	char *oldpwd;
+	char *newpwd;
 	
-	//FIXME: change the home directory in the env array too
-	// TODO: mkdir("test", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-}
-
-static void	remove_string(char **src, int index)
-{
-	free(src[index]);
-	while (src[index + 1])
+    oldpwd = getcwd(NULL, 0);
+	i = 0;
+	if (chdir(path) == -1)
+		dprintf(2, "%s\n", strerror(errno));
+	while (environ[i])
 	{
-		src[index] = src[index + 1];
-		index++;
+		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
+		{
+			newpwd = getcwd(NULL, 0);
+			free(environ[i]);
+			environ[i] = ft_strjoin("PWD=", newpwd);
+			// if (!environ[i])
+			// 	FREE AND PRINT FT
+		}
+		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
+		{
+			free(environ[i]);
+			environ[i] = ft_strjoin("OLDPWD=", oldpwd);
+			// if (!environ[i])
+			// 	FREE FREE AND PRINT FT
+		}
+		i++;
 	}
-	src[index] = NULL;
 }
 
 // FIXME: unset $(env | awk -F= '{print $1}')

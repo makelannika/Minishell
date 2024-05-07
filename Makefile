@@ -17,6 +17,7 @@ LIBFT		=	$(LIBFTDIR)/libft.a
 
 READLINEH	=	-I ~/.brew/Cellar/readline/8.2.10/include
 READLINELIB	=	-L ~/.brew/Cellar/readline/8.2.10/lib/ -lreadline
+INCLUDE		=	-I /include
 NCURSESLIB	=	-lncurses
 
 CFLAGS		=	-Wall -Wextra -Werror
@@ -26,11 +27,11 @@ CC			=	cc
 CFILES		=	src/parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c			\
 				src/pipex.c			src/fd_utils.c			src/check_redirs.c	src/forking.c		\
 				src/cmd_parsing.c	src/list_utils.c		src/get_redirs.c	src/main.c
-					
+
 OFILES		=	$(CFILES:.c=.o)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(READLINEH)
+	$(CC) $(CFLAGS) -c $< -o $@ $(READLINEH) $(INCLUDE)
 
 all: $(NAME)
 

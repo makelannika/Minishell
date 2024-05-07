@@ -77,8 +77,10 @@ void	free_str_array(char **array);
 
 void	put_env(char **env);
 void	put_pwd(void);
-void	do_cd(char *path);
+void	do_cd(char *path, char **env);
 void	do_unset(char **env, char *key);
+void	sort_strings(char **arr);
+void    putstr_in_array(char ***env, char *cmd);
 
 /**********************************--LIST_FT--*************************************/
 
@@ -88,5 +90,6 @@ void	do_unset(char **env, char *key);
 /***********************************--UTILS--**************************************/
 
 int		array_len(char **a);
+void	remove_string(char **src, int index);
 
 #endif
