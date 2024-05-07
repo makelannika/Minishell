@@ -6,44 +6,53 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:25:34 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/03 15:24:24 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/07 13:57:05 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// _Bool check_option(char *s)
-// {
-// 	s++;
-// }
+_Bool check_option(char *a)
+{
+	int p;
 
-// //echo -nnnnnnn -n "home is '$HOME'"
-// void echo(char **new_args, char **envp)
-// {
-// 	_Bool put_newline;
-	
-// 	if (new_args[1][0] == '-')
-// 		put_newline = check_option(new_args[1]);
-// }
-// void	echo(char **a)
-// {
-// 	int i; 
-	
-// 	i = 0;
-// 	while (a[i])
-// 	{
-// 		if (a[1][0] != '-')
-// 		{
-// 			ft_printf(2, a[1]);
-// 			return ;
-// 		}
-// 		else
-// 	}
-// }
-// }
-// echo -nnnnnnnnnnnnnn hello
-// echo -nnnnnnnnnnnnnn-n hello
-// echo -nnnnnnnnnnnnnn -n hello
-// echo -nnnnnnnnnnnnnn-n hello
-// echo " hello         jsjsj"
+	p = 1;
+    if (!a)
+        return (true);
+	while (a[p])
+	{
+		if (a[p] != 'n')
+			return (false);
+		p++;
+	}
+	return (true);
+}
 
+void	do_echo(char **cmd)
+{
+	int		i;
+	
+	i = 1;
+    if (cmd[i] && cmd[i][0] != '-')
+    {
+        ft_printf(1, "%s", cmd[1]);
+        ft_printf(1, "\n");
+        return ;
+    }
+    else
+    {
+        while (cmd[i])
+        {
+            if (check_option(cmd[i]))
+                i++;
+            else
+            {
+                while (cmd[i])
+                    ft_printf(1, "%s", cmd[i++]);
+                return ;
+            }
+        }
+    }
+	if(!(check_option(cmd[1])))
+		ft_printf(1, "\n");
+}

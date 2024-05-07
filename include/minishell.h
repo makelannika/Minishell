@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/03 19:48:02 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:37:24 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	put_pwd(void);
 void	do_cd(char *path, char **env);
 void	do_unset(char **env, char *key);
 void	sort_strings(char **arr);
+void    putstr_in_array(char ***env, char *cmd);
 
 /**********************************--LIST_FT--*************************************/
 

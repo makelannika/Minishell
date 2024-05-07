@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/03 21:44:32 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/05 21:00:40 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,11 @@ void put_pwd(void)
 
 void do_cd(char *path, char**environ)
 {
-    
 	int	i;
-	char *tmp;
-	char *pwd1;
-	char *pwd2;
+	char *oldpwd;
+	char *newpwd;
 	
-    pwd1 = getcwd(NULL, 0);
+    oldpwd = getcwd(NULL, 0);
 	i = 0;
 	if (chdir(path) == -1)
 		dprintf(2, "%s\n", strerror(errno));
@@ -53,15 +51,21 @@ void do_cd(char *path, char**environ)
 	{
 		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
 		{
-			pwd2 = getcwd(NULL, 0);
-			tmp = environ[i];
-			environ[i] = ft_strjoin("PWD=", pwd2);
-			free(tmp);
-			break ;
+			newpwd = getcwd(NULL, 0);
+			free(environ[i]);
+			environ[i] = ft_strjoin("PWD=", newpwd);
+			// if (!environ[i])
+			// 	FREE AND PRINT FT
+		}
+		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
+		{
+			free(environ[i]);
+			environ[i] = ft_strjoin("OLDPWD=", oldpwd);
+			// if (!environ[i])
+			// 	FREE FREE AND PRINT FT
 		}
 		i++;
 	}
-	//FIXME: change old pwd do this in one while loop don't separte function cause you are smart
 }
 
 // FIXME: unset $(env | awk -F= '{print $1}')
