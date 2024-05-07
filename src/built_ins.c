@@ -35,8 +35,6 @@ void put_pwd(void)
 	ft_printf(1, "%s\n", s);
 }
 
-
-
 void do_cd(char *path, char**environ)
 {
 	int	i;
