@@ -1,0 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fd_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/20 17:47:58 by amakela           #+#    #+#             */
+/*   Updated: 2024/05/04 17:10:53 by amakela          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/minishell.h"
+
+// opens and closes correct fds for last child process
+static int	last_child(t_pipex *data, t_node *processes)
+{
+	data->ends[0] = dup(data->read_end);
+	if (data->read_end != -1)
+		close(data->read_end);
+	handle_redirs(processes, data);
+	return (0);
+}
+
+// opens and closes correct fds for middle child processes
+static int	middle_child(t_pipex *data, t_node *processess)
+{
+	int	tmp;
+
+	if (pipe(data->ends) == -1)
+	{
+		ft_printf(2, "Error opening a pipe\n");
+		return (close_and_free(data));
+	}
+	tmp = dup(data->read_end);
+	dup2(data->ends[0], data->read_end);
+	dup2(tmp, data->ends[0]);
+	if (tmp != -1)
+		close(tmp);
+	handle_redirs(processess, data);
+	return (0);
+}
+
+// opens and closes correct fds for first child process
+static int	first_child(t_pipex *data, t_node *processes)
+{
+	data->read_end = dup(data->ends[0]);
+	if (data->ends[0] != -1)
+		close(data->ends[0]);
+	handle_redirs(processes, data);
+	return (0);
+}
+
+// opens and closes correct fds based on the process
+int	get_fds(t_pipex *data, t_node *processes)
+{
+	if (data->count == 0)
+		return (first_child(data, processes));
+	if (data->count == data->cmds - 1)
+		return (last_child(data, processes));
+	else
+		return (middle_child(data, processes));
+}
