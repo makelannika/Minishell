@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_ins.c                                        :+:      :+:    :+:   */
+/*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -34,8 +34,6 @@ void put_pwd(void)
 		ft_printf(2, "%s\n", strerror(errno));
 	ft_printf(1, "%s\n", s);
 }
-
-
 
 void do_cd(char *path, char**environ)
 {

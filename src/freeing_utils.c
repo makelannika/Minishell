@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freeing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 17:52:16 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/01 14:20:20 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/04 17:33:34 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_str_array(char **array)
 }
 
 // frees a single process node
-void	free_node(t_node *node)
+static void	free_node(t_node *node)
 {
 	if (node->redirs)
 		free_str_array(node->redirs);
@@ -50,4 +50,29 @@ void	free_list(t_node **processes)
 	}
 	free_node(*processes);
 	processes = NULL;
+}
+
+// frees pipex data and closes fds
+int	close_and_free(t_pipex *data)
+{
+	int	i;
+
+	i = 0;
+	if (data->ends[0] != -1)
+		close(data->ends[0]);
+	if (data->ends[1])
+		close(data->ends[1] != -1);
+	if (data->read_end != -1)
+		close(data->read_end);
+	if (data->paths)
+		free_str_array(data->paths);
+	if (data->new_cmd)
+		free(data->new_cmd);
+	if (data->cmd)
+		free_str_array(data->cmd);
+	if (data->path)
+		free(data->path);
+	if (data->pids)
+		free(data->pids);
+	return (-1);
 }
