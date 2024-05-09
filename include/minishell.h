@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/07 13:35:58 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/09 20:33:14 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,18 @@
 #include <errno.h>
 #include "../libft/libft.h"
 
+typedef struct s_flags
+{
+	int	in_single;
+	int	in_double;
+} 	t_flags;
+
 typedef	struct node
 {
 	char		**redirs;
 	char		*cmd;
 	struct node	*next;
-} t_node;
+} 	t_node;
 
 typedef struct s_pipex
 {
@@ -41,7 +47,7 @@ typedef struct s_pipex
 	int		ends[2];
 	int		read_end;
 	char	**paths;
-	char	*new_cmd;
+	char	*cmd_str;
 	char	**cmd;
 	char	*path;
 	int		*pids;
@@ -57,8 +63,9 @@ int		count_quotes(char *string);
 void	add_back(t_node **lst, t_node *new);
 int		get_list_length(t_node *processes);
 int		counter(char *string, char c);
-void	get_redirs(char	*string, t_node *node);
+void	get_redir_arr(char	*string, t_node *node);
 void	remove_redirs(char	*string);
+void	init_flags(t_flags *f);
 
 /**********************************--PIPEX--***************************************/
 

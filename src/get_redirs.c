@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:23:34 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/04 17:29:14 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/09 20:30:21 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,17 @@
 void	remove_redirs(char	*string)
 {
 	int i;
-	int	in_quotes;
-	int	in_double_quotes;
+	t_flags	f;
 
 	i = 0;
-	in_quotes = -1;
-	in_double_quotes = -1;
+	init_flags(&f);
 	while(string[i])
 	{
 		if (string[i] == '\'')
-			in_quotes *= -1;
+			f.in_single *= -1;
 		else if (string[i] == '\"')
-			in_double_quotes *= -1;
-		if ((string[i] == '<' || string[i] == '>') && (in_quotes == -1 && in_double_quotes == -1))
+			f.in_double *= -1;
+		if ((string[i] == '<' || string[i] == '>') && (f.in_single == -1 && f.in_double == -1))
 			{
 				string[i++] = ' ';
 				if (string[i] == ' ')
@@ -50,7 +48,7 @@ static char	*get_redir(char *string)
 	i = 1;
 	while (string[i])
 	{
-		if (string[i] == ' ')
+		if (string[i] == ' ' || string[i] == '>')
 			i++;
 		while (string[i] && string[i] != ' ')
 			i++;
@@ -60,39 +58,43 @@ static char	*get_redir(char *string)
 	return (NULL);
 }
 
-// makes a 2d array to store all redirections of a single process
-void	get_redirs(char	*string, t_node *node)
+int	get_redirs(char *string, t_node *node)
 {
 	int	i;
 	int	j;
-	int	count;
-	int	in_quotes;
-	int	in_double_quotes;
+	t_flags	f;
 
 	i = 0;
 	j = 0;
-	in_quotes = -1;
-	in_double_quotes = -1;
-	count = counter(string, '<') + counter(string, '>');
-	node->redirs = malloc(sizeof(char *) * (count + 1));
-	if (!node->redirs)
-		return ;
+	init_flags(&f);
 	while (string[i])
 	{
 		if (string[i] == '\'')
-			in_quotes *= -1;
+			f.in_single *= -1;
 		else if (string[i] == '\"')
-			in_double_quotes *= -1;
-		if ((string[i] == '<' || string[i] == '>') && (in_quotes == -1 & in_double_quotes == -1))
+			f.in_double *= -1;
+		if ((string[i] == '<' || string[i] == '>') && (f.in_single == -1 & f.in_double == -1))
 		{
 			node->redirs[j++] = get_redir(&string[i]); 
 			if (!node->redirs[j - 1])
-			{
-				free_str_array(node->redirs);
-				return ;
-			}
+				return (-1);
+			if ((string[i] == '<' && string[i + 1] == '<') || (string[i] == '>' && string[i + 1] == '>'))
+				i++;
 		}
 		i++;
 	}
-	node->redirs[j] = NULL;
+	return (1);
+}
+
+// makes a 2d array to store all redirections of a single process
+void	get_redir_arr(char	*string, t_node *node)
+{
+	int	count;
+	
+	count = counter(string, '<') + counter(string, '>');
+	node->redirs = ft_calloc(count + 1, sizeof(char *));
+	if (!get_redirs(string, node))
+		free_str_array(node->redirs);
+	if (!node->redirs)
+		return ;
 }
