@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/07 13:36:14 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/09 19:28:06 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,6 @@ int	main()
 	if (!processes)
 		return (-1);
 	pipex(processes);
-	// int	i = 0;
-	// while (processes != NULL)
-	// {
-	// 	i = 0;
-	// 	while (processes->redirs[i])
-	// 		ft_printf(1, "%s\n", processes->redirs[i++]);
-	// 	ft_printf(1, "%s\n", processes->cmd);
-	// 	ft_printf(1, "\n");
-	// 	processes = processes->next;
-	// }
 	free_list(&processes);
 	return (0);
 }

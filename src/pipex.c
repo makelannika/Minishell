@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 19:40:51 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/07 13:35:19 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/09 14:52:21 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static int	init_data(t_pipex *data, t_node *processes)
 	data->read_end = -1;
 	if (get_paths(data) == -1)
 		return (close_and_free(data));
-	data->new_cmd = NULL;
+	data->cmd_str = NULL;
 	data->cmd = NULL;
 	data->path = NULL;
 	data->pids = ft_calloc(data->cmds, sizeof(int));
