@@ -64,6 +64,7 @@ void    putstr_in_array(char ***env, char *str)
 }
 //TODO: need to figure out empty string thingy and if first digits is a number or _
 //TODO: figure out exit or return
+//TODO: multiple variables
 //TODO: does control C end minishell?
 void    do_export(char **env, char **cmd)
 {
