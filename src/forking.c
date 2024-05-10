@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/09 21:09:00 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/10 21:10:10 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ _Bool	is_builtin(char *cmd)
 {
 	if (ft_strncmp(cmd, "cd\0", 3) == 0)
 		return (true);
-	if (ft_strncmp(cmd, "export\0", 3) == 0)
+	if (ft_strncmp(cmd, "export\0", 7) == 0)
 		return (true);
-	if (ft_strncmp(cmd, "unset\0", 3) == 0)
+	if (ft_strncmp(cmd, "unset\0", 6) == 0)
 		return (true);
-	if (ft_strncmp(cmd, "exit\0", 3) == 0)
+	if (ft_strncmp(cmd, "exit\0", 5) == 0)
 		return (true);
 	if (cmd[0] == 'p' || cmd[0] == 'P')
 		return (check_case(cmd, "pwd\0"));
@@ -89,8 +89,11 @@ static int	path_check(t_pipex *data)
 	start = ft_strlen(data->cmd[0]);
 	while (data->cmd[0][start] != '/')
 		start--;
-	if (is_builtin(&data->cmd[0][start + 1])) // which error msg?
+	if (is_builtin(&data->cmd[0][start + 1]))
+	{
+		ft_printf(2, "no such file or directory: %s\n", data->cmd[0]);
 		return (-1);
+	}
 	if (access(data->cmd[0], F_OK) == 0)
 	{
 		data->path = ft_substr(data->cmd[0], 0, ft_strlen(data->cmd[0]));
@@ -110,10 +113,9 @@ static int	get_path(t_pipex *data)
 	}
 	else if (is_builtin(data->cmd[0]))
 	{
-		ft_printf(1, "builtin\n");
+		// call specific builtin, args: t_data *pipex
 		return (-1);
 	}
-	call specific builtin, args: t_data *pipex
 	else
 	{
 		if (find_path(data) == -1)
@@ -170,16 +172,48 @@ static int	do_cmd(t_pipex *data, t_node *processes)
 	return (-1);
 }
 
-// forks, unless there's only one cmd and it is a builtin?
+// returns a string containing only the cmd from the cmd string
+// needed to check if the cmd is a builtin and we don't want to fork
+char	*trim_cmd(char *cmd_str, char **trimmed)
+{
+	int		i;
+	int		len;
+	int		start;
+
+	i = 0;
+	len = 0;
+	start = 0;
+	while (cmd_str[i] && cmd_str[i] == ' ')
+		i++;
+	start = i;
+	while (cmd_str[i] && cmd_str[i] != ' ')
+	{
+		i++;
+		len++;
+	}
+	*trimmed = ft_substr(cmd_str, start, len);
+	if (!trimmed)
+		return (NULL);
+	return (*trimmed);
+}
+
+// forks, unless there's only one cmd and it is a builtin
 int	forking(t_pipex *data, t_node *processes)
 {
-	if (data->cmds == 1) // && is_builtin?
+	char	*trimmed;
+
+	trimmed = NULL;
+	if (trim_cmd(processes->cmd, &trimmed) == NULL)
+		return (-1);
+	if (data->cmds == 1 && is_builtin(trimmed))
 	{
+		free(trimmed);
 		if (do_cmd(data, processes) == -1)
 			return (0);
 	}
 	else
 	{
+		free(trimmed);
 		data->pids[data->count] = fork();
 		if (data->pids[data->count] < 0)
 		{
