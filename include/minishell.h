@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/09 20:33:14 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/10 20:55:27 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_pipex
 	int		count;
 	int		ends[2];
 	int		read_end;
+	char	**env;
 	char	**paths;
 	char	*cmd_str;
 	char	**cmd;
