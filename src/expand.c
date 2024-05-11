@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 14:58:46 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/10 22:55:25 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/11 18:10:37 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ char	*expand(char *value, char **cmd, int len, int start)
 {
 	char	*new_str;
 	int		i;
+	int		k;
 	int		rest_of_str;
+	char	*tmp;
 
 	new_str = malloc(sizeof(char) * (ft_strlen(value) + ft_strlen(*cmd) - len + 1));
 	if (!new_str)
@@ -27,15 +29,16 @@ char	*expand(char *value, char **cmd, int len, int start)
 		new_str[i] = (*cmd)[i];
 		i++;
 	}
-	int k = 0;
+	k = 0;
 	while (i <= len + start + 1)
 		new_str[i++] = value[k++];
-	printf("new_str is: %s\n", new_str);
 	rest_of_str = start + len;
 	while ((*cmd)[rest_of_str])
 		new_str[i++] = (*cmd)[rest_of_str++];
 	new_str[i] = '\0';
+	tmp = *cmd;
 	*cmd = new_str;
+	free (tmp);
 	return (*cmd);
 }
 
@@ -45,6 +48,7 @@ char	*shrink(char **cmd, int	remove)
 	int j = 0;
 	int	len = ft_strlen(*cmd);
 	char	*new_string;
+	char	*tmp;
 
 	new_string = ft_calloc(len, sizeof(char));
 	if (!new_string)
@@ -54,18 +58,34 @@ char	*shrink(char **cmd, int	remove)
 	i++;
 	while ((*cmd)[i])
 		new_string[j++] = (*cmd)[i++];
-	return (new_string);
+	tmp = *cmd;
+	*cmd = new_string; 
+	free (tmp);
+	return (*cmd);
 }
+
+
 
 char	*get_value(int key_start, int key_len, char **env, char **cmd)
 {
+	
 	char	*key;
 	char	*value;
 	int		i;
 	int		start;
 	
-	value = NULL;
-	// printf("cmd is: %s\n", &cmd[0][key_start]);
+	// quote = NONE;
+	// if (quote == NONE)
+	// {
+	// 	if (c == '\'')
+	// 		quote = SINGLE;
+	// 	else
+	// 		quote = DOUBLE;
+	// }
+	// else if (quote == SINGLE && c == '\'')
+	// 	quote = NONE;
+	// else if (quote == DOUBLE && c == '"')
+	// 	quote = NONE;
 	i = 0;
 	start = key_start;
 	key = malloc(sizeof(char) * (key_len + 1));
@@ -79,58 +99,78 @@ char	*get_value(int key_start, int key_len, char **env, char **cmd)
 	{
 		if (ft_strncmp(key, env[i], ft_strlen(key)) == 0)
 		{
-
 			value = (ft_strchr(env[i], '=') + 1);
-			return (expand(value, cmd, key_len, start));
+			if(!expand(value, cmd, key_len, start))
+				return (NULL);
+				//free and return
+			break ;
 		}
 		else
-			return(shrink(cmd, start - 1));
+			if(!shrink(cmd, start - 1))
+				return (NULL);
 		i++;
 	}
 	free(key);
-	return
+	return (*cmd);
 }
 
-void	expand_that_shit(char *cmd, char **env)
+void	expand_that_shit(char **cmd, char **env)
 {
-	int 	in_quotes;
 	int		i;
 	int		key_start;
+	t_quote	quote;
 
-	
-	in_quotes = -1;
 	i = 0;
-	while (cmd[i])
+	quote = NONE;
+	while ((*cmd)[i])
 	{
-		if (cmd[i] == '\'')
-			in_quotes *= -1;
-		if (cmd[i] == '$' && in_quotes == -1)
+		if ((*cmd)[i] == '\'' || (*cmd)[i] == '"')
 		{
-			while (cmd[i] == '$')
+			if (quote == NONE)
+			{
+				if ((*cmd)[i] == '\'')
+					quote = SINGLE;
+				else
+					quote = DOUBLE;
+			}
+			else if ((*cmd)[i] == '\'' && quote == SINGLE)	
+				quote = NONE;
+			else if ((*cmd)[i] == '"' && quote == DOUBLE)
+				quote = NONE;
+		}	
+		if ((*cmd)[i] == '$' && quote != SINGLE)
+		{
+			while ((*cmd)[i] == '$')
 				i++;
 			key_start = i;
-			// while ((ft_isalpha(cmd[i]) == 1) || cmd[i] == '_' || cmd[i] == '\'')
-			while ((cmd[i]) != ' ' && cmd[i] != '\0')
+			while (ft_isalpha((*cmd)[i]) || (*cmd)[i] == '_')
 				i++;
-			get_value(key_start, i - key_start, env, &cmd);
+			get_value(key_start, i - key_start, env, cmd);
 			//check free and exit
 			continue;
 		}
-		i++;
+		else
+			i++;
 	}
-	printf("new cmd is: %s", cmd);
 }
 int main()
 {
     char **env = malloc(4 * sizeof(char*));
-    env[0] = ft_strdup("NAME=Michael");
+    env[0] = ft_strdup("HOME=Michael");
     env[1] = ft_strdup("AGE=36");
     env[2] = ft_strdup("HAIR=black");
     env[3] = NULL;
 	
-	char *str = malloc(30 * sizeof(char));
-	str = "echo '$NAME' What $NAME $NAME $'NAME'";
-	expand_that_shit (str, env);
+	char *str = ft_strdup("echo \"'$HOME'\" What $$$HOME $HOME $AGE'$ HOME'");
+	// str = "echo $'NAME'";
+	// str = "echo $$$$NAME";
+	expand_that_shit (&str, env);
+	int i = 0;
+	printf("expanded string is %s\n", str);
+	while (env[i])
+		free(env[i++]);
+	free(env);
+	free(str);
 }
 
 

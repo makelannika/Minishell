@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:33:21 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/07 13:25:09 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/11 18:12:37 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void    putstr_in_array(char ***env, char *str)
 //TODO: need to figure out empty string thingy and if first digits is a number or _
 //TODO: figure out exit or return
 //TODO: multiple variables
-//TODO: does control C end minishell?
 void    do_export(char **env, char **cmd)
 {
 	int     i;

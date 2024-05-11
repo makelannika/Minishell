@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/07 13:35:58 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/11 17:55:46 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@ typedef	struct node
 	char		*cmd;
 	struct node	*next;
 } t_node;
+
+typedef enum e_quote
+{
+	NONE,
+	SINGLE,
+	DOUBLE
+}	t_quote;
 
 typedef struct s_pipex
 {
