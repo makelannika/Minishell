@@ -6,35 +6,11 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:13:07 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/09 20:28:34 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/11 17:52:37 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-// int	counter(char *string, char a, char b, char c)
-// {
-// 	int	i;
-// 	int	count;
-// 	int	in_a;
-// 	int	in_b;
-	
-// 	i = 0;
-// 	count = 0;
-// 	in_a = -1;
-// 	in_b = -1;
-// 	while (string[i])
-// 	{
-// 		if (string[i] == a)
-// 			in_a *= -1;
-// 		else if (string[i] == b)
-// 			in_b *= -1;
-// 		if (string[i] == c && (in_a == -1 && in_b == -1))
-// 			count++;
-// 		i++;
-// 	}
-// 	return (count);
-// }
 
 // for checking enclosed quotes
 int	count_quotes(char *string)
@@ -93,7 +69,6 @@ static t_node	*parse_process(char	*string, t_node **processes)
 	}
 	add_back(processes, node);
 	get_redir_arr(string, node);
-	remove_redirs(string);
 	node->cmd = string;
 	if (!node->redirs || !node->cmd)
 	{

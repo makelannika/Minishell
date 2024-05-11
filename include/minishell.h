@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/10 20:55:27 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/11 17:50:10 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	add_back(t_node **lst, t_node *new);
 int		get_list_length(t_node *processes);
 int		counter(char *string, char c);
 void	get_redir_arr(char	*string, t_node *node);
-void	remove_redirs(char	*string);
 void	init_flags(t_flags *f);
 
 /**********************************--PIPEX--***************************************/
@@ -89,11 +88,6 @@ void	do_cd(char *path, char **env);
 void	do_unset(char **env, char *key);
 void	sort_strings(char **arr);
 void    putstr_in_array(char ***env, char *cmd);
-
-/**********************************--LIST_FT--*************************************/
-
-// void	free_list(t_node **processes);
-// void	free_str_array(char **array);
 
 /***********************************--UTILS--**************************************/
 

@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/09 20:53:48 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/11 17:48:32 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 // clears files with '>' but not with '>>'
 static int	redir_out(char *file, t_pipex *data)
 {
+	int i;
+
+	i = 1;
 	if (data->ends[1] != -1)
 		close(data->ends[1]);
 	if (file[1] == '>')
@@ -39,6 +42,8 @@ static int	redir_in(char *file, t_pipex *data)
 {
 	if (data->ends[0] != -1)
 		close(data->ends[0]);
+	// if (file[1] == '<')
+		// heredoc
 	data->ends[0] = open(&file[1], O_RDONLY);
 	if (data->ends[0] < 0)
 	{

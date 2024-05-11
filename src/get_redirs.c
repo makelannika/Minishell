@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:23:34 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/09 20:30:21 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/11 17:36:57 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,50 @@ void	remove_redirs(char	*string)
 		else if (string[i] == '\"')
 			f.in_double *= -1;
 		if ((string[i] == '<' || string[i] == '>') && (f.in_single == -1 && f.in_double == -1))
-			{
+		{
+			string[i++] = ' ';
+			while (string[i] == ' ')
+				i++;
+			while (string[i] && string[i] != ' ')
 				string[i++] = ' ';
-				if (string[i] == ' ')
-					i++;
-				while (string[i] && string[i] != ' ')
-					string[i++] = ' ';
-			}
+		}
 		else
 			i++;
 	}
+}
+
+void	remove_redir(char **string, int start, int end)
+{
+	while (start < end)
+	{
+		(*string)[start] = ' ';
+		start++;
+	}
+}
+
+char *trim_redir(char *redir_str)
+{
+	int		i;
+	int		j;
+	int		trim;
+	char	*new_redir;
+	
+	i = 0;
+	j = 0;
+	trim = 0;
+	trim = counter(redir_str, ' ');
+	new_redir = ft_calloc(ft_strlen(redir_str) - trim + 1, sizeof(char));
+	if (!new_redir)
+		return (NULL);
+	i = 0;
+	while (redir_str[i])
+	{
+		while (redir_str[i] == ' ')
+			i++;
+		new_redir[j++] = redir_str[i++];
+	}
+	free(redir_str);
+	return (new_redir);
 }
 
 // returns one redirection at a time to be stored in the 2d array
@@ -48,11 +82,18 @@ static char	*get_redir(char *string)
 	i = 1;
 	while (string[i])
 	{
-		if (string[i] == ' ' || string[i] == '>')
+		if ((string[i] == '<' && string[i - 1] == '<')
+			|| (string[i] == '>' && string[i - 1] == '>'))
+			i++;
+		while (string[i] == ' ')
 			i++;
 		while (string[i] && string[i] != ' ')
 			i++;
 		redir_str = ft_substr(string, 0, i);
+		if (!redir_str)
+			return (NULL);
+		redir_str = trim_redir(redir_str);
+		remove_redir(&string, 0, i);
 		return (redir_str);
 	}
 	return (NULL);
