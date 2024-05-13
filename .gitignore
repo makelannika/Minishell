@@ -1,3 +1,5 @@
+*.a
+*.o
 git_notes.txt
 .DS_store
 commands.txt

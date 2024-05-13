@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/11 18:31:35 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/13 15:39:21 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	main()
 	extern	char **environ;
 	
 	line = readline("minishell: ");
+	add_history(line);
 	if (count_quotes(line) % 2 != 0)
 		ft_printf(2, "Error\nUnclosed quotes\n");
 	parse_input(line, &processes);
@@ -27,16 +28,6 @@ int	main()
 	if (!processes)
 		return (-1);
 	pipex(processes);
-	// int	i = 0;
-	// while (processes != NULL)
-	// {
-	// 	i = 0;
-	// 	while (processes->redirs[i])
-	// 		ft_printf(1, "%s\n", processes->redirs[i++]);
-	// 	ft_printf(1, "%s\n", processes->cmd);
-	// 	ft_printf(1, "\n");
-	// 	processes = processes->next;
-	// }
 	free_list(&processes);
 	return (0);
 }
