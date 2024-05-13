@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:33:21 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/07 13:25:09 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/07 14:50:47 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,4 @@ void    do_export(char **env, char **cmd)
     }
 	else
 		putstr_in_array(&env, cmd[1]);
-}
-int main()
-{
-    char **s = malloc(4 * sizeof(char*));
-    s[0] = ft_strdup("that=werwe");
-    s[1] = ft_strdup("AFD");
-    s[2] = ft_strdup("werre=34534");
-    s[3] = NULL;
-
-    char **t = malloc(4 * sizeof(char*));
-    t[0] = ft_strdup("export");
-    t[1] = NULL;
-    do_export(s,t);
-    // for(int i = 0; s[i]; i++)
-    //     ft_printf(1, "%s\n", s[i]);
 }
