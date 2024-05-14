@@ -74,18 +74,6 @@ char	*get_value(int key_start, int key_len, char **env, char **cmd)
 	int		i;
 	int		start;
 	
-	// quote = NONE;
-	// if (quote == NONE)
-	// {
-	// 	if (c == '\'')
-	// 		quote = SINGLE;
-	// 	else
-	// 		quote = DOUBLE;
-	// }
-	// else if (quote == SINGLE && c == '\'')
-	// 	quote = NONE;
-	// else if (quote == DOUBLE && c == '"')
-	// 	quote = NONE;
 	i = 0;
 	start = key_start;
 	key = malloc(sizeof(char) * (key_len + 1));

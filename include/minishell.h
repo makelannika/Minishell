@@ -94,7 +94,7 @@ void	put_pwd(void);
 void	do_cd(char *path, char **env);
 void	do_unset(char **env, char *key);
 void	sort_strings(char **arr);
-void    putstr_in_array(char ***env, char *cmd);
+char	**putstr_in_array(char **env, char *cmd);
 
 /***********************************--UTILS--**************************************/
 

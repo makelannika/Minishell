@@ -24,7 +24,7 @@ CFLAGS		=	-Wall -Wextra -Werror
 DEBUGFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
 CC			=	cc
 
-CFILES		=	src/input_parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c			\
+CFILES		=	src/input_parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c		\
 				src/pipex.c			src/fd_utils.c			src/check_redirs.c	src/forking.c		\
 				src/cmd_parsing.c	src/list_utils.c		src/get_redirs.c	src/main.c			\
 				src/utils.c
