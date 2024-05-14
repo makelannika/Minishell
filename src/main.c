@@ -12,22 +12,33 @@
 
 #include "../include/minishell.h"
 
-// test main for parsing
 int	main()
 {
 	char	*line;
 	t_node	*processes = NULL;
 	extern	char **environ;
-	
-	line = readline("minishell: ");
-	add_history(line);
-	if (count_quotes(line) % 2 != 0)
-		ft_printf(2, "Error\nUnclosed quotes\n");
-	parse_input(line, &processes);
-	free(line);
-	if (!processes)
-		return (-1);
-	pipex(processes);
-	free_list(&processes);
+
+	while (1) 
+	{
+		line = readline("Minishell: ");
+		if (!line || strcmp(line, "exit") == 0)
+		{
+			free(line);
+				break;
+		}
+		else 
+		{
+			processes = NULL;
+			add_history(line);
+			if (count_quotes(line) % 2 != 0)
+				ft_printf(2, "Error\nEnclosed quotes\n");
+			parse_input(line, &processes);
+			free(line);
+			if (!processes)
+				return (-1);
+			pipex(processes);
+			free_list(&processes);
+		}
+	}
 	return (0);
 }

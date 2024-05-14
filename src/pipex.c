@@ -30,7 +30,8 @@ static int	wait_children(int *pids, int count)
 			exitcode = WTERMSIG(status);
 		i++;
 	}
-	exit(exitcode);
+	return (exitcode);
+	// exit(exitcode);
 }
 
 // adds a slash to the end of each path
@@ -92,7 +93,6 @@ static	int	get_env(t_pipex *data)
 	i = 0;
 	while (environ[i])
 		i++;
-	ft_printf(1, "i: %d\n", i);
 	data->env = ft_calloc(i + 1, sizeof(char *));
 	if (!data->env)
 		return (-1);
@@ -100,7 +100,6 @@ static	int	get_env(t_pipex *data)
 	while (environ[i])
 	{
 		data->env[i] = ft_strdup(environ[i]);
-		ft_printf(1, "%s\n", environ[i]);
 		i++;
 	}
 	return (0);
@@ -158,5 +157,6 @@ int	pipex(t_node *processes)
 		processes = processes->next;
 	}
 	wait_children(data.pids, data.cmds);
+	ft_printf(1, "end of pipex\n");
 	return (0);
 }
