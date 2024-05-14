@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/11 17:50:10 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/13 15:54:23 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ typedef	struct node
 	char		*cmd;
 	struct node	*next;
 } 	t_node;
+
+typedef enum e_quote
+{
+	NONE,
+	SINGLE,
+	DOUBLE
+}	t_quote;
 
 typedef struct s_pipex
 {
@@ -87,7 +94,7 @@ void	put_pwd(void);
 void	do_cd(char *path, char **env);
 void	do_unset(char **env, char *key);
 void	sort_strings(char **arr);
-void    putstr_in_array(char ***env, char *cmd);
+char	**putstr_in_array(char **env, char *cmd);
 
 /***********************************--UTILS--**************************************/
 

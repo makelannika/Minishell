@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built_in.c                                         :+:      :+:    :+:   */
+/*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -67,6 +67,7 @@ void do_cd(char *path, char**environ)
 }
 
 // FIXME: unset $(env | awk -F= '{print $1}')
+// FIXME: take multiple variables
 void do_unset(char **env, char *key)
 {
 	int	i;

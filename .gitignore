@@ -1,3 +1,5 @@
+*.a
+*.o
 git_notes.txt
 .DS_store
 commands.txt
@@ -8,3 +10,4 @@ test1.c
 echo_test.c
 echo_test.sh
 pseudocode.txt
+.vscode

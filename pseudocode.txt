@@ -78,3 +78,9 @@ s_pipex
 	}	t_pipex;
 	
 */
+
+export "what"="wer" what=wer
+export what= qwer wer wer
+export "what "= qwer wer wer 
+export "1what"= qwer wer wer 
+export "what"= "' wer'" wer wer 
