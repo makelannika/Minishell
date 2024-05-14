@@ -6,39 +6,13 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:23:34 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/11 17:36:57 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/14 11:48:28 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// removes redirection symbols and file names from the string
-void	remove_redirs(char	*string)
-{
-	int i;
-	t_flags	f;
-
-	i = 0;
-	init_flags(&f);
-	while(string[i])
-	{
-		if (string[i] == '\'')
-			f.in_single *= -1;
-		else if (string[i] == '\"')
-			f.in_double *= -1;
-		if ((string[i] == '<' || string[i] == '>') && (f.in_single == -1 && f.in_double == -1))
-		{
-			string[i++] = ' ';
-			while (string[i] == ' ')
-				i++;
-			while (string[i] && string[i] != ' ')
-				string[i++] = ' ';
-		}
-		else
-			i++;
-	}
-}
-
+// removes each redir after it's been saved to the redir_arr
 void	remove_redir(char **string, int start, int end)
 {
 	while (start < end)
@@ -48,6 +22,7 @@ void	remove_redir(char **string, int start, int end)
 	}
 }
 
+// trims spaces from a redir string
 char *trim_redir(char *redir_str)
 {
 	int		i;
@@ -99,6 +74,7 @@ static char	*get_redir(char *string)
 	return (NULL);
 }
 
+// saves all redirs to the redir_arr
 int	get_redirs(char *string, t_node *node)
 {
 	int	i;
