@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:25:34 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/07 13:57:05 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/14 15:12:16 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,15 @@ _Bool check_option(char *a)
 	}
 	return (true);
 }
-
-void	do_echo(char **cmd)
+//FIXME: need to redo -n so that it prints all at once
+void	do_echo(char **cmd, int fd_out)
 {
 	int		i;
 	
 	i = 1;
     if (cmd[i] && cmd[i][0] != '-')
     {
-        ft_printf(1, "%s", cmd[1]);
-        ft_printf(1, "\n");
+        ft_printf(fd_out, "%s\n", cmd[1]);
         return ;
     }
     else
@@ -48,11 +47,11 @@ void	do_echo(char **cmd)
             else
             {
                 while (cmd[i])
-                    ft_printf(1, "%s", cmd[i++]);
+                    ft_printf(fd_out, "%s", cmd[i++]);
                 return ;
             }
         }
     }
 	if(!(check_option(cmd[1])))
-		ft_printf(1, "\n");
+		ft_printf(fd_out, "\n");
 }

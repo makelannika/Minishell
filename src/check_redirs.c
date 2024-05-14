@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 11:34:19 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/14 15:17:52 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	redir_out(char *file, t_pipex *data)
 		if (access(&file[1], F_OK) != 0)
 			ft_printf(2, "no such file or directory: %s\n", &file[1]);
 		else
-			ft_printf(2, "permission denied: %s\n", &file[1]);
+			ft_printf(2, "1permission denied: %s\n", &file[1]);
 		data->error = true;
 		return (-1);
 	}
@@ -50,7 +50,7 @@ static int	redir_in(char *file, t_pipex *data)
 		if (access(&file[1], F_OK) != 0)
 			ft_printf(2, "no such file or directory: %s\n", &file[1]);
 		else
-			ft_printf(2, "permission denied: %s\n", &file[1]);
+			ft_printf(2, "2permission denied: %s\n", &file[1]);
 		data->error = true;
 		return (-1);
 	}

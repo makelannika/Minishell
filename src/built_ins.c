@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/05 21:00:40 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/14 14:58:07 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void do_cd(char *path, char**environ)
 
 // FIXME: unset $(env | awk -F= '{print $1}')
 // FIXME: take multiple variables
+// FIXME: 
 void do_unset(char **env, char *key)
 {
 	int	i;
