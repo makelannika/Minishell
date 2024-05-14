@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/10 21:10:10 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/14 16:04:28 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,38 @@ _Bool	check_case(char *cmd, char *builtin)
 	if (cmd[i] != builtin[i])
 		return (false);
 	return (true);
+}
+
+// calls the correct builtin function
+int	call_builtin(t_pipex *data, char *cmd)
+{
+	if (ft_strncmp(cmd, "cd\0", 3) == 0)
+		do_cd(data->cmd[1], data->env);
+	else if (ft_strncmp(cmd, "export\0", 7) == 0)
+	{
+		do_export(data->env, data->cmd);
+		return (0);
+	}
+	else if (ft_strncmp(cmd, "unset\0", 6) == 0)
+	{
+		do_unset(data->env, data->cmd[1]);
+		return (true);
+	}
+	else if (ft_strncmp(cmd, "exit\0", 5) == 0)
+		return (true);
+	else if (cmd[0] == 'p' || cmd[0] == 'P')
+	{
+		if (check_case(cmd, "pwd\0"))
+			put_pwd();
+	}
+	else if (cmd[0] == 'e' || cmd[0] == 'E')
+	{
+		if (check_case(cmd, "env\0"))
+			put_env(data->env);
+		else if (check_case(cmd, "echo\0"))
+			do_echo(data->cmd, data->ends[1]);
+	}
+	return (0);
 }
 
 // checks if command is a builtin
@@ -111,11 +143,11 @@ static int	get_path(t_pipex *data)
 		if (path_check(data) == -1)
 			return (-1);
 	}
-	// else if (is_builtin(data->cmd[0]))
-	// {
-	// 	// call specific builtin, args: t_data *pipex
-	// 	return (-1);
-	// }
+	else if (is_builtin(data->cmd[0]))
+	{
+		call_builtin(data, data->cmd[0]);
+		return (0);
+	}
 	else
 	{
 		if (find_path(data) == -1)
@@ -149,17 +181,22 @@ static int	do_cmd(t_pipex *data, t_node *processes)
 {
 	extern char	**environ;
 
-	if (data->read_end != -1)
-		close(data->read_end);
-	dup2(data->ends[0], STDIN_FILENO);
-	dup2(data->ends[1], STDOUT_FILENO);
-	if (data->ends[0] != -1)
-		close(data->ends[0]);
-	if (data->ends[1] != -1)
-		close(data->ends[1]);
+	if (!data->builtin)
+	{
+		if (data->read_end != -1)
+			close(data->read_end);
+		dup2(data->ends[0], STDIN_FILENO);
+		dup2(data->ends[1], STDOUT_FILENO);
+		if (data->ends[0] != -1)
+			close(data->ends[0]);
+		if (data->ends[1] != -1)
+			close(data->ends[1]);
+	}
 	parse_cmd(data, processes->cmd);
 	if (!data->cmd_str)
 		return (-1);
+	if (data->builtin != NULL)
+		return (get_cmd(data->cmd_str, data));
 	if (get_cmd(data->cmd_str, data) == -1)
 		return (-1);
 	if (!data->path)
@@ -168,7 +205,7 @@ static int	do_cmd(t_pipex *data, t_node *processes)
 		return (-1);
 	}
 	execve(data->path, data->cmd, environ);
-	ft_printf(2, "permission denied: %s\n", data->cmd[0]);
+	ft_printf(2, "4permission denied: %s\n", data->cmd[0]);
 	return (-1);
 }
 
@@ -200,20 +237,21 @@ char	*trim_cmd(char *cmd_str, char **trimmed)
 // forks, unless there's only one cmd and it is a builtin
 int	forking(t_pipex *data, t_node *processes)
 {
-	// char	*trimmed;
+	char	*trimmed;
 
-	// trimmed = NULL;
-	// if (trim_cmd(processes->cmd, &trimmed) == NULL)
-	// 	return (-1);
-	// if (data->cmds == 1 && is_builtin(trimmed))
-	// {
-	// 	free(trimmed);
-	// 	if (do_cmd(data, processes) == -1)
-	// 		return (0);
-	// }
-	// else
-	// {
-		// free(trimmed);
+	trimmed = NULL;
+	if (trim_cmd(processes->cmd, &trimmed) == NULL)
+		return (-1);
+	if (data->cmds == 1 && is_builtin(trimmed))
+	{
+		data->builtin = trimmed;
+		free(trimmed);
+		if (do_cmd(data, processes) == -1)
+			return (0);
+	}
+	else
+	{
+		free(trimmed);
 		data->pids[data->count] = fork();
 		if (data->pids[data->count] < 0)
 		{
@@ -224,7 +262,7 @@ int	forking(t_pipex *data, t_node *processes)
 		{
 			if (do_cmd(data, processes) == -1)
 				return (-1);
-		// }
+		}
 	}
 	return (0);
 }

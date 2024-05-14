@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:56:23 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/10 14:56:57 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/14 15:33:45 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,13 @@ static void	space_handler(char *cmd)
 // handles spaces and quotes of the cmd
 void	parse_cmd(t_pipex *data, char *cmd)
 {
+	
 	if (!cmd[0])
 	{
-		ft_printf(2, "permission denied: %s\n", cmd);
+		ft_printf(2, "3permission denied: %s\n", cmd);
 		close_and_free(data);
-		exit(126);
+		// exit(126);
+		return ;
 	}
 	space_handler(cmd);
 	// expand here?

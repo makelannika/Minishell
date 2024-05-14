@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+         #
+#    By: amakela <amakela@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/05/13 15:54:02 by linhnguy         ###   ########.fr        #
+#    Updated: 2024/05/14 14:30:21 by amakela          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,9 +24,9 @@ DEBUGFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
 CC			=	cc
 
 CFILES		=	src/input_parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c		\
-				src/pipex.c			src/fd_utils.c			src/check_redirs.c	src/forking.c		\
-				src/cmd_parsing.c	src/list_utils.c		src/get_redirs.c	src/main.c			\
-				src/utils.c
+				src/pipex.c				src/fd_utils.c			src/check_redirs.c	src/forking.c	\
+				src/cmd_parsing.c		src/list_utils.c		src/get_redirs.c	src/main.c		\
+				src/utils.c				src/export.c
 
 OFILES		=	$(CFILES:.c=.o)
 

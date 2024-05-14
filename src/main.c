@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/13 15:54:49 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/14 16:00:31 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ int	main()
 	while (1) 
 	{
 		line = readline("Minishell: ");
-		if (!line || strcmp(line, "exit") == 0)
+		if (!line || strcmp(line, "exit") == 0) // error msg for null from readline
 		{
 			free(line);
 				break;
 		}
+		else if (line[0] == '\0')
+			continue;
 		else 
 		{
 			processes = NULL;

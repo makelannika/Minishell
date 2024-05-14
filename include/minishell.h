@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/13 15:54:23 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/14 15:26:30 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_pipex
 	int		*pids;
 	bool	error;
 	int		exitcode;
+	char	*builtin;
 }	t_pipex;
 
 /*********************************--PARSING--**************************************/
@@ -89,6 +90,8 @@ void	free_str_array(char **array);
 
 /*********************************--BUILT_IN--*************************************/
 
+char    **do_export(char **env, char **cmd);
+void	do_echo(char **cmd, int fd_out);
 void	put_env(char **env);
 void	put_pwd(void);
 void	do_cd(char *path, char **env);
