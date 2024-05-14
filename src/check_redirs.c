@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/11 17:48:32 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/14 11:34:19 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	redir_out(char *file, t_pipex *data)
 	if (data->ends[1] != -1)
 		close(data->ends[1]);
 	if (file[1] == '>')
-		data->ends[1] = open(&file[2], O_CREAT | O_WRONLY | O_APPEND);
+		data->ends[1] = open(&file[2], O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else
 		data->ends[1] = open(&file[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (data->ends[1] < 0)
