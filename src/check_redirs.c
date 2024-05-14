@@ -6,18 +6,25 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/07 13:43:06 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/11 17:48:32 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// checks rights to a redir file with '>' and clears it
+// checks rights to a redir file with '>'
+// clears files with '>' but not with '>>'
 static int	redir_out(char *file, t_pipex *data)
 {
+	int i;
+
+	i = 1;
 	if (data->ends[1] != -1)
 		close(data->ends[1]);
-	data->ends[1] = open(&file[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (file[1] == '>')
+		data->ends[1] = open(&file[2], O_CREAT | O_WRONLY | O_APPEND);
+	else
+		data->ends[1] = open(&file[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (data->ends[1] < 0)
 	{
 		if (access(&file[1], F_OK) != 0)
@@ -35,6 +42,8 @@ static int	redir_in(char *file, t_pipex *data)
 {
 	if (data->ends[0] != -1)
 		close(data->ends[0]);
+	// if (file[1] == '<')
+		// heredoc
 	data->ends[0] = open(&file[1], O_RDONLY);
 	if (data->ends[0] < 0)
 	{
@@ -48,7 +57,7 @@ static int	redir_in(char *file, t_pipex *data)
 	return (0);
 }
 
-// checks rights to all redir files and clears all output files
+// checks rights to all redir files and clears ones with '>'
 void	handle_redirs(t_node *processes, t_pipex *data)
 {
 	int	i;

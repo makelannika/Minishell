@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   input_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/04 17:27:03 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/07 13:05:26 by amakela          ###   ########.fr       */
+/*   Created: 2024/05/09 14:13:07 by amakela           #+#    #+#             */
+/*   Updated: 2024/05/11 17:52:37 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,18 @@ int	counter(char *string, char c)
 {
 	int	i;
 	int	count;
-	int	in_quotes;
-	int	in_double_quotes;
+	t_flags	f;
 	
 	i = 0;
 	count = 0;
-	in_quotes = -1;
-	in_double_quotes = -1;
+	init_flags(&f);
 	while (string[i])
 	{
 		if (string[i] == '\'')
-			in_quotes *= -1;
+			f.in_single *= -1;
 		else if (string[i] == '\"')
-			in_double_quotes *= -1;
-		if (string[i] == c && (in_quotes == -1 & in_double_quotes == -1))
+			f.in_double *= -1;
+		if (string[i] == c && (f.in_single == -1 && f.in_double == -1))
 			count++;
 		i++;
 	}
@@ -70,8 +68,7 @@ static t_node	*parse_process(char	*string, t_node **processes)
 		return (NULL);
 	}
 	add_back(processes, node);
-	get_redirs(string, node);
-	remove_redirs(string);
+	get_redir_arr(string, node);
 	node->cmd = string;
 	if (!node->redirs || !node->cmd)
 	{
@@ -82,25 +79,29 @@ static t_node	*parse_process(char	*string, t_node **processes)
 	return (node);
 }
 
+void	init_flags(t_flags *f)
+{
+	f->in_single = -1;
+	f->in_double = -1;
+}
+
 // parses the complete line returned from readline
 t_node	**parse_input(char *line, t_node **processes)
 {
 	int	i;
 	int	start;
-	int	in_quotes;
-	int	in_double_quotes;
+	t_flags	f;
 
 	i = 0;
 	start = 0;
-	in_quotes = -1;
-	in_double_quotes = -1;
+	init_flags(&f);
 	while (line[i])
 	{
 		if (line[i] == '\'')
-			in_quotes *= -1;
+			f.in_single *= -1;
 		else if (line[i] == '\"')
-			in_double_quotes *= -1;
-		if (line[i] == '|' && in_quotes == -1 && in_double_quotes == -1)
+			f.in_double *= -1;
+		if (line[i] == '|' && f.in_single == -1 && f.in_double == -1)
 		{
 			if (!parse_process(ft_substr(line, start, i - start), processes))
 				return (NULL);

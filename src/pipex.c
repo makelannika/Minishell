@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 19:40:51 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/07 13:35:19 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/10 21:32:56 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static int	wait_children(int *pids, int count)
 	exit(exitcode);
 }
 
+// adds a slash to the end of each path
 static int	add_slash(t_pipex *data)
 {
 	int		i;
@@ -53,6 +54,7 @@ static int	add_slash(t_pipex *data)
 	return (0);
 }
 
+// saves an array of paths into pipex's struct
 static int	get_paths(t_pipex *data)
 {
 	int			i;
@@ -81,6 +83,30 @@ static int	get_paths(t_pipex *data)
 	return (0);
 }
 
+// saves a copy of env into pipex's struct
+static	int	get_env(t_pipex *data)
+{
+	int			i;
+	extern char	**environ;
+
+	i = 0;
+	while (environ[i])
+		i++;
+	ft_printf(1, "i: %d\n", i);
+	data->env = ft_calloc(i + 1, sizeof(char *));
+	if (!data->env)
+		return (-1);
+	i = 0;
+	while (environ[i])
+	{
+		data->env[i] = ft_strdup(environ[i]);
+		ft_printf(1, "%s\n", environ[i]);
+		i++;
+	}
+	return (0);
+}
+
+// initializes pipex's struct
 static int	init_data(t_pipex *data, t_node *processes)
 {
 	data->cmds = get_list_length(processes);
@@ -91,9 +117,11 @@ static int	init_data(t_pipex *data, t_node *processes)
 		return (-1);
 	}
 	data->read_end = -1;
+	if (get_env(data) == -1)
+		return (close_and_free(data));
 	if (get_paths(data) == -1)
 		return (close_and_free(data));
-	data->new_cmd = NULL;
+	data->cmd_str = NULL;
 	data->cmd = NULL;
 	data->path = NULL;
 	data->pids = ft_calloc(data->cmds, sizeof(int));
