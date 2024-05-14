@@ -111,11 +111,11 @@ static int	get_path(t_pipex *data)
 		if (path_check(data) == -1)
 			return (-1);
 	}
-	else if (is_builtin(data->cmd[0]))
-	{
-		// call specific builtin, args: t_data *pipex
-		return (-1);
-	}
+	// else if (is_builtin(data->cmd[0]))
+	// {
+	// 	// call specific builtin, args: t_data *pipex
+	// 	return (-1);
+	// }
 	else
 	{
 		if (find_path(data) == -1)
@@ -200,20 +200,20 @@ char	*trim_cmd(char *cmd_str, char **trimmed)
 // forks, unless there's only one cmd and it is a builtin
 int	forking(t_pipex *data, t_node *processes)
 {
-	char	*trimmed;
+	// char	*trimmed;
 
-	trimmed = NULL;
-	if (trim_cmd(processes->cmd, &trimmed) == NULL)
-		return (-1);
-	if (data->cmds == 1 && is_builtin(trimmed))
-	{
-		free(trimmed);
-		if (do_cmd(data, processes) == -1)
-			return (0);
-	}
-	else
-	{
-		free(trimmed);
+	// trimmed = NULL;
+	// if (trim_cmd(processes->cmd, &trimmed) == NULL)
+	// 	return (-1);
+	// if (data->cmds == 1 && is_builtin(trimmed))
+	// {
+	// 	free(trimmed);
+	// 	if (do_cmd(data, processes) == -1)
+	// 		return (0);
+	// }
+	// else
+	// {
+		// free(trimmed);
 		data->pids[data->count] = fork();
 		if (data->pids[data->count] < 0)
 		{
@@ -224,7 +224,7 @@ int	forking(t_pipex *data, t_node *processes)
 		{
 			if (do_cmd(data, processes) == -1)
 				return (-1);
-		}
+		// }
 	}
 	return (0);
 }

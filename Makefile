@@ -18,7 +18,6 @@ LIBFT		=	$(LIBFTDIR)/libft.a
 READLINEH	=	-I ~/.brew/Cellar/readline/8.2.10/include
 READLINELIB	=	-L ~/.brew/Cellar/readline/8.2.10/lib/ -lreadline
 INCLUDE		=	-I /include
-NCURSESLIB	=	-lncurses
 
 CFLAGS		=	-Wall -Wextra -Werror
 DEBUGFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address

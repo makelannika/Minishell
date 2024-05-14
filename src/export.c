@@ -53,7 +53,7 @@ char    **putstr_in_array(char **env, char *str)
     env = malloc(sizeof(char*) *(array_len(env) + 2));
     while (tmp[i])
     {
-        ft_strchr(tmp[i], '=')
+        // ft_strchr(tmp[i], '=');
         env[i] = ft_strdup(tmp[i]);
         free(tmp[i]);
         // if (!*env)
