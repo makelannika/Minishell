@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 16:04:28 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/15 16:11:25 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,25 @@ int	call_builtin(t_pipex *data, char *cmd)
 		do_cd(data->cmd[1], data->env);
 	else if (ft_strncmp(cmd, "export\0", 7) == 0)
 	{
-		do_export(data->env, data->cmd);
+		do_export(data->env, data->cmd, data->ends[1]);
 		return (0);
 	}
 	else if (ft_strncmp(cmd, "unset\0", 6) == 0)
 	{
 		do_unset(data->env, data->cmd[1]);
-		return (true);
+		return (0);
 	}
 	else if (ft_strncmp(cmd, "exit\0", 5) == 0)
-		return (true);
+		return (0);
 	else if (cmd[0] == 'p' || cmd[0] == 'P')
 	{
 		if (check_case(cmd, "pwd\0"))
-			put_pwd();
+			put_pwd(data->ends[1]);
 	}
 	else if (cmd[0] == 'e' || cmd[0] == 'E')
 	{
 		if (check_case(cmd, "env\0"))
-			put_env(data->env);
+			put_env(data->env, data->ends[1]);
 		else if (check_case(cmd, "echo\0"))
 			do_echo(data->cmd, data->ends[1]);
 	}
@@ -146,7 +146,7 @@ static int	get_path(t_pipex *data)
 	else if (is_builtin(data->cmd[0]))
 	{
 		call_builtin(data, data->cmd[0]);
-		return (0);
+		return (-1);
 	}
 	else
 	{
@@ -181,10 +181,10 @@ static int	do_cmd(t_pipex *data, t_node *processes)
 {
 	extern char	**environ;
 
+	if (data->read_end != -1)
+		close(data->read_end);
 	if (!data->builtin)
 	{
-		if (data->read_end != -1)
-			close(data->read_end);
 		dup2(data->ends[0], STDIN_FILENO);
 		dup2(data->ends[1], STDOUT_FILENO);
 		if (data->ends[0] != -1)
@@ -195,7 +195,7 @@ static int	do_cmd(t_pipex *data, t_node *processes)
 	parse_cmd(data, processes->cmd);
 	if (!data->cmd_str)
 		return (-1);
-	if (data->builtin != NULL)
+	if (data->builtin)
 		return (get_cmd(data->cmd_str, data));
 	if (get_cmd(data->cmd_str, data) == -1)
 		return (-1);
@@ -205,13 +205,13 @@ static int	do_cmd(t_pipex *data, t_node *processes)
 		return (-1);
 	}
 	execve(data->path, data->cmd, environ);
-	ft_printf(2, "4permission denied: %s\n", data->cmd[0]);
+	ft_printf(2, "permission denied: %s\n", data->cmd[0]);
 	return (-1);
 }
 
 // returns a string containing only the cmd from the cmd string
 // needed to check if the cmd is a builtin and we don't want to fork
-char	*trim_cmd(char *cmd_str, char **trimmed)
+char	*trim_cmd(char *cmd_str)
 {
 	int		i;
 	int		len;
@@ -228,10 +228,7 @@ char	*trim_cmd(char *cmd_str, char **trimmed)
 		i++;
 		len++;
 	}
-	*trimmed = ft_substr(cmd_str, start, len);
-	if (!trimmed)
-		return (NULL);
-	return (*trimmed);
+	return (ft_substr(cmd_str, start, len));
 }
 
 // forks, unless there's only one cmd and it is a builtin
@@ -239,19 +236,19 @@ int	forking(t_pipex *data, t_node *processes)
 {
 	char	*trimmed;
 
-	trimmed = NULL;
-	if (trim_cmd(processes->cmd, &trimmed) == NULL)
+	trimmed = trim_cmd(processes->cmd);
+	if (!trimmed)
 		return (-1);
-	if (data->cmds == 1 && is_builtin(trimmed))
+	if (is_builtin(trimmed))
+		data->builtin = true;
+	free(trimmed);
+	if (data->cmds == 1 && data->builtin)
 	{
-		data->builtin = trimmed;
-		free(trimmed);
 		if (do_cmd(data, processes) == -1)
 			return (0);
 	}
 	else
 	{
-		free(trimmed);
 		data->pids[data->count] = fork();
 		if (data->pids[data->count] < 0)
 		{

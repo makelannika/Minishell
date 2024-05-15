@@ -6,13 +6,13 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/14 14:58:07 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/15 14:24:51 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void put_env(char **env)
+void put_env(char **env, int fd_out)
 {
 	int	i;
 
@@ -20,19 +20,19 @@ void put_env(char **env)
 	while (env[i])
 	{
 		if (ft_strchr(env[i], '='))
-			ft_printf(2, "%s\n", env[i]);
+			ft_printf(fd_out, "%s\n", env[i]);
 		i++;
 	}
 }
 
-void put_pwd(void)
+void put_pwd(int fd_out)
 {
 	char *s;
 
 	s = getcwd(NULL, 0);
 	if (!s)
 		ft_printf(2, "%s\n", strerror(errno));
-	ft_printf(1, "%s\n", s);
+	ft_printf(fd_out, "%s\n", s);
 }
 
 void do_cd(char *path, char**environ)
@@ -44,7 +44,7 @@ void do_cd(char *path, char**environ)
     oldpwd = getcwd(NULL, 0);
 	i = 0;
 	if (chdir(path) == -1)
-		dprintf(2, "%s\n", strerror(errno));
+		ft_printf(2, "%s\n", strerror(errno));
 	while (environ[i])
 	{
 		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
