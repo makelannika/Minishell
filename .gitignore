@@ -11,3 +11,5 @@ echo_test.c
 echo_test.sh
 pseudocode.txt
 .vscode
+a.out
+info.plist
