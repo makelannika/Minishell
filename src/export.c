@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:33:21 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/14 14:30:05 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/15 14:25:14 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ _Bool check_key(char *str)
     return (true);
 }
 
-void    print_export(char *str)
+void    print_export(char *str, int fd_out)
 {
     char    *tmp;
     int     i;
@@ -92,14 +92,14 @@ void    print_export(char *str)
         //print error message and return
     tmp = ft_strchr(str, '=');
     if (!tmp) //prints string without =
-        ft_printf(1, "declare -x %s\n", str);
+        ft_printf(fd_out, "declare -x %s\n", str);
     else if (*(tmp + 1) == '\0') //prints strings with = at the end
-        ft_printf(1, "declare -x %s\'\'\n", str);
+        ft_printf(fd_out, "declare -x %s\'\'\n", str);
     else
         printf("declare -x %.*s\"%s\"\n", (int)(tmp - str + 1), str, tmp + 1);
 }
 
-char    **do_export(char **env, char **cmd)
+char    **do_export(char **env, char **cmd, int fd_out)
 {
 	int     i;
 	
@@ -109,9 +109,9 @@ char    **do_export(char **env, char **cmd)
         ft_printf(2, "here\n");
         sort_strings(env);
         for(int i =0; env[i]; i++)
-        ft_printf(2, "%s\n", env[i]);
+        ft_printf(fd_out, "%s\n", env[i]);
         while (env[i])
-            print_export(env[i++]);
+            print_export(env[i++], fd_out);
     }
 	else
     {

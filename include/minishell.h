@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 15:26:30 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/15 14:26:12 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_pipex
 	int		*pids;
 	bool	error;
 	int		exitcode;
-	char	*builtin;
+	_Bool	builtin;
 }	t_pipex;
 
 /*********************************--PARSING--**************************************/
@@ -90,10 +90,10 @@ void	free_str_array(char **array);
 
 /*********************************--BUILT_IN--*************************************/
 
-char    **do_export(char **env, char **cmd);
+char    **do_export(char **env, char **cmd, int fd_out);
 void	do_echo(char **cmd, int fd_out);
-void	put_env(char **env);
-void	put_pwd(void);
+void	put_env(char **env, int fd_out);
+void	put_pwd(int	fd_out);
 void	do_cd(char *path, char **env);
 void	do_unset(char **env, char *key);
 void	sort_strings(char **arr);
