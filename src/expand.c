@@ -150,27 +150,27 @@ int		expand_that_shit(char **cmd, char **env, t_pipex data)
 	}
 	return (0);
 }
-int main()
-{
-	t_pipex data;
-	data = (t_pipex){0};
-    char **env = malloc(4 * sizeof(char*));
-    env[0] = ft_strdup("HOME=Michael");
-    env[1] = ft_strdup("AGE=36");
-    env[2] = ft_strdup("HAIR=black");
-    env[3] = NULL;
+// int main()
+// {
+// 	t_pipex data;
+// 	data = (t_pipex){0};
+//     char **env = malloc(4 * sizeof(char*));
+//     env[0] = ft_strdup("HOME=Michael");
+//     env[1] = ft_strdup("AGE=36");
+//     env[2] = ft_strdup("HAIR=black");
+//     env[3] = NULL;
 	
-	char *str = ft_strdup("echo $? \"'$HOME'\" '\"$HOME\"' What $$$HOME $HOME $AGE'$ HOME'");
-	// str = "echo $'NAME'";
-	// str = "echo $$$$NAME";
-	expand_that_shit (&str, env, data);
-	int i = 0;
-	printf("%s\n", str);
-	while (env[i])
-		free(env[i++]);
-	free(env);
-	free(str);
-}
+// 	char *str = ft_strdup("echo $? \"'$HOME'\" '\"$HOME\"' What $$$HOME $HOME $AGE'$ HOME'");
+// 	// str = "echo $'NAME'";
+// 	// str = "echo $$$$NAME";
+// 	expand_that_shit (&str, env, data);
+// 	int i = 0;
+// 	printf("%s\n", str);
+// 	while (env[i])
+// 		free(env[i++]);
+// 	free(env);
+// 	free(str);
+// }
 
 
 //echo $HOME
