@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 16:00:31 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/15 14:00:03 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main()
 	while (1) 
 	{
 		line = readline("Minishell: ");
-		if (!line || strcmp(line, "exit") == 0) // error msg for null from readline
+		if (!line || ft_strncmp(line, "exit", 4) == 0) // error msg for null from readline
 		{
 			free(line);
 				break;

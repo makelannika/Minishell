@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 19:40:51 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 15:32:04 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/15 16:11:31 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ int	pipex(t_node *processes)
 	while (data.count < data.cmds)
 	{
 		data.error = false;
+		data.builtin = false;
 		if (get_fds(&data, processes) == -1)
 			exit(EXIT_FAILURE);
 		if (data.error == false)

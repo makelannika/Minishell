@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 17:47:58 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 15:32:11 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/15 16:11:13 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 static int	last_child(t_pipex *data, t_node *processes)
 {
 	dup2(data->read_end, data->ends[0]);
+	dup2(STDOUT_FILENO, data->ends[1]);
 	handle_redirs(processes, data);
 	return (0);
 }
@@ -42,7 +43,8 @@ static int	middle_child(t_pipex *data, t_node *processess)
 // opens and closes correct fds for first child process
 static int	first_child(t_pipex *data, t_node *processes)
 {
-	dup2(data->ends[0], data->read_end);
+	data->read_end = dup(data->ends[0]);
+	close(data->ends[0]);
 	handle_redirs(processes, data);
 	return (0);
 }
