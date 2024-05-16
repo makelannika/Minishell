@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:56:23 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 15:33:45 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/16 11:41:32 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	parse_cmd(t_pipex *data, char *cmd)
 		// exit(126);
 		return ;
 	}
+	expand_that_shit(&cmd, data->env, *data);
 	space_handler(cmd);
-	// expand here?
 	data->cmd_str = quote_remover(data, cmd);
 }

@@ -6,7 +6,7 @@
 #    By: amakela <amakela@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/05/14 14:30:21 by amakela          ###   ########.fr        #
+#    Updated: 2024/05/16 11:25:15 by amakela          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ CC			=	cc
 CFILES		=	src/input_parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c		\
 				src/pipex.c				src/fd_utils.c			src/check_redirs.c	src/forking.c	\
 				src/cmd_parsing.c		src/list_utils.c		src/get_redirs.c	src/main.c		\
-				src/utils.c				src/export.c
+				src/utils.c				src/export.c			src/expand.c
 
 OFILES		=	$(CFILES:.c=.o)
 

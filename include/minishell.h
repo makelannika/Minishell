@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/15 14:26:12 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/16 11:24:39 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int		get_list_length(t_node *processes);
 int		counter(char *string, char c);
 void	get_redir_arr(char	*string, t_node *node);
 void	init_flags(t_flags *f);
+int		expand_that_shit(char **cmd, char **env, t_pipex data);
 
 /**********************************--PIPEX--***************************************/
 
