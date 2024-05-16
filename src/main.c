@@ -24,7 +24,7 @@ int	main()
 		if (!line || ft_strncmp(line, "exit", 4) == 0) // error msg for null from readline
 		{
 			free(line);
-				break;
+				return (-1);
 		}
 		else if (line[0] == '\0')
 			continue;

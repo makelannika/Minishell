@@ -33,23 +33,20 @@ void	do_echo(char **cmd, int fd_out)
 	int		i;
 	
 	i = 1;
-    if (cmd[i] && cmd[i][0] != '-')
+    while (cmd[i])
     {
-        ft_printf(fd_out, "%s\n", cmd[1]);
-        return ;
-    }
-    else
-    {
-        while (cmd[i])
+        if (check_option(cmd[i]))
         {
-            if (check_option(cmd[i]))
-                i++;
+            i++;
+            continue ;
+        }
+        else
+        {
+            if (cmd[i + 1] == '\0')
+                ft_printf(fd_out, "%s", cmd[i++]);
             else
-            {
-                while (cmd[i])
-                    ft_printf(fd_out, "%s", cmd[i++]);
-                return ;
-            }
+                ft_printf(fd_out, "%s ", cmd[i++]);
+
         }
     }
 	if(!(check_option(cmd[1])))
