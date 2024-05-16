@@ -108,7 +108,7 @@ void	parse_cmd(t_pipex *data, char *cmd)
 		// exit(126);
 		return ;
 	}
-	expand_that_shit(&cmd, data->env, *data);
 	space_handler(cmd);
+	expand_that_shit(&cmd, data->env, *data);
 	data->cmd_str = quote_remover(data, cmd);
 }
