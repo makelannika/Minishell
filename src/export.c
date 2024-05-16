@@ -106,10 +106,7 @@ char    **do_export(char **env, char **cmd, int fd_out)
 	i = 0;
 	if (!cmd[1])
 	{
-        ft_printf(2, "here\n");
         sort_strings(env);
-        for(int i =0; env[i]; i++)
-        ft_printf(fd_out, "%s\n", env[i]);
         while (env[i])
             print_export(env[i++], fd_out);
     }

@@ -16,9 +16,11 @@ _Bool check_option(char *a)
 {
 	int p;
 
-	p = 1;
-    if (!a)
+	p = 0;
+    if (!a[p])
         return (true);
+    if (a[p] == '-')
+        p++;
 	while (a[p])
 	{
 		if (a[p] != 'n')
@@ -31,7 +33,7 @@ _Bool check_option(char *a)
 void	do_echo(char **cmd, int fd_out)
 {
 	int		i;
-	
+
 	i = 1;
     while (cmd[i])
     {
@@ -46,7 +48,6 @@ void	do_echo(char **cmd, int fd_out)
                 ft_printf(fd_out, "%s", cmd[i++]);
             else
                 ft_printf(fd_out, "%s ", cmd[i++]);
-
         }
     }
 	if(!(check_option(cmd[1])))
