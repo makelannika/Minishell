@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:56:23 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 17:31:52 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 20:23:18 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,14 +103,10 @@ void	parse_cmd(t_pipex *data, char **cmd)
 	if (!(*cmd)[0])
 	{
 		ft_printf(2, "3permission denied: %s\n", *cmd);
-		ft_printf(2, "3permission denied: %s\n", *cmd);
 		close_and_free(data);
 		// exit(126);
 		return ;
 	}
-	space_handler(*cmd);
-	expand_that_shit(cmd, data->env, *data);
-	data->cmd_str = quote_remover(data, *cmd);
 	space_handler(*cmd);
 	expand_that_shit(cmd, data->env, *data);
 	data->cmd_str = quote_remover(data, *cmd);
