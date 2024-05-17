@@ -45,11 +45,14 @@ void	do_echo(char **cmd, int fd_out)
         else
         {
             if (cmd[i + 1] == '\0')
-                ft_printf(fd_out, "%s", cmd[i++]);
+            {
+                if(!(check_option(cmd[1])))
+                    ft_printf(fd_out, "%s\n", cmd[i++]);
+                else
+                    ft_printf(fd_out, "%s", cmd[i++]);
+            }
             else
                 ft_printf(fd_out, "%s ", cmd[i++]);
         }
     }
-	if(!(check_option(cmd[1])))
-		ft_printf(fd_out, "\n");
 }

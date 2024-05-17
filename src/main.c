@@ -21,11 +21,21 @@ int	main()
 	while (1) 
 	{
 		line = readline("Minishell: ");
-		if (!line || ft_strncmp(line, "exit", 4) == 0) // error msg for null from readline
-		{
-			free(line);
+		if (!line) // error msg for null from readline
 				return (-1);
-		}
+		else if (ft_strncmp(line, "exit", 4) == 0)
+		{
+			if (ft_strlen(line) > 4 && line[4] == ' ') // needs to finish this
+			{
+				break;
+			}
+			else
+			{
+				ft_printf(2, "%s: command not found", line);
+				free(line);
+				return (127);
+			}
+		}	
 		else if (line[0] == '\0')
 			continue;
 		else 
@@ -35,10 +45,12 @@ int	main()
 			if (count_quotes(line) % 2 != 0)
 				ft_printf(2, "Error\nEnclosed quotes\n");
 			parse_input(line, &processes);
+					// printf("HERE1\n");
 			free(line);
 			if (!processes)
 				return (-1);
 			pipex(processes);
+			printf("1cmd is %s\n", processes->cmd);
 			free_list(&processes);
 		}
 	}

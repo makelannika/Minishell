@@ -98,17 +98,17 @@ static void	space_handler(char *cmd)
 }
 
 // handles spaces and quotes of the cmd
-void	parse_cmd(t_pipex *data, char *cmd)
+void	parse_cmd(t_pipex *data, char **cmd)
 {
 	
-	if (!cmd[0])
+	if (!(*cmd)[0])
 	{
-		ft_printf(2, "3permission denied: %s\n", cmd);
+		ft_printf(2, "3permission denied: %s\n", *cmd);
 		close_and_free(data);
 		// exit(126);
 		return ;
 	}
-	space_handler(cmd);
-	expand_that_shit(&cmd, data->env, *data);
-	data->cmd_str = quote_remover(data, cmd);
+	space_handler(*cmd);
+	expand_that_shit(cmd, data->env, *data);
+	data->cmd_str = quote_remover(data, *cmd);
 }

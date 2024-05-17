@@ -160,6 +160,8 @@ static int	get_path(t_pipex *data)
 static int	get_cmd(char *cmd, t_pipex *data)
 {
 	data->cmd = ft_split(cmd, 7);
+	// for (int i = 0; data->cmd[i]; i++)
+	// 	printf("cmd is %s\n", data->cmd[i]);
 	if (!data->cmd)
 	{
 		ft_printf(2, "Error\nSplit failed when getting a command\n");
@@ -192,7 +194,7 @@ static int	do_cmd(t_pipex *data, t_node *processes)
 		if (data->ends[1] != -1)
 			close(data->ends[1]);
 	}
-	parse_cmd(data, processes->cmd);
+	parse_cmd(data, &processes->cmd);
 	if (!data->cmd_str)
 		return (-1);
 	if (data->builtin)

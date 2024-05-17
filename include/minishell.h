@@ -82,7 +82,7 @@ int		pipex(t_node *processes);
 int		get_fds(t_pipex *data, t_node *processes);
 void	handle_redirs(t_node *processes, t_pipex *data);
 int		forking(t_pipex *data, t_node *processes);
-void	parse_cmd(t_pipex *data, char *cmd);
+void	parse_cmd(t_pipex *data, char **cmd);
 
 /********************************--CLEANING--***************************************/
 int		close_and_free(t_pipex *data);
