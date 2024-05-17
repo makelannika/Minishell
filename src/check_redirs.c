@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 17:21:18 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 19:11:38 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static void	do_heredoc(char *file, t_pipex *data)
 	}
 	close(heredoc);
 	free(delimiter);
+	unlink(".heredoc");
 }
 
 // checks rights to a redir file with '<'
