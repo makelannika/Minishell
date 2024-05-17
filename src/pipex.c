@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/03 19:40:51 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 13:51:18 by amakela          ###   ########.fr       */
+/*   Created: 2024/05/17 14:10:49 by linhnguy          #+#    #+#             */
+/*   Updated: 2024/05/17 17:22:13 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ static	int	get_env(t_pipex *data)
 }
 
 // initializes pipex's struct
-static int	init_data(t_pipex *data, t_node *processes)
+int	init_data(t_pipex *data, t_node *processes)
 {
 	data->cmds = get_list_length(processes);
 	data->count = 0;
@@ -126,38 +126,38 @@ static int	init_data(t_pipex *data, t_node *processes)
 	data->pids = ft_calloc(data->cmds, sizeof(int));
 	if (!data->pids)
 		return (close_and_free(data));
-	data->error = false;
+	data->error = 0;
 	data->builtin = NULL;
 	return (0);
 }
 
-int	pipex(t_node *processes)
+int	pipex(t_node *processes, t_pipex *data)
 {
-	t_pipex	data;
+	// t_pipex	data;
 
-	if (init_data(&data, processes) == -1)
+	if (init_data(data, processes) == -1)
 		return (-1);
-	while (data.count < data.cmds)
+	while (data->count < data->cmds)
 	{
-		data.error = false;
-		data.builtin = false;
-		if (get_fds(&data, processes) == -1)
+		data->error = 0;
+		data->builtin = 0;
+		if (get_fds(data, processes) == -1)
 			exit(EXIT_FAILURE);
-		if (data.error == false)
+		if (data->error == 0)
 		{
-			if (forking(&data, processes) == -1)
+			if (forking(data, processes) == -1)
 			{
-				close_and_free(&data);
+				close_and_free(data);
 				exit(EXIT_FAILURE);
 			}
 		}
-		if (data.ends[0] != -1)
-			close(data.ends[0]);
-		if (data.ends[1] != -1)
-			close(data.ends[1]);
-		data.count++;
+		if (data->ends[0] != -1)
+			close(data->ends[0]);
+		if (data->ends[1] != -1)
+			close(data->ends[1]);
+		data->count++;
 		processes = processes->next;
 	}
-	wait_children(data.pids, data.cmds);
+	wait_children(data->pids, data->cmds);
 	return (0);
 }

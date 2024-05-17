@@ -12,8 +12,6 @@
 
 #include "../include/minishell.h"
 
-#include "../include/minishell.h"
-
 char	*expand(char *value, char **cmd, int key_len, int key_start)
 {
 	char	*new_str;
@@ -22,7 +20,11 @@ char	*expand(char *value, char **cmd, int key_len, int key_start)
 	int		rest_of_str;
 	char	*tmp;
 
-	new_str = ft_calloc(ft_strlen(value) + ft_strlen(*cmd) - key_len + 1, sizeof(char));
+	new_str = ft_calloc(ft_strlen(value) + ft_strlen(*cmd) - key_len, sizeof(char));
+	// ft_printf(2, "value is %s\ncmd is %s\n", value, *cmd);
+	// ft_printf(2, "value len is %i\ncmd len is %i\n", ft_strlen(value), ft_strlen(*cmd));
+	// ft_printf(2, "key_len is: %i\n", key_len);
+	// ft_printf(2, "malloced: %i\n", ft_strlen(value) + ft_strlen(*cmd) - key_len);
 	if (!new_str)
 		return (NULL);
 	i = 0;
@@ -42,28 +44,7 @@ char	*expand(char *value, char **cmd, int key_len, int key_start)
 	tmp = *cmd;
 	*cmd = new_str;
 	free (tmp);
-	return (*cmd);
-}
-
-char	*shrink(char **cmd, int	remove)
-{
-	int	i = 0;
-	int j = 0;
-	int	len = ft_strlen(*cmd);
-	char	*new_string;
-	char	*tmp;
-
-	new_string = ft_calloc(len, sizeof(char));
-	if (!new_string)
-		return (NULL);
-	while ((*cmd)[i] && i != remove)
-		new_string[j++] = (*cmd)[i++];
-	i++;
-	while ((*cmd)[i])
-		new_string[j++] = (*cmd)[i++];
-	tmp = *cmd;
-	*cmd = new_string; 
-	free (tmp);
+	// ft_printf(2, "cmd len after: %d\n", ft_strlen(*cmd));
 	return (*cmd);
 }
 
@@ -92,9 +73,6 @@ char	*get_value(int key_start, int key_len, char **env, char **cmd)
 				//free and return
 			break ;
 		}
-		else
-			if(!shrink(cmd, start - 1))
-				return (NULL);
 		i++;
 	}
 	free(key);
@@ -129,7 +107,7 @@ int		expand_that_shit(char **cmd, char **env, t_pipex data)
 		{
 			if((*cmd)[i + 1] == '?')
 			{
-				data.exitcode = 10;
+				// data.exitcode = 10;
 				char *exit_code = ft_itoa(data.exitcode);
 				if (!expand(exit_code, cmd, 1, i + 1))
 					return (-1); //free shit
@@ -179,3 +157,5 @@ int		expand_that_shit(char **cmd, char **env, t_pipex data)
 //echo $"'HOME'" = 'HOME'
 //echo $$blah '$HOME' $'BLUE' $"'SABE'" $HOME is the $PWD = $blah $HOME BLUE 'SABE' /Users/linhnguy is the /Users/linhnguy
 
+
+// echo path is /Users/linhnguy/.brew/bin:/Users/linhnguy/.brew/bin:/Users/linhnguy/.brew/bin:/Users/linhnguy/.brew/bin:/Users/linhnguy/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Applications/Visual:

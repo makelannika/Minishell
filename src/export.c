@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:33:21 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/15 14:25:14 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 14:49:15 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,14 @@ _Bool check_key(char *str)
 
     i = 1;
     if (!(ft_isalpha(str[0]) || str[0] != '_'))
-        return (false);
+        return (0);
     while (str[i] != '=')
     {
         if (!ft_isalpha(str[i]) || str[i] != '_' || !ft_isdigit(str[i]))
-            return (false);
+            return (0);
         i++;
     }
-    return (true);
+    return (1);
 }
 
 void    print_export(char *str, int fd_out)
@@ -106,10 +106,7 @@ char    **do_export(char **env, char **cmd, int fd_out)
 	i = 0;
 	if (!cmd[1])
 	{
-        ft_printf(2, "here\n");
         sort_strings(env);
-        for(int i =0; env[i]; i++)
-        ft_printf(fd_out, "%s\n", env[i]);
         while (env[i])
             print_export(env[i++], fd_out);
     }

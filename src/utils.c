@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 17:38:41 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/06 19:15:49 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/17 14:45:15 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,15 @@ void	remove_string(char **src, int index)
 		index++;
 	}
 	src[index] = NULL;
+}
+
+_Bool	ft_isdigit_str(char *str)
+{
+	while (*str)
+	{
+		if (*str <= 48 && *str >= 57)
+			return (0);
+		str++;
+	}
+	return (1);
 }
