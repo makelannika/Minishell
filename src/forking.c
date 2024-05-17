@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/15 16:11:25 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 13:55:25 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ static int	do_cmd(t_pipex *data, t_node *processes)
 		if (data->ends[1] != -1)
 			close(data->ends[1]);
 	}
-	parse_cmd(data, processes->cmd);
+	parse_cmd(data, &processes->cmd);
 	if (!data->cmd_str)
 		return (-1);
 	if (data->builtin)

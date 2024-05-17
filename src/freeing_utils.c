@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 17:52:16 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/15 15:07:22 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 13:53:03 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ void	free_list(t_node **processes)
 {
 	t_node	*temp;
 	if (processes == NULL || *processes == NULL)
-	{
-		ft_printf(1, "processes == NULL");
 		return ;
-	}
 	while ((*processes)->next != NULL)
 	{
 		temp = *processes;
