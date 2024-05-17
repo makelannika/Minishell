@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/16 11:24:39 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 16:48:09 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 #include <unistd.h>
 #include <curses.h>
 #include <string.h>
-#include <stdbool.h>
 #include <fcntl.h>
+#include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <errno.h>
@@ -59,9 +59,10 @@ typedef struct s_pipex
 	char	**cmd;
 	char	*path;
 	int		*pids;
-	bool	error;
+	_Bool	error;
 	int		exitcode;
 	_Bool	builtin;
+	struct sigaction *sa;
 }	t_pipex;
 
 /*********************************--PARSING--**************************************/
@@ -78,7 +79,8 @@ int		expand_that_shit(char **cmd, char **env, t_pipex data);
 
 /**********************************--PIPEX--***************************************/
 
-int		pipex(t_node *processes);
+int		init_data(t_pipex *data, t_node *processes);
+int		pipex(t_node *processes, t_pipex *data);
 int		get_fds(t_pipex *data, t_node *processes);
 void	handle_redirs(t_node *processes, t_pipex *data);
 int		forking(t_pipex *data, t_node *processes);
@@ -104,5 +106,6 @@ char	**putstr_in_array(char **env, char *cmd);
 
 int		array_len(char **a);
 void	remove_string(char **src, int index);
+_Bool	ft_isdigit_str(char *str);
 
 #endif

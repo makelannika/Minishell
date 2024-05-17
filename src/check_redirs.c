@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redirs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 15:17:52 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 14:48:14 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	redir_out(char *file, t_pipex *data)
 			ft_printf(2, "no such file or directory: %s\n", &file[1]);
 		else
 			ft_printf(2, "1permission denied: %s\n", &file[1]);
-		data->error = true;
+		data->error = 1;
 		return (-1);
 	}
 	return (0);
@@ -51,7 +51,7 @@ static int	redir_in(char *file, t_pipex *data)
 			ft_printf(2, "no such file or directory: %s\n", &file[1]);
 		else
 			ft_printf(2, "2permission denied: %s\n", &file[1]);
-		data->error = true;
+		data->error = 1;
 		return (-1);
 	}
 	return (0);

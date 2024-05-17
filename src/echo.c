@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:25:34 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/14 15:12:16 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 14:47:07 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,16 @@ _Bool check_option(char *a)
 
 	p = 0;
     if (!a[p])
-        return (true);
+        return (1);
     if (a[p] == '-')
         p++;
 	while (a[p])
 	{
 		if (a[p] != 'n')
-			return (false);
+			return (0);
 		p++;
 	}
-	return (true);
+	return (1);
 }
 //FIXME: need to redo -n so that it prints all at once
 void	do_echo(char **cmd, int fd_out)

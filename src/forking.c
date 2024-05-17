@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   forking.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/15 16:11:25 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 14:48:19 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ _Bool	check_case(char *cmd, char *builtin)
 	while (cmd[i])
 	{
 		if (cmd[i] != builtin[i] && cmd[i] + 32 != builtin[i])
-			return (false);
+			return (0);
 		i++;
 	}
 	if (cmd[i] != builtin[i])
-		return (false);
-	return (true);
+		return (0);
+	return (1);
 }
 
 // calls the correct builtin function
@@ -66,22 +66,22 @@ int	call_builtin(t_pipex *data, char *cmd)
 _Bool	is_builtin(char *cmd)
 {
 	if (ft_strncmp(cmd, "cd\0", 3) == 0)
-		return (true);
+		return (1);
 	if (ft_strncmp(cmd, "export\0", 7) == 0)
-		return (true);
+		return (1);
 	if (ft_strncmp(cmd, "unset\0", 6) == 0)
-		return (true);
+		return (1);
 	if (ft_strncmp(cmd, "exit\0", 5) == 0)
-		return (true);
+		return (1);
 	if (cmd[0] == 'p' || cmd[0] == 'P')
 		return (check_case(cmd, "pwd\0"));
 	if (cmd[0] == 'e' || cmd[0] == 'E')
 	{
 		if (check_case(cmd, "env\0")
 			|| check_case(cmd, "echo\0"))
-			return (true);
+			return (1);
 	}
-	return (false);
+	return (0);
 }
 
 // finds correct path for cmd / checks if command exists
@@ -242,7 +242,7 @@ int	forking(t_pipex *data, t_node *processes)
 	if (!trimmed)
 		return (-1);
 	if (is_builtin(trimmed))
-		data->builtin = true;
+		data->builtin = 1;
 	free(trimmed);
 	if (data->cmds == 1 && data->builtin)
 	{
