@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 15:17:52 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 17:04:58 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,59 @@ static int	redir_out(char *file, t_pipex *data)
 	return (0);
 }
 
+static void	do_heredoc(char *file, t_pipex *data)
+{
+	char	*delimiter;
+	char	*line;
+	int		len;
+	int		heredoc;
+	
+	delimiter = NULL;
+	line = NULL;
+	len = 0;
+	heredoc = open(".heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	close(heredoc);
+	heredoc = open(".heredoc", O_CREAT | O_RDWR | O_APPEND, 0644);
+	data->ends[0] = open(".heredoc", O_RDONLY);
+	delimiter = trim_cmd(&file[2]);
+	len = ft_strlen(delimiter);
+	while (1)
+	{
+		line = readline("> ");
+		if (ft_strncmp(line, delimiter, len) == 0)
+		{
+			free(line);
+			break ;
+		}
+		else
+		{
+			ft_printf(heredoc, "%s\n", line);
+			free(line);
+		}
+	}
+	close(heredoc);
+	free(delimiter);
+}
+
 // checks rights to a redir file with '<'
 static int	redir_in(char *file, t_pipex *data)
 {
 	if (data->ends[0] != -1)
 		close(data->ends[0]);
-	// if (file[1] == '<')
-		// heredoc
-	data->ends[0] = open(&file[1], O_RDONLY);
-	if (data->ends[0] < 0)
+	if (file[1] == '<') // check if open fails
+		do_heredoc(file, data);
+	else
 	{
-		if (access(&file[1], F_OK) != 0)
-			ft_printf(2, "no such file or directory: %s\n", &file[1]);
-		else
-			ft_printf(2, "2permission denied: %s\n", &file[1]);
-		data->error = true;
-		return (-1);
+		data->ends[0] = open(&file[1], O_RDONLY);
+		if (data->ends[0] < 0)
+		{
+			if (access(&file[1], F_OK) != 0)
+				ft_printf(2, "no such file or directory: %s\n", &file[1]);
+			else
+				ft_printf(2, "2permission denied: %s\n", &file[1]);
+			data->error = true;
+			return (-1);
+		}
 	}
 	return (0);
 }
