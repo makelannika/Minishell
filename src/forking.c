@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 17:23:08 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 20:29:59 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ int	forking(t_pipex *data, t_node *processes)
 	if (is_builtin(trimmed))
 		data->builtin = 1;
 	free(trimmed);
-	if (data->cmds == 1 && data->builtin)
+	if (data->count == 0 && data->builtin)
 	{
 		if (do_cmd(data, processes) == -1)
 			return (0);
