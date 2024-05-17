@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+         #
+#    By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/10 19:33:06 by amakela           #+#    #+#              #
-#    Updated: 2024/01/01 18:12:31 by amakela          ###   ########.fr        #
+#    Updated: 2024/05/17 20:19:11 by linhnguy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ CFILES = ft_atoi.c			ft_bzero.c		ft_calloc.c		ft_isalnum.c	\
 		 ft_strlcat.c		ft_strlcpy.c	ft_strlen.c		ft_strmapi.c	\
 		 ft_strncmp.c		ft_strnstr.c	ft_strrchr.c	ft_strtrim.c	\
 		 ft_substr.c		ft_tolower.c	ft_toupper.c					\
-		 get_next_line.c
+		 get_next_line.c	ft_atol.c
 
 BONUSES = ft_lstnew_bonus.c 	ft_lstadd_front_bonus.c		ft_lstsize_bonus.c		\
 		  ft_lstlast_bonus.c	ft_lstadd_back_bonus.c		ft_lstdelone_bonus.c	\

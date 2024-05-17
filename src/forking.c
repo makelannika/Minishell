@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   forking.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 17:23:08 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 21:11:47 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	call_builtin(t_pipex *data, char *cmd)
 		return (0);
 	}
 	else if (ft_strncmp(cmd, "exit\0", 5) == 0)
-		return (0);
+		do_exit(cmd, data);
 	else if (cmd[0] == 'p' || cmd[0] == 'P')
 	{
 		if (check_case(cmd, "pwd\0"))

@@ -1,45 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/02 17:38:41 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/17 20:40:37 by linhnguy         ###   ########.fr       */
+/*   Created: 2024/01/08 14:53:17 by linhnguy          #+#    #+#             */
+/*   Updated: 2024/01/08 15:14:41 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "libft.h"
 
-int	array_len(char **a)
+static int	ft_isspace(char s)
 {
-	int i;
+	if ((s >= 9 && s <= 13) || s == 32)
+		return (1);
+	return (0);
+}
 
+long	ft_atol(const char *str)
+{
+	long	dest;
+	long	i;
+	long	neg;
+
+	dest = 0;
 	i = 0;
-	while(a[i])
+	neg = 1;
+	while (ft_isspace(str[i]))
 		i++;
-	return (i);
-}
-
-void	remove_string(char **src, int index)
-{
-	free(src[index]);
-	while (src[index + 1])
+	if ((str[i] == 45 || str[i] == 43))
 	{
-		src[index] = src[index + 1];
-		index++;
+		if (str[i] == 45)
+			neg = -1;
+		i++;
 	}
-	src[index] = NULL;
-}
-
-_Bool	ft_isdigit_str(char *str)
-{
-	while (*str)
-	{
-		if (*str < '0' || *str > '9')
-			return (0);
-		str++;
-	}
-	return (1);
+	while (ft_isdigit(str[i]))
+		dest = dest * 10 + str[i++] - '0';
+	return (dest * neg);
 }
