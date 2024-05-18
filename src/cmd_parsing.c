@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:56:23 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/18 18:12:10 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/18 18:21:24 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*quote_remover(char *cmd)
 	int	remove;
 	int	len;
 
-	remove = count_removable_quotes(cmd);
+	remove = count_quotes(cmd);
 	len = ft_strlen(cmd) - remove + 1;
 	return (remove_quotes(cmd, len));
 }
