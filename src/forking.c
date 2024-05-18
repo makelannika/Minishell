@@ -6,7 +6,6 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 21:11:47 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +243,7 @@ int	forking(t_pipex *data, t_node *processes)
 	if (is_builtin(trimmed))
 		data->builtin = 1;
 	free(trimmed);
-	if (data->cmds == 1 && data->builtin)
+	if (data->count == 0 && data->builtin)
 	{
 		if (do_cmd(data, processes) == -1)
 			return (0);
