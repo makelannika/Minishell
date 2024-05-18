@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 17:22:49 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/18 18:09:09 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	main()
 		{
 			processes = NULL;
 			add_history(line);
-			if (count_quotes(line) % 2 != 0)
+			if (count_removable_quotes(line) % 2 != 0)
 				ft_printf(2, "Error\nEnclosed quotes\n");
 			parse_input(line, &processes);
 			free(line);

@@ -6,28 +6,11 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:13:07 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/11 17:52:37 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/18 18:10:45 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-// for checking enclosed quotes
-int	count_quotes(char *string)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (string[i])
-	{
-		if (string[i] == '\'' || string[i] == '\"')
-			count++;
-		i++;
-	}
-	return (count);
-}
 
 // returns the number of character c outside of quotes and single quotes in a string
 int	counter(char *string, char c)

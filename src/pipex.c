@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:10:49 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/17 17:22:13 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 20:48:21 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,8 +133,6 @@ int	init_data(t_pipex *data, t_node *processes)
 
 int	pipex(t_node *processes, t_pipex *data)
 {
-	// t_pipex	data;
-
 	if (init_data(data, processes) == -1)
 		return (-1);
 	while (data->count < data->cmds)

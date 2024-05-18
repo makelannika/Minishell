@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:23:34 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 11:48:28 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/18 17:56:15 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static char	*get_redir(char *string)
 {
 	int		i;
 	char	*redir_str;
+	char	*tmp;
 	
 	i = 1;
 	while (string[i])
@@ -67,8 +68,12 @@ static char	*get_redir(char *string)
 		redir_str = ft_substr(string, 0, i);
 		if (!redir_str)
 			return (NULL);
-		redir_str = trim_redir(redir_str);
+		redir_str = trim_redir(redir_str); // add check
+		tmp = redir_str;
+		redir_str = quote_remover(redir_str); // add check
+		free(tmp);	
 		remove_redir(&string, 0, i);
+		ft_printf(2, "redir str: %s\n", redir_str);
 		return (redir_str);
 	}
 	return (NULL);

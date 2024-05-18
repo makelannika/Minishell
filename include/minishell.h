@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 17:25:57 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/18 18:11:36 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void	get_redir_arr(char	*string, t_node *node);
 void	init_flags(t_flags *f);
 int		expand_that_shit(char **cmd, char **env, t_pipex data);
 char	*trim_cmd(char *cmd_str);
+char	*quote_remover(char *cmd);
 
 /**********************************--PIPEX--***************************************/
 
@@ -85,7 +86,7 @@ int		pipex(t_node *processes, t_pipex *data);
 int		get_fds(t_pipex *data, t_node *processes);
 void	handle_redirs(t_node *processes, t_pipex *data);
 int		forking(t_pipex *data, t_node *processes);
-void	parse_cmd(t_pipex *data, char **cmd);
+int		parse_cmd(t_pipex *data, char **cmd);
 
 /********************************--CLEANING--***************************************/
 int		close_and_free(t_pipex *data);
