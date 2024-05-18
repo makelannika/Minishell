@@ -45,7 +45,7 @@ int	call_builtin(t_pipex *data, char *cmd)
 		return (0);
 	}
 	else if (ft_strncmp(cmd, "exit\0", 5) == 0)
-		do_exit(cmd, data);
+		do_exit(data->cmd, data);
 	else if (cmd[0] == 'p' || cmd[0] == 'P')
 	{
 		if (check_case(cmd, "pwd\0"))

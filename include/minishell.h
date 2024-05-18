@@ -102,7 +102,7 @@ void	do_cd(char *path, char **env);
 void	do_unset(char **env, char *key);
 void	sort_strings(char **arr);
 char	**putstr_in_array(char **env, char *cmd);
-void	do_exit(char *cmd, t_pipex *data);
+void	do_exit(char **cmd, t_pipex *data);
 
 /***********************************--UTILS--**************************************/
 

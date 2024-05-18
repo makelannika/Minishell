@@ -77,5 +77,5 @@ int	main()
 			free_list(&processes);
 		}
 	}
-	return (0);
+	return (data.exitcode);
 }

@@ -82,26 +82,31 @@ void do_unset(char **env, char *key)
 	}
 }
 
-void	do_exit(char *cmd, t_pipex *data)
+void	do_exit(char **cmd, t_pipex *data)
 {
 	long	code;
 	
-	if (ft_strlen(cmd) > 4 && cmd[4] == ' ')
-	{
-		code = ft_atol(ft_strchr(cmd, ' ') + 1);
-		if (!ft_isdigit_str(ft_strchr(cmd, ' ') + 1) || code < 0)
-		{
-			ft_printf(2, "%s: numeric argument required\n", cmd);
-			exit (255);
-		}
-		if (code > 255)
-			exit (code % 256);
-	}
-	else if (cmd[4] == '\0')
+	if (!cmd[1])
 		exit (data->exitcode);
-	else
+	if (cmd[1])
 	{
-		ft_printf(2, "%s: command not found\n", cmd);
-		data->exitcode = 127;
+		if (ft_isdigit_str(cmd[1]))
+		{
+			code = ft_atol(cmd[1]);
+			if (!ft_isdigit_str(cmd[1]) || code < 0)
+			{
+				ft_printf(2, "%s %s: numeric argument required\n", cmd[0], cmd[1]);
+				exit (255);
+			}
+			else if (code > 255)
+				exit (code % 256);
+			else
+				exit (code);
+		}
+		else
+		{
+			ft_printf(2, "%s %s: command not found\n", cmd[0], cmd[1]);
+			exit (127);
+		}
 	}
 }
