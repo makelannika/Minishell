@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/15 14:24:51 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 21:09:15 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,34 @@ void do_unset(char **env, char *key)
 		if (ft_strncmp(env[i], key, ft_strlen(key)) == 0)
 			remove_string(env, i);
 		i++;
+	}
+}
+
+void	do_exit(char **cmd, t_pipex *data)
+{
+	long	code;
+	
+	if (!cmd[1])
+		exit (data->exitcode);
+	if (cmd[1])
+	{
+		if (ft_isdigit_str(cmd[1]))
+		{
+			code = ft_atol(cmd[1]);
+			if (!ft_isdigit_str(cmd[1]) || code < 0)
+			{
+				ft_printf(2, "%s %s: numeric argument required\n", cmd[0], cmd[1]);
+				exit (255);
+			}
+			else if (code > 255)
+				exit (code % 256);
+			else
+				exit (code);
+		}
+		else
+		{
+			ft_printf(2, "%s %s: command not found\n", cmd[0], cmd[1]);
+			exit (127);
+		}
 	}
 }

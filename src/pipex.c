@@ -12,25 +12,23 @@
 
 #include "../include/minishell.h"
 
-static int	wait_children(int *pids, int count)
+static int	wait_children(int *pids, int count, int *exitcode)
 {
 	int	status;
-	int	exitcode;
 	int	i;
 
 	i = 0;
 	status = 0;
-	exitcode = 0;
 	while (i < count)
 	{
 		waitpid(pids[i], &status, 0);
 		if (WIFEXITED(status) && i == count - 1)
-			exitcode = WEXITSTATUS(status);
+			*exitcode = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			exitcode = WTERMSIG(status);
+			*exitcode = WTERMSIG(status);
 		i++;
 	}
-	return (exitcode);
+	return (*exitcode);
 	// exit(exitcode);
 }
 
@@ -156,6 +154,6 @@ int	pipex(t_node *processes, t_pipex *data)
 		data->count++;
 		processes = processes->next;
 	}
-	wait_children(data->pids, data->cmds);
-	return (0);
+	wait_children(data->pids, data->cmds, &data->exitcode);
+	return (data->exitcode);
 }

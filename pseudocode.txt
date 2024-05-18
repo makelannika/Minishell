@@ -84,3 +84,21 @@ export what= qwer wer wer
 export "what "= qwer wer wer 
 export "1what"= qwer wer wer 
 export "what"= "' wer'" wer wer 
+
+Detailed Signal Descriptions
+SIGINT: Typically sent when the user presses Ctrl+C in the terminal. It is often used to stop a running program.
+SIGTERM: A polite way to ask a process to terminate. The process can catch and handle this signal, allowing it to perform cleanup operations before exiting.
+SIGKILL: Forces the process to terminate immediately. It cannot be caught or ignored, ensuring the process stops immediately.
+SIGSEGV: Indicates a segmentation fault, often due to invalid memory access (e.g., dereferencing a null pointer).
+SIGUSR1 and SIGUSR2: User-defined signals for custom use in applications.
+SIGALRM: Sent when a real-time timer set by alarm() expires.
+SIGCHLD: Sent to a parent process when one of its child processes terminates or stops.
+SIGHUP: Often used to reload configuration files without restarting the process, especially for daemon processes.
+SIGPIPE: Sent when a process tries to write to a pipe with no readers, common in network and inter-process communication.
+SIGSTOP: Pauses the process; cannot be caught or ignored, ensuring the process stops.
+SIGCONT: Resumes a process that has been paused by SIGSTOP.
+Practical Applications
+Handling Interruptions: Use SIGINT to handle user interruptions gracefully.
+Graceful Shutdowns: Use SIGTERM to allow processes to clean up before exiting.
+Debugging: Use SIGSEGV to identify and handle segmentation faults in a program.
+Custom Signals: Use SIGUSR1 and SIGUSR2 for application-specific signal handling.

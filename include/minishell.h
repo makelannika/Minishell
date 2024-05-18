@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/18 18:11:36 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/18 18:17:19 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void	do_cd(char *path, char **env);
 void	do_unset(char **env, char *key);
 void	sort_strings(char **arr);
 char	**putstr_in_array(char **env, char *cmd);
+void	do_exit(char **cmd, t_pipex *data);
 
 /***********************************--UTILS--**************************************/
 

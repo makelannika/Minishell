@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/18 18:09:09 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/18 18:18:38 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ int	main()
 	t_node			*processes = NULL;
 	extern	char	**environ;
 	t_pipex			data;
-	int				code;
+	long			code;
 	
+	data = (t_pipex){0};
 	while (1) 
 	{
-		line = readline("Minishell: ");
+		line = readline("MOOshell: ");
 		if (!line)
 		{
 			ft_printf(2, "Error: realine failed\n");	
@@ -30,16 +31,28 @@ int	main()
 		}
 		else if (ft_strncmp(line, "exit", 4) == 0)
 		{
-			if (ft_strlen(line) > 4 && line[4] == ' ' && ft_isdigit_str(ft_strchr(line, ' ') + 1))
+			if (ft_strlen(line) > 4 && line[4] == ' ')
 			{
-				code = ft_atoi(ft_strchr(line, ' ') + 1);
+				if (!ft_isdigit_str(ft_strchr(line, ' ') + 1))
+				{
+					ft_printf(2, "%s: numeric argument required\n", line);
+					free(line);
+					return (255);
+				}
+				code = ft_atol(ft_strchr(line, ' ') + 1);
+				if (code < 0)
+				{
+					ft_printf(2, "%s: numeric argument required\n", line);
+					return (255);
+				}
 				if (code > 255)
 					code = code % 256;
-				data.exitcode = code;
+				return (code);
 			}
 			else if (line[4] == '\0')
 			{
-				
+				free(line);
+				return (data.exitcode);
 			}
 			else
 			{
@@ -54,7 +67,7 @@ int	main()
 		{
 			processes = NULL;
 			add_history(line);
-			if (count_removable_quotes(line) % 2 != 0)
+			if (count_quotes(line) % 2 != 0)
 				ft_printf(2, "Error\nEnclosed quotes\n");
 			parse_input(line, &processes);
 			free(line);
@@ -64,5 +77,5 @@ int	main()
 			free_list(&processes);
 		}
 	}
-	return (0);
+	return (data.exitcode);
 }

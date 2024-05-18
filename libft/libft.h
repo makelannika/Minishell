@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:44:38 by amakela           #+#    #+#             */
-/*   Updated: 2024/01/01 18:27:56 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/17 20:19:31 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,6 @@ int		ft_printhex(int fd, unsigned long nbr, char specifier, int *count);
 int		ft_printnbr(int fd, long nbr, int *count);
 int		ft_printstr(int fd, char *str);
 char	*get_next_line(int fd);
+long	ft_atol(const char *str);
 
 #endif
