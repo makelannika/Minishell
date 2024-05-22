@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/22 13:47:10 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 13:55:36 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int		set_exitcode(t_pipex *data, int exitcode);
 
 /*********************************--BUILT_IN--*************************************/
 
-char    **do_export(t_pipex *data, char **env, char **cmd, int fd_out);
+void	do_export(t_pipex *data, char **env, char **cmd, int fd_out);
 void	do_echo(t_pipex *data, char **cmd, int fd_out);
 void	put_env(t_pipex *data, char **env, int fd_out);
 void	put_pwd(t_pipex *data, int	fd_out);
