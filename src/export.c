@@ -151,5 +151,5 @@ void    do_export(t_pipex *data, char **env, char **cmd, int fd_out)
 //     printf("____________________\n");
 //     do_export(env, str ,2);
 // }
-//TODO: update key that aleady exists
 //TODO: figure out exit or return
+//TODO: update key that aleady exists
