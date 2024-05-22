@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/22 12:36:46 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 13:46:36 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	main()
 	long			code;
 	
 	data = (t_pipex){0};
+	get_env(&data);
 	while (1) 
 	{
 		line = readline("MOOshell: ");

@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:10:49 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/22 12:34:04 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 13:46:58 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	get_paths(t_pipex *data)
 }
 
 // saves a copy of env into pipex's struct
-static	int	get_env(t_pipex *data)
+int	get_env(t_pipex *data)
 {
 	int			i;
 	extern char	**environ;
@@ -115,8 +115,6 @@ int	init_data(t_pipex *data, t_node *processes)
 		return (-1);
 	}
 	data->read_end = -1;
-	if (get_env(data) == -1)
-		return (close_and_free(data));
 	if (get_paths(data) == -1)
 		return (close_and_free(data));
 	data->cmd_str = NULL;
@@ -142,10 +140,11 @@ int	pipex(t_node *processes, t_pipex *data)
 			exit(EXIT_FAILURE);
 		if (data->error == 0)
 		{
-			if (forking(data, processes) == -1)
+			forking(data, processes);
+			if (data->pids == 0)
 			{
 				close_and_free(data);
-				return (-1);
+				return (0);
 			}
 		}
 		if (data->ends[0] != -1)
