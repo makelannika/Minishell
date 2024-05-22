@@ -21,6 +21,7 @@ int	main()
 	long			code;
 	
 	data = (t_pipex){0};
+	get_env(&data);
 	while (1) 
 	{
 		line = readline("MOOshell: ");

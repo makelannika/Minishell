@@ -83,7 +83,7 @@ static int	get_paths(t_pipex *data)
 }
 
 // saves a copy of env into pipex's struct
-static	int	get_env(t_pipex *data)
+int	get_env(t_pipex *data)
 {
 	int			i;
 	extern char	**environ;
@@ -114,8 +114,6 @@ int	init_data(t_pipex *data, t_node *processes)
 		return (-1);
 	}
 	data->read_end = -1;
-	if (get_env(data) == -1)
-		return (close_and_free(data));
 	if (get_paths(data) == -1)
 		return (close_and_free(data));
 	data->cmd_str = NULL;

@@ -78,6 +78,7 @@ void	init_flags(t_flags *f);
 int		expand_that_shit(char **cmd, char **env, t_pipex data);
 char	*trim_cmd(char *cmd_str);
 char	*quote_remover(char *cmd);
+int		get_env(t_pipex *data);
 
 /**********************************--PIPEX--***************************************/
 
