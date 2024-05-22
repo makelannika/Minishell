@@ -70,7 +70,7 @@ _Bool check_key(char *str)
     int i;
 
     i = 1;
-    if (!(ft_isalpha(str[0]) || str[0] != '_'))
+    if (!(ft_isalpha(str[0]) && str[0] != '_'))
         return (0);
     while (str[i] && str[i] != '=')
     {
@@ -119,35 +119,36 @@ char    **do_export(char **env, char **cmd, int fd_out)
             }
 		    env = putstr_in_array(env, cmd[i++]);
         }
+        // printf("AFTER EXPORT_________\n");
         // for (int p = 0; env[p]; p++)
         //     printf("%s\n", env[p]);
+        // printf("\n\n\n");
     }
     return (env);
 }
-int main()
-{
-    char **exports = malloc(sizeof(char *) * 8);
-    char **env = malloc(sizeof(char *) * 9);
+// int main()
+// {
+//     char **exports = malloc(sizeof(char *) * 8);
+//     char **env = malloc(sizeof(char *) * 9);
 
-    exports[0] = ft_strdup("export");
-    exports[1] = ft_strdup("cat=10");
-    exports[2] = ft_strdup("cat=9");
-    exports[3] = ft_strdup("cat");
-    exports[4] = ft_strdup("cat=");
-    exports[5] = NULL;
+//     exports[0] = ft_strdup("export");
+//     exports[1] = ft_strdup("1cat=10");
+//     exports[2] = ft_strdup("cat=9");
+//     exports[3] = ft_strdup("cat");
+//     exports[4] = ft_strdup("cat=");
+//     exports[5] = NULL;
 
-    char **str= malloc(sizeof(char *) * 9);
-    str[0] = "export";
-    str[2] = NULL;
+//     char **str= malloc(sizeof(char *) * 9);
+//     str[0] = "export";
+//     str[2] = NULL;
 
-    env[0] = ft_strdup("dog=6");
-    env[1] = ft_strdup("dog=7");
-    env[2] = ft_strdup("dog=7=234sdf");
-    env[3] = NULL;
-    do_export(env, exports, 2);
-    printf("____________________\n");
-    do_export(env, str ,2);
-}
-//TODO: need to figure out empty string thingy and if first digits is a number or _
-//TODO: figure out exit or return
+//     env[0] = ft_strdup("dog=6");
+//     env[1] = ft_strdup("dog=7");
+//     env[2] = ft_strdup("dog=7=234sdf");
+//     env[3] = NULL;
+//     do_export(env, exports, 2);
+//     printf("____________________\n");
+//     do_export(env, str ,2);
+// }
 //TODO: update key that aleady exists
+//TODO: figure out exit or return
