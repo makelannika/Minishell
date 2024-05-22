@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:33:21 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/17 14:49:15 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/22 11:10:31 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,9 @@ void    print_export(char *str, int fd_out)
         printf("declare -x %.*s\"%s\"\n", (int)(tmp - str + 1), str, tmp + 1);
 }
 
-char    **do_export(char **env, char **cmd, int fd_out)
+char    **do_export(t_pipex *data, char **env, char **cmd, int fd_out)
 {
+    (void)data;
 	int     i;
 	
 	i = 0;

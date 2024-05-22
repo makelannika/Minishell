@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/18 18:17:19 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 11:07:14 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,15 +93,16 @@ int		parse_cmd(t_pipex *data, char **cmd);
 int		close_and_free(t_pipex *data);
 void	free_list(t_node **processes);
 void	free_str_array(char **array);
+int		set_exitcode(t_pipex *data, int exitcode);
 
 /*********************************--BUILT_IN--*************************************/
 
-char    **do_export(char **env, char **cmd, int fd_out);
-void	do_echo(char **cmd, int fd_out);
-void	put_env(char **env, int fd_out);
-void	put_pwd(int	fd_out);
-void	do_cd(char *path, char **env);
-void	do_unset(char **env, char *key);
+char    **do_export(t_pipex *data, char **env, char **cmd, int fd_out);
+void	do_echo(t_pipex *data, char **cmd, int fd_out);
+void	put_env(t_pipex *data, char **env, int fd_out);
+void	put_pwd(t_pipex *data, int	fd_out);
+void	do_cd(t_pipex *data, char *path, char **env);
+void	do_unset(t_pipex *data, char **env, char *key);
 void	sort_strings(char **arr);
 char	**putstr_in_array(char **env, char *cmd);
 void	do_exit(char **cmd, t_pipex *data);

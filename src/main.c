@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/18 18:21:04 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 12:36:46 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	main()
 {
 	char			*line;
 	t_node			*processes = NULL;
-	extern	char	**environ;
 	t_pipex			data;
 	long			code;
 	
@@ -27,7 +26,7 @@ int	main()
 		line = readline("MOOshell: ");
 		if (!line)
 		{
-			ft_printf(2, "Error: realine failed\n");	
+			ft_printf(2, "Error: readline failed\n");	
 				return (-1);
 		}
 		else if (ft_strncmp(line, "exit", 4) == 0)
