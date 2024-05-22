@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/22 13:57:00 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 18:59:26 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,10 +179,10 @@ static int	get_cmd(char *cmd, t_pipex *data)
 // execve here
 static int	do_cmd(t_pipex *data, t_node *processes)
 {
-	if (data->read_end != -1)
-		close(data->read_end);
 	if (!data->builtin)
 	{
+		if (data->read_end != -1)
+			close(data->read_end);
 		dup2(data->ends[0], STDIN_FILENO);
 		dup2(data->ends[1], STDOUT_FILENO);
 		if (data->ends[0] != -1)
