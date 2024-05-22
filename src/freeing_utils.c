@@ -49,6 +49,15 @@ void	free_list(t_node **processes)
 	processes = NULL;
 }
 
+void	reset_data(t_pipex *data)
+{
+	data->env = NULL;
+	data->paths = NULL;
+	data->cmd_str = NULL;
+	data->cmd = NULL;
+	data->path = NULL;
+	data->pids = NULL;
+}
 // frees pipex data and closes fds
 int	close_and_free(t_pipex *data)
 {
@@ -73,6 +82,6 @@ int	close_and_free(t_pipex *data)
 		free(data->path);
 	if (data->pids)
 		free(data->pids);
-	*data = (t_pipex){0};
+	reset_data(data);
 	return (-1);
 }

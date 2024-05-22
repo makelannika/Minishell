@@ -17,6 +17,7 @@ int	set_exitcode(t_pipex *data, int exitcode)
 	data->exitcode = exitcode;
 	return (-1);
 }
+
 // checks all case combinations for builtin commands
 // is called only for pwd, env & echo
 _Bool	check_case(char *cmd, char *builtin)
@@ -169,7 +170,6 @@ static int	get_cmd(char *cmd, t_pipex *data)
 		ft_printf(2, "command not found: %s\n", cmd);
 		close_and_free(data);
 		return (set_exitcode(data, 127));
-		// exit(127);
 	}
 	if (get_path(data) == -1)
 		return (-1);

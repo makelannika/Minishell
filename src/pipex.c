@@ -93,7 +93,10 @@ int	get_env(t_pipex *data)
 		i++;
 	data->env = ft_calloc(i + 1, sizeof(char *));
 	if (!data->env)
+	{
+		data->exitcode = -1;
 		return (-1);
+	}
 	i = 0;
 	while (environ[i])
 	{
@@ -144,7 +147,7 @@ int	pipex(t_node *processes, t_pipex *data)
 			if (data->pids == 0)
 			{
 				close_and_free(data);
-				return (0);
+				return (data->exitcode);
 			}
 		}
 		if (data->ends[0] != -1)

@@ -25,10 +25,13 @@ int	main()
 		line = readline("MOOshell: ");
 		if (!line)
 		{
-			ft_printf(2, "Error: readline failed\n");	
+			if (data.pids == 0)
+				ft_printf(2, "in child process\n");
+			ft_printf(2, "error is %i\n", data.exitcode);
+			ft_printf(2, "Error: 1readline failed\n");	
 				return (-1);
 		}
-		else if (line[0] == '\0')
+		if (line[0] == '\0')
 			continue;
 		else 
 		{
@@ -44,8 +47,11 @@ int	main()
 			if (!processes)
 				return (-1);
 			pipex(processes, &data);
+			if (data.pids == 0)
+				return (data.exitcode);
 			free_list(&processes);
 		}
 	}
+	ft_printf(2, "exitcode of the parent: %d\n", data.exitcode);
 	return (data.exitcode);
 }
