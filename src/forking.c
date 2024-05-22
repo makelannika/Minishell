@@ -46,7 +46,7 @@ int	call_builtin(t_pipex *data, char *cmd)
 		// for (int p = 0; data->env[p]; p++)
         //     printf("%s\n", data->env[p]);
 		printf("pointer before export is %p\n", data->env);
-		data->env = do_export(data->env, data->cmd, data->ends[1]);
+		data->env = do_export(data, data->env, data->cmd, data->ends[1]);
 		printf("pointer AFTER export is %p\n", data->env);
 		printf("\nAfter export\n\n");
 		for (int p = 0; data->env[p]; p++)

@@ -96,7 +96,7 @@ void    print_export(char *str, int fd_out)
         printf("declare -x %.*s\"%s\"\n", (int)(tmp - str + 1), str, tmp + 1);
 }
 
-char    **do_export(t_pipex *data, char **env, char **cmd, int fd_out)
+void    do_export(t_pipex *data, char **env, char **cmd, int fd_out)
 {
     (void)data;
 	int     i;
@@ -125,8 +125,8 @@ char    **do_export(t_pipex *data, char **env, char **cmd, int fd_out)
         //     printf("%s\n", env[p]);
         // printf("\n\n\n");
     }
-    return (env);
-}
+    data->env = env;
+}   
 // int main()
 // {
 //     char **exports = malloc(sizeof(char *) * 8);
