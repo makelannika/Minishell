@@ -38,6 +38,8 @@ int	call_builtin(t_pipex *data, char *cmd)
 	else if (ft_strncmp(cmd, "export\0", 7) == 0)
 	{
 		do_export(data->env, data->cmd, data->ends[1]);
+		// for (int p = 0; data->env[p]; p++)
+        //     printf("%s\n", data->env[p]);
 		return (0);
 	}
 	else if (ft_strncmp(cmd, "unset\0", 6) == 0)

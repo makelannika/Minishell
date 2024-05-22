@@ -35,14 +35,15 @@ int	main()
 			{
 				if (!ft_isdigit_str(ft_strchr(line, ' ') + 1))
 				{
-					ft_printf(2, "%s: numeric argument required\n", line);
+					ft_printf(2, "%s: 1numeric argument required\n", line);
 					free(line);
+	printf("exit here\n");
 					return (255);
 				}
 				code = ft_atol(ft_strchr(line, ' ') + 1);
 				if (code < 0)
 				{
-					ft_printf(2, "%s: numeric argument required\n", line);
+					ft_printf(2, "%s: 2numeric argument required\n", line);
 					return (255);
 				}
 				if (code > 255)

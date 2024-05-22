@@ -72,9 +72,9 @@ _Bool check_key(char *str)
     i = 1;
     if (!(ft_isalpha(str[0]) || str[0] != '_'))
         return (0);
-    while (str[i] != '=')
+    while (str[i] && str[i] != '=')
     {
-        if (!ft_isalpha(str[i]) || str[i] != '_' || !ft_isdigit(str[i]))
+        if (!ft_isalpha(str[i]) && str[i] != '_' && !ft_isdigit(str[i]))
             return (0);
         i++;
     }
@@ -87,14 +87,11 @@ void    print_export(char *str, int fd_out)
     int     i;
 
     i = 0;
-    tmp = NULL;
-    if (!check_key(str))
-        //print error message and return
     tmp = ft_strchr(str, '=');
     if (!tmp) //prints string without =
         ft_printf(fd_out, "declare -x %s\n", str);
     else if (*(tmp + 1) == '\0') //prints strings with = at the end
-        ft_printf(fd_out, "declare -x %s\'\'\n", str);
+        ft_printf(fd_out, "declare -x %s\"\"\n", str);
     else
         printf("declare -x %.*s\"%s\"\n", (int)(tmp - str + 1), str, tmp + 1);
 }
@@ -114,35 +111,43 @@ char    **do_export(char **env, char **cmd, int fd_out)
     {
         i = 1;
         while (cmd[i])
+        {
+            if (!check_key(cmd[i]))
+            {
+                ft_printf(2, "export: `%s': not a valid identifier\n", cmd[i++]);
+                continue;
+            }
 		    env = putstr_in_array(env, cmd[i++]);
+        }
+        // for (int p = 0; env[p]; p++)
+        //     printf("%s\n", env[p]);
     }
     return (env);
 }
-// int main()
-// {
-//     char **array = malloc(sizeof(char *) * 8);
-//     char **env = malloc(sizeof(char *) * 9);
+int main()
+{
+    char **exports = malloc(sizeof(char *) * 8);
+    char **env = malloc(sizeof(char *) * 9);
 
-//     array[0] = ft_strdup("export");
-//     array[1] = ft_strdup("cat=10");
-//     array[2] = ft_strdup("pipe=9");
-//     array[3] = ft_strdup("ppopoe");
-//     array[4] = ft_strdup("pipsdfe=");
-//     array[5] = NULL;
+    exports[0] = ft_strdup("export");
+    exports[1] = ft_strdup("cat=10");
+    exports[2] = ft_strdup("cat=9");
+    exports[3] = ft_strdup("cat");
+    exports[4] = ft_strdup("cat=");
+    exports[5] = NULL;
 
-//     char **str= malloc(sizeof(char *) * 9);
-//     str[0] = "export";
-//     str[1] = NULL;
+    char **str= malloc(sizeof(char *) * 9);
+    str[0] = "export";
+    str[2] = NULL;
 
-
-//     env[0] = ft_strdup("cat=6");
-//     env[1] = ft_strdup("dog=7");
-//     env[2] = ft_strdup("dog=7=234sdf");
-//     env[3] = NULL;
-//     env = do_export(env, array);
-//     do_export(env, str);
-    
-// }
+    env[0] = ft_strdup("dog=6");
+    env[1] = ft_strdup("dog=7");
+    env[2] = ft_strdup("dog=7=234sdf");
+    env[3] = NULL;
+    do_export(env, exports, 2);
+    printf("____________________\n");
+    do_export(env, str ,2);
+}
 //TODO: need to figure out empty string thingy and if first digits is a number or _
 //TODO: figure out exit or return
-//TODO: multiple variables
+//TODO: update key that aleady exists

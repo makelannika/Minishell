@@ -80,7 +80,7 @@ char	*get_value(int key_start, int key_len, char **env, char **cmd)
 	}
 	if (found == 0)
 	{
-		printf("here2\n");
+		// printf("here2\n");
 		i = 0;
 		char *new_str = ft_calloc(ft_strlen(*cmd), sizeof(char));
 		while (i < start - 1)
@@ -126,7 +126,6 @@ int		expand_that_shit(char **cmd, char **env, t_pipex data)
 		{
 			if((*cmd)[i + 1] == '?')
 			{
-				printf("here1\n");
 				char *exit_code = ft_itoa(data.exitcode);
 				if (!expand(exit_code, cmd, 1, i + 1))
 					return (-1); //free shit
