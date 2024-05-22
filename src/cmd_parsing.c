@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:56:23 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/18 18:21:24 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 12:28:57 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ int	count_quotes(char *string)
 // creates a new parsed cmd str into pipex's struct 
 char	*quote_remover(char *cmd)
 {
-	int	remove;
-	int	len;
+	int		remove;
+	int		len;
 
 	remove = count_quotes(cmd);
 	len = ft_strlen(cmd) - remove + 1;
@@ -103,15 +103,14 @@ int	parse_cmd(t_pipex *data, char **cmd)
 {
 	if (!(*cmd)[0])
 	{
-		ft_printf(2, "3permission denied: %s\n", *cmd);
+		ft_printf(2, "permission denied: %s\n", *cmd);
 		close_and_free(data);
-		// exit(126);
-		return (-1);
+		return (set_exitcode(data, 1));
 	}
 	space_handler(*cmd);
-	expand_that_shit(cmd, data->env, *data); // add check?
+	expand_that_shit(cmd, data->env, *data); // add check
 	data->cmd_str = quote_remover(*cmd);
 	if (!data->cmd_str)
-		return (-1);
+		return (set_exitcode(data, -1));
 	return (0);
 }

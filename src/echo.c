@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:25:34 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/17 17:23:22 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 11:10:22 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ _Bool check_option(char *a)
 	return (1);
 }
 //FIXME: need to redo -n so that it prints all at once
-void	do_echo(char **cmd, int fd_out)
+void	do_echo(t_pipex *data, char **cmd, int fd_out)
 {
+    (void)data;
 	int		i;
 
 	i = 1;

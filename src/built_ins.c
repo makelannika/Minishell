@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/17 21:09:15 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/05/22 12:36:22 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void put_env(char **env, int fd_out)
+void put_env(t_pipex *data, char **env, int fd_out)
 {
+	(void)data;
 	int	i;
 
 	i = 0;
@@ -25,8 +26,9 @@ void put_env(char **env, int fd_out)
 	}
 }
 
-void put_pwd(int fd_out)
+void put_pwd(t_pipex *data, int fd_out)
 {
+	(void)data;
 	char *s;
 
 	s = getcwd(NULL, 0);
@@ -35,8 +37,9 @@ void put_pwd(int fd_out)
 	ft_printf(fd_out, "%s\n", s);
 }
 
-void do_cd(char *path, char**environ)
+void do_cd(t_pipex *data, char *path, char**environ)
 {
+	(void)data;
 	int	i;
 	char *oldpwd;
 	char *newpwd;
@@ -69,8 +72,9 @@ void do_cd(char *path, char**environ)
 // FIXME: unset $(env | awk -F= '{print $1}')
 // FIXME: take multiple variables
 // FIXME: 
-void do_unset(char **env, char *key)
+void do_unset(t_pipex *data, char **env, char *key)
 {
+	(void)data;
 	int	i;
 
 	i = 0;
@@ -84,6 +88,7 @@ void do_unset(char **env, char *key)
 
 void	do_exit(char **cmd, t_pipex *data)
 {
+	(void)data;
 	long	code;
 	
 	if (!cmd[1])

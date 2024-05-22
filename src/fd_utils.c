@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 17:47:58 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/15 16:11:13 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 12:33:18 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static int	middle_child(t_pipex *data, t_node *processess)
 	if (pipe(data->ends) == -1)
 	{
 		ft_printf(2, "Error opening a pipe\n");
+		data->exitcode = -1;
 		return (close_and_free(data));
 	}
 	tmp = dup(data->read_end);

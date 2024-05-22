@@ -6,12 +6,17 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/18 18:16:47 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 12:36:33 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+int	set_exitcode(t_pipex *data, int exitcode)
+{
+	data->exitcode = exitcode;
+	return (-1);
+}
 // checks all case combinations for builtin commands
 // is called only for pwd, env & echo
 _Bool	check_case(char *cmd, char *builtin)
@@ -34,32 +39,26 @@ _Bool	check_case(char *cmd, char *builtin)
 int	call_builtin(t_pipex *data, char *cmd)
 {
 	if (ft_strncmp(cmd, "cd\0", 3) == 0)
-		do_cd(data->cmd[1], data->env);
+		do_cd(data, data->cmd[1], data->env);
 	else if (ft_strncmp(cmd, "export\0", 7) == 0)
-	{
-		do_export(data->env, data->cmd, data->ends[1]);
-		return (0);
-	}
+		do_export(data, data->env, data->cmd, data->ends[1]);
 	else if (ft_strncmp(cmd, "unset\0", 6) == 0)
-	{
-		do_unset(data->env, data->cmd[1]);
-		return (0);
-	}
+		do_unset(data, data->env, data->cmd[1]);
 	else if (ft_strncmp(cmd, "exit\0", 5) == 0)
 		do_exit(data->cmd, data);
 	else if (cmd[0] == 'p' || cmd[0] == 'P')
 	{
 		if (check_case(cmd, "pwd\0"))
-			put_pwd(data->ends[1]);
+			put_pwd(data, data->ends[1]);
 	}
 	else if (cmd[0] == 'e' || cmd[0] == 'E')
 	{
 		if (check_case(cmd, "env\0"))
-			put_env(data->env, data->ends[1]);
+			put_env(data, data->env, data->ends[1]);
 		else if (check_case(cmd, "echo\0"))
-			do_echo(data->cmd, data->ends[1]);
+			do_echo(data, data->cmd, data->ends[1]);
 	}
-	return (0);
+	return (data->exitcode);
 }
 
 // checks if command is a builtin
@@ -97,7 +96,7 @@ static int	find_path(t_pipex *data)
 		{
 			temp = ft_strjoin(data->paths[i], data->cmd[0]);
 			if (!temp)
-				return (-1);
+				return (set_exitcode(data, -1));
 			if (access(temp, F_OK) == 0)
 			{
 				data->path = temp;
@@ -109,7 +108,7 @@ static int	find_path(t_pipex *data)
 	}
 	ft_printf(2, "command not found: %s\n", data->cmd[0]);
 	close_and_free(data);
-	exit(127);
+	return (set_exitcode(data, 127));
 }
 
 // checks path/cmd when relative/absolute path is given
@@ -124,7 +123,7 @@ static int	path_check(t_pipex *data)
 	if (is_builtin(&data->cmd[0][start + 1]))
 	{
 		ft_printf(2, "no such file or directory: %s\n", data->cmd[0]);
-		return (-1);
+		return (set_exitcode(data, 127));
 	}
 	if (access(data->cmd[0], F_OK) == 0)
 	{
@@ -132,7 +131,7 @@ static int	path_check(t_pipex *data)
 		return (0);
 	}
 	ft_printf(2, "no such file or directory: %s\n", data->cmd[0]);
-	return (-1);
+	return (set_exitcode(data, 127));
 }
 
 // gets path for cmd if needed & calls builtin functions
@@ -146,7 +145,7 @@ static int	get_path(t_pipex *data)
 	else if (is_builtin(data->cmd[0]))
 	{
 		call_builtin(data, data->cmd[0]);
-		return (-1);
+		return (data->exitcode);
 	}
 	else
 	{
@@ -160,18 +159,17 @@ static int	get_path(t_pipex *data)
 static int	get_cmd(char *cmd, t_pipex *data)
 {
 	data->cmd = ft_split(cmd, 7);
-	// for (int i = 0; data->cmd[i]; i++)
-	// 	printf("cmd is %s\n", data->cmd[i]);
 	if (!data->cmd)
 	{
 		ft_printf(2, "Error\nSplit failed when getting a command\n");
-		return (-1);
+		return (set_exitcode(data, -1));
 	}
 	if (data->cmd[0] == '\0')
 	{
 		ft_printf(2, "command not found: %s\n", cmd);
 		close_and_free(data);
-		exit(127);
+		return (set_exitcode(data, 127));
+		// exit(127);
 	}
 	if (get_path(data) == -1)
 		return (-1);
@@ -181,8 +179,6 @@ static int	get_cmd(char *cmd, t_pipex *data)
 // execve here
 static int	do_cmd(t_pipex *data, t_node *processes)
 {
-	extern char	**environ;
-
 	if (data->read_end != -1)
 		close(data->read_end);
 	if (!data->builtin)
@@ -203,11 +199,11 @@ static int	do_cmd(t_pipex *data, t_node *processes)
 	if (!data->path)
 	{
 		ft_printf(2, "command not found: %s\n", data->cmd[0]);
-		return (-1);
+		return (set_exitcode(data, 127));
 	}
-	execve(data->path, data->cmd, environ);
+	execve(data->path, data->cmd, data->env);
 	ft_printf(2, "permission denied: %s\n", data->cmd[0]);
-	return (-1);
+	return (set_exitcode(data, 1));
 }
 
 // returns a string containing only the cmd from the cmd string
@@ -246,7 +242,7 @@ int	forking(t_pipex *data, t_node *processes)
 	if (data->count == 0 && data->builtin)
 	{
 		if (do_cmd(data, processes) == -1)
-			return (0);
+			return (-1);
 	}
 	else
 	{

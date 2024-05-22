@@ -6,13 +6,13 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 17:52:16 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 13:53:03 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 12:28:47 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
  #include "../include/minishell.h"
 
-// frees the array of redirs
+// frees an array of strings
 void	free_str_array(char **array)
 {
 	int	i;
@@ -73,5 +73,6 @@ int	close_and_free(t_pipex *data)
 		free(data->path);
 	if (data->pids)
 		free(data->pids);
+	*data = (t_pipex){0};
 	return (-1);
 }
