@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/23 12:32:02 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/23 16:03:42 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,8 @@ static int	redir_out(char *file, t_pipex *data)
 		if (access(&file[1], F_OK) != 0)
 			ft_printf(2, "no such file or directory: %s\n", &file[1]);
 		else
-			ft_printf(2, "1permission denied: %s\n", &file[1]);
-		data->exitcode = 1;
-		data->error = true;
-		return (-1);
+			ft_printf(2, "permission denied: %s\n", &file[1]);
+		return (set_exitcode(data, 1));
 	}
 	return (0);
 }
@@ -74,8 +72,7 @@ static int	handle_heredoc(char *file, t_pipex *data)
 	if (do_heredoc(file) == -1)
 	{
 		ft_printf(2, "heredoc failed\n");
-		data->error = true;
-		return (-1);
+		return (set_exitcode(data, -1));
 	}
 	data->ends[0] = open(".heredoc", O_RDONLY);
 	unlink(".heredoc");
@@ -93,9 +90,8 @@ static int	redir_in(char *file, t_pipex *data)
 		if (access(&file[1], F_OK) != 0)
 			ft_printf(2, "no such file or directory: %s\n", &file[1]);
 		else
-			ft_printf(2, "2permission denied: %s\n", &file[1]);
-		data->error = true;
-		return (-1);
+			ft_printf(2, "permission denied: %s\n", &file[1]);
+		return (set_exitcode(data, 1));
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/22 19:24:14 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/23 16:02:04 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ typedef struct s_pipex
 	char	**cmd;
 	char	*path;
 	int		*pids;
-	_Bool	error;
 	int		exitcode;
 	_Bool	builtin;
 	struct sigaction *sa;
