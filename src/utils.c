@@ -43,3 +43,15 @@ _Bool	ft_isdigit_str(char *str)
 	}
 	return (1);
 }
+
+void	set_error_and_print(t_pipex *data, int error, char *msg)
+{
+	data->exitcode = error;
+	ft_printf(2, "%s\n", msg);
+}
+
+void print_error_and_exit(my_printffd my_printf, char *cmd0, char *cmd1, int exitcode)
+{
+	my_printf(2, "%s %s: numeric argument required\n", cmd0, cmd1);
+	exit(exitcode);
+}

@@ -12,9 +12,8 @@
 
 #include "../include/minishell.h"
 
-void put_env(t_pipex *data, char **env, int fd_out)
+void put_env(char **env, int fd_out)
 {
-	(void)data;
 	int	i;
 
 	i = 0;
@@ -28,7 +27,6 @@ void put_env(t_pipex *data, char **env, int fd_out)
 
 void put_pwd(t_pipex *data, int fd_out)
 {
-	(void)data;
 	char *s;
 
 	s = getcwd(NULL, 0);
@@ -43,7 +41,6 @@ void put_pwd(t_pipex *data, int fd_out)
 
 void do_cd(t_pipex *data, char *path, char**environ)
 {
-	(void)data;
 	int	i;
 	char *oldpwd;
 	char *newpwd;
@@ -60,14 +57,14 @@ void do_cd(t_pipex *data, char *path, char**environ)
 			free(environ[i]);
 			environ[i] = ft_strjoin("PWD=", newpwd);
 			if (!environ[i])
-				
+				set_error_and_print(data, -1, "strjoin failed");
 		}
 		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
 		{
 			free(environ[i]);
 			environ[i] = ft_strjoin("OLDPWD=", oldpwd);
-			// if (!environ[i])
-			// 	FREE FREE AND PRINT FT
+			if (!environ[i])
+				set_error_and_print(data, -1, "strjoin failed");
 		}
 		i++;
 	}
@@ -76,9 +73,8 @@ void do_cd(t_pipex *data, char *path, char**environ)
 // FIXME: unset $(env | awk -F= '{print $1}')
 // FIXME: take multiple variables
 // FIXME: 
-void do_unset(t_pipex *data, char **env, char *key)
+void do_unset(char **env, char *key)
 {
-	(void)data;
 	int	i;
 
 	i = 0;
@@ -92,9 +88,10 @@ void do_unset(t_pipex *data, char **env, char *key)
 
 void	do_exit(char **cmd, t_pipex *data)
 {
-	(void)data;
 	long	code;
+	my_printffd my_printf;
 	
+	my_printf = ft_printf;
 	if (data->count == 0 && data->cmds > 1)
 		return ;
 	if (!cmd[1])
@@ -104,20 +101,16 @@ void	do_exit(char **cmd, t_pipex *data)
 		if (ft_isdigit_str(cmd[1]))
 		{
 			code = ft_atol(cmd[1]);
-			if (!ft_isdigit_str(cmd[1]) || code < 0)
-			{
-				ft_printf(2, "%s %s: numeric argument required\n", cmd[0], cmd[1]);
-				exit (255);
-			}
+			if (code < 0)
+				print_error_and_exit(my_printf, cmd[0], cmd[1], 255);
 			else if (code > 255)
 				exit (code % 256);
 			else
 				exit (code);
 		}
+		else if (!ft_isdigit_str(cmd[1]))
+			print_error_and_exit(my_printf, cmd[0], cmd[1], 255);
 		else
-		{
-			ft_printf(2, "%s %s: command not found\n", cmd[0], cmd[1]);
-			exit (127);
-		}
+			print_error_and_exit(my_printf, cmd[0], cmd[1], 127);
 	}
 }
