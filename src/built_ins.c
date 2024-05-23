@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/22 12:36:22 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 19:00:56 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ void	do_exit(char **cmd, t_pipex *data)
 	(void)data;
 	long	code;
 	
+	if (data->count == 0 && data->cmds > 1)
+		return ;
 	if (!cmd[1])
 		exit (data->exitcode);
 	if (cmd[1])

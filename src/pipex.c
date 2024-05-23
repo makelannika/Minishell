@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:10:49 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/22 13:54:51 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/22 19:30:13 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static int	wait_children(int *pids, int count, int *exitcode)
 		i++;
 	}
 	return (*exitcode);
-	// exit(exitcode);
 }
 
 // adds a slash to the end of each path
@@ -114,20 +113,32 @@ int	init_data(t_pipex *data, t_node *processes)
 	if (pipe(data->ends) == -1)
 	{
 		ft_printf(2, "Error opening a pipe\n");
-		data->exitcode = -1;
-		return (-1);
+		return (set_exitcode(data, -1));
 	}
 	data->read_end = -1;
-	if (get_paths(data) == -1)
-		return (close_and_free(data));
 	data->cmd_str = NULL;
 	data->cmd = NULL;
 	data->path = NULL;
 	data->pids = ft_calloc(data->cmds, sizeof(int));
 	if (!data->pids)
 		return (close_and_free(data));
+	data->pids[0] = -1;
 	data->error = 0;
+	data->exitcode = 0;
 	data->builtin = NULL;
+	return (0);
+}
+
+// initializes env and path in the main
+int	first_inits(t_pipex *data)
+{
+	if (get_env(data) == -1)
+		return (-1);
+	if (get_paths(data) == -1)
+	{
+		free_str_array(data->env);
+		return (-1);
+	}
 	return (0);
 }
 
@@ -144,10 +155,10 @@ int	pipex(t_node *processes, t_pipex *data)
 		if (data->error == 0)
 		{
 			forking(data, processes);
-			if (data->pids == 0)
+			if (data->pids[data->count] == 0)
 			{
 				close_and_free(data);
-				return (data->exitcode);
+				return (1);
 			}
 		}
 		if (data->ends[0] != -1)
@@ -158,5 +169,5 @@ int	pipex(t_node *processes, t_pipex *data)
 		processes = processes->next;
 	}
 	wait_children(data->pids, data->cmds, &data->exitcode);
-	return (data->exitcode);
+	return (0);
 }
