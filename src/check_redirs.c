@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 20:11:17 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:32:02 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	redir_out(char *file, t_pipex *data)
 			ft_printf(2, "no such file or directory: %s\n", &file[1]);
 		else
 			ft_printf(2, "1permission denied: %s\n", &file[1]);
+		data->exitcode = 1;
 		data->error = true;
 		return (-1);
 	}

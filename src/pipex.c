@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:10:49 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/22 19:30:13 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:39:44 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,14 +151,14 @@ int	pipex(t_node *processes, t_pipex *data)
 		data->error = 0;
 		data->builtin = 0;
 		if (get_fds(data, processes) == -1)
-			exit(EXIT_FAILURE);
+			return (-1);
 		if (data->error == 0)
 		{
-			forking(data, processes);
-			if (data->pids[data->count] == 0)
+			if (forking(data, processes) == -1
+				|| data->pids[data->count] == 0)
 			{
 				close_and_free(data);
-				return (1);
+				return (-1);
 			}
 		}
 		if (data->ends[0] != -1)

@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/23 12:20:44 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:35:02 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	main()
 			free(line);
 			if (!processes)
 				return (-1);
-			if (pipex(processes, &data) == 1)
+			if (pipex(processes, &data) == -1)
 				return (data.exitcode);
 			free_list(&processes);
 		}
