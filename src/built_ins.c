@@ -33,7 +33,11 @@ void put_pwd(t_pipex *data, int fd_out)
 
 	s = getcwd(NULL, 0);
 	if (!s)
+	{
 		ft_printf(2, "%s\n", strerror(errno));
+		data->exitcode = errno;
+		return ;
+	}
 	ft_printf(fd_out, "%s\n", s);
 }
 
@@ -55,8 +59,8 @@ void do_cd(t_pipex *data, char *path, char**environ)
 			newpwd = getcwd(NULL, 0);
 			free(environ[i]);
 			environ[i] = ft_strjoin("PWD=", newpwd);
-			// if (!environ[i])
-			// 	FREE AND PRINT FT
+			if (!environ[i])
+				
 		}
 		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
 		{
