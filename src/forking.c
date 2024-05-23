@@ -44,7 +44,7 @@ int	call_builtin(t_pipex *data, char *cmd)
 	else if (ft_strncmp(cmd, "export", 7) == 0)
 		do_export(data, data->env, data->cmd, data->ends[1]);
 	else if (ft_strncmp(cmd, "unset", 6) == 0)
-		do_unset(data, data->env, data->cmd[1]);
+		do_unset(data->env, data->cmd[1]);
 	else if (ft_strncmp(cmd, "exit", 5) == 0)
 		do_exit(data->cmd, data);
 	else if (cmd[0] == 'p' || cmd[0] == 'P')
@@ -55,7 +55,7 @@ int	call_builtin(t_pipex *data, char *cmd)
 	else if (cmd[0] == 'e' || cmd[0] == 'E')
 	{
 		if (check_case(cmd, "env"))
-			put_env(data, data->env, data->ends[1]);
+			put_env(data->env, data->ends[1]);
 		else if (check_case(cmd, "echo"))
 			do_echo(data, data->cmd, data->ends[1]);
 	}
