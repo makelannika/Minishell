@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/23 16:21:34 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/24 14:38:49 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ static void	redir_out(char *file, t_pipex *data)
 	int i;
 
 	i = 1;
-	if (data->ends[1] != -1)
-		close(data->ends[1]);
+	close(data->ends[1]);
 	if (file[1] == '>')
 		data->ends[1] = open(&file[2], O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else
@@ -33,6 +32,7 @@ static void	redir_out(char *file, t_pipex *data)
 			ft_printf(2, "permission denied: %s\n", &file[1]);
 		data->exitcode = 1;
 	}
+	// ft_printf(2, "opened redir_out\n");
 }
 
 static int	do_heredoc(char *file)
@@ -66,8 +66,7 @@ static int	do_heredoc(char *file)
 
 static void	handle_heredoc(char *file, t_pipex *data)
 {
-	if (data->ends[0] != -1)
-		close(data->ends[0]);
+	close(data->ends[0]);
 	if (do_heredoc(file) == -1)
 	{
 		ft_printf(2, "heredoc failed\n");
@@ -80,13 +79,13 @@ static void	handle_heredoc(char *file, t_pipex *data)
 		data->exitcode = -1;
 	}
 	unlink(".heredoc");
+	// ft_printf(2, "handled heredoc\n");
 }
 
 // checks rights to a redir file with '<'
 static void	redir_in(char *file, t_pipex *data)
 {
-	if (data->ends[0] != -1)
-		close(data->ends[0]);
+	close(data->ends[0]);
 	data->ends[0] = open(&file[1], O_RDONLY);
 	if (data->ends[0] < 0)
 	{
@@ -96,22 +95,23 @@ static void	redir_in(char *file, t_pipex *data)
 			ft_printf(2, "permission denied: %s\n", &file[1]);
 		data->exitcode = 1;
 	}
+	// ft_printf(2, "opened redir_in\n");
 }
 
 // checks rights to all redir files and clears ones with '>'
-void	handle_redirs(t_node *processes, t_pipex *data)
+void	handle_redirs(t_node *process, t_pipex *data)
 {
 	int	i;
 
 	i = 0;
-	while (processes->redirs[i])
+	while (process->redirs[i])
 	{
-		if (ft_strncmp(processes->redirs[i], "<<", 2) == 0)
-			handle_heredoc(processes->redirs[i], data);
-		else if (ft_strncmp(processes->redirs[i], "<", 1) == 0)
-			redir_in(processes->redirs[i], data);
-		else if (ft_strncmp(processes->redirs[i], ">", 1) == 0)
-			redir_out(processes->redirs[i], data);
+		if (ft_strncmp(process->redirs[i], "<<", 2) == 0)
+			handle_heredoc(process->redirs[i], data);
+		else if (ft_strncmp(process->redirs[i], "<", 1) == 0)
+			redir_in(process->redirs[i], data);
+		else if (ft_strncmp(process->redirs[i], ">", 1) == 0)
+			redir_out(process->redirs[i], data);
 		i++;
 		if (data->exitcode != 0)
 			return ;

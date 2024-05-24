@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 17:47:58 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/22 12:33:18 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/24 14:58:02 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 static int	last_child(t_pipex *data, t_node *processes)
 {
 	dup2(data->read_end, data->ends[0]);
+	close(data->read_end);
 	dup2(STDOUT_FILENO, data->ends[1]);
 	handle_redirs(processes, data);
 	return (0);
@@ -35,8 +36,7 @@ static int	middle_child(t_pipex *data, t_node *processess)
 	tmp = dup(data->read_end);
 	dup2(data->ends[0], data->read_end);
 	dup2(tmp, data->ends[0]);
-	if (tmp != -1)
-		close(tmp);
+	close(tmp);
 	handle_redirs(processess, data);
 	return (0);
 }

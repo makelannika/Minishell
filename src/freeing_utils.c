@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 17:52:16 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/22 17:52:22 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/24 14:37:58 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,9 @@ int	close_and_free(t_pipex *data)
 	int	i;
 
 	i = 0;
-	if (data->ends[0] != -1)
-		close(data->ends[0]);
-	if (data->ends[1] != -1)
-		close(data->ends[1]);
-	if (data->read_end != -1)
-		close(data->read_end);
+	close(data->ends[0]);
+	close(data->ends[1]);
+	close(data->read_end);
 	if (data->env)
 		free_str_array(data->env);
 	if (data->paths)
