@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/23 16:02:04 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/23 16:49:48 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef	struct node
 {
 	char		**redirs;
 	char		*cmd;
+	int			builtin;
 	struct node	*next;
 } 	t_node;
 
@@ -81,6 +82,7 @@ char	*trim_cmd(char *cmd_str);
 char	*quote_remover(char *cmd);
 int		get_env(t_pipex *data);
 int		first_inits(t_pipex *data);
+_Bool	is_builtin(char *cmd);
 
 /**********************************--PIPEX--***************************************/
 

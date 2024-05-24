@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 19:46:20 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/04 17:30:25 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/23 16:28:21 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ t_node	*create_node()
 		return (NULL);
 	new_node->redirs = NULL;
 	new_node->cmd = NULL;
+	new_node->builtin = 0;
 	new_node->next = NULL;
 	return (new_node);
 }
