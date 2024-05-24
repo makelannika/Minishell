@@ -57,7 +57,7 @@ int	call_builtin(t_pipex *data, char *cmd)
 		if (check_case(cmd, "env"))
 			put_env(data->env, data->ends[1]);
 		else if (check_case(cmd, "echo"))
-			do_echo(data, data->cmd, data->ends[1]);
+			do_echo(data->cmd, data->ends[1]);
 	}
 	return (data->exitcode);
 }

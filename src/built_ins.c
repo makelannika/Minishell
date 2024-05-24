@@ -72,7 +72,6 @@ void do_cd(t_pipex *data, char *path, char**environ)
 
 // FIXME: unset $(env | awk -F= '{print $1}')
 // FIXME: take multiple variables
-// FIXME: 
 void do_unset(char **env, char *key)
 {
 	int	i;
@@ -104,9 +103,9 @@ void	do_exit(char **cmd, t_pipex *data)
 			if (code < 0)
 				print_error_and_exit(my_printf, cmd[0], cmd[1], 255);
 			else if (code > 255)
-				exit (code % 256);
+				free_and_exit(data, code % 256);
 			else
-				exit (code);
+				free_and_exit(data, code);
 		}
 		else if (!ft_isdigit_str(cmd[1]))
 			print_error_and_exit(my_printf, cmd[0], cmd[1], 255);

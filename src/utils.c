@@ -50,8 +50,15 @@ void	set_error_and_print(t_pipex *data, int error, char *msg)
 	ft_printf(2, "%s\n", msg);
 }
 
-void print_error_and_exit(my_printffd my_printf, char *cmd0, char *cmd1, int exitcode)
+void	print_error_and_exit(my_printffd my_printf, char *cmd0, char *cmd1, int exitcode) //use only for exit builtin
 {
-	my_printf(2, "%s %s: numeric argument required\n", cmd0, cmd1);
+	if	(my_printf && cmd0 && cmd1)
+		my_printf(2, "%s %s: numeric argument required\n", cmd0, cmd1);
+	exit(exitcode);
+}
+
+void	free_and_exit(t_pipex *data, int exitcode) //use only for exit builtin
+{
+	close_and_free(data);
 	exit(exitcode);
 }

@@ -30,9 +30,8 @@ _Bool check_option(char *a)
 	return (1);
 }
 //FIXME: need to redo -n so that it prints all at once
-void	do_echo(t_pipex *data, char **cmd, int fd_out)
+void	do_echo(char **cmd, int fd_out)
 {
-    (void)data;
 	int		i;
 
 	i = 1;
