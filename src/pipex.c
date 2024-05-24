@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:10:49 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/24 14:37:52 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/24 15:39:58 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,8 @@ int	init_data(t_pipex *data, t_node *processes)
 {
 	data->cmds = get_list_length(processes);
 	data->count = 0;
-	if (pipe(data->ends) == -1)
-	{
-		ft_printf(2, "Error opening a pipe\n");
-		return (set_exitcode(data, -1));
-	}
+	data->ends[0] = dup(STDIN_FILENO);
+	data->ends[1] = dup(STDOUT_FILENO);
 	data->read_end = -1;
 	data->cmd_str = NULL;
 	data->cmd = NULL;
@@ -146,14 +143,15 @@ int	pipex(t_node *processes, t_pipex *data)
 		return (-1);
 	while (data->count < data->cmds)
 	{
+		// ft_printf(2, "in pipex's loop\n");
 		data->exitcode = 0;
 		if (get_fds(data, processes) == -1)
 			return (-1);
 		if (data->exitcode == 0)
 		{
 			if (forking(data, processes) == -1
-				|| data->pids[data->count] == 0)
-				return (close_and_free(data));
+				|| (data->pids[data->count] == 0 && !processes->builtin))
+					return (close_and_free(data));
 		}
 		close(data->ends[0]);
 		close(data->ends[1]);

@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/24 14:38:49 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/24 15:52:26 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	redir_out(char *file, t_pipex *data)
 			ft_printf(2, "permission denied: %s\n", &file[1]);
 		data->exitcode = 1;
 	}
-	// ft_printf(2, "opened redir_out\n");
 }
 
 static int	do_heredoc(char *file)
@@ -79,7 +78,6 @@ static void	handle_heredoc(char *file, t_pipex *data)
 		data->exitcode = -1;
 	}
 	unlink(".heredoc");
-	// ft_printf(2, "handled heredoc\n");
 }
 
 // checks rights to a redir file with '<'
@@ -95,7 +93,6 @@ static void	redir_in(char *file, t_pipex *data)
 			ft_printf(2, "permission denied: %s\n", &file[1]);
 		data->exitcode = 1;
 	}
-	// ft_printf(2, "opened redir_in\n");
 }
 
 // checks rights to all redir files and clears ones with '>'
