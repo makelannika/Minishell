@@ -42,12 +42,37 @@ void sort_strings(char **arr)
         }
     }
 }
-//still need to fix this when key already exists
+
+_Bool   update_key(t_pipex *data, char **env, char *str)
+{
+    char *equal;
+    char **tmp;
+    int i;
+    int flag;
+
+    i = 0;
+    flag = 0;
+    tmp = env;
+    while (tmp[i])
+    {
+        equal = ft_strchr(tmp[i], '=');
+        if (ft_strncmp(tmp[i], str, equal - tmp[i]) == 0)
+        {
+            flag = 1;
+            free(tmp[i]);
+            env[i] = ft_strdup(str);
+            if (!env[i])
+                data->exitcode = -1;
+        }
+        i++;
+    }
+    return (flag);
+}
+
 char    **putstr_in_array(t_pipex *data, char **env, char *str)
 {
     char **tmp;
 	int i;
-    char *equal;
 
     i = 0;
     tmp = env;
@@ -56,16 +81,6 @@ char    **putstr_in_array(t_pipex *data, char **env, char *str)
         data->exitcode = -1;
     while (tmp[i])
     {
-        equal = ft_strchr(tmp[i], '=');
-        if (ft_strncmp(tmp[i], str, equal - tmp[i]) == 0)
-        {
-            free(tmp[i]);
-            env[i] = ft_strdup(str);
-            if (!env[i])
-                data->exitcode = -1;
-            i++;
-            continue;
-        }
         env[i] = ft_strdup(tmp[i]);
         if (!env[i])
             data->exitcode = -1;
@@ -130,6 +145,11 @@ void    do_export(t_pipex *data, char **env, char **cmd, int fd_out)
                 ft_printf(2, "export: `%s': not a valid identifier\n", cmd[i++]);
                 continue;
             }
+            if (update_key(data, env, cmd[i]))
+            {
+                i++;
+                continue;
+            }    
 		    env = putstr_in_array(data, env, cmd[i++]);
         }
         // printf("AFTER EXPORT_________\n");
@@ -144,11 +164,11 @@ void    do_export(t_pipex *data, char **env, char **cmd, int fd_out)
 //     t_pipex *data = malloc(sizeof(t_pipex));
 //     char **exports = malloc(sizeof(char *) * 8);
 //     char **env = malloc(sizeof(char *) * 9);
-
+// // export what=wer 1wer=dfg _soer=2341!
 //     exports[0] = ft_strdup("export");
-//     exports[1] = ft_strdup("_dog=10");
-//     exports[2] = ft_strdup("-cat=9");
-//     exports[3] = ft_strdup("hat=8");
+//     exports[1] = ft_strdup("what=wer");
+//     exports[2] = ft_strdup("1wer=dfg");
+//     exports[3] = ft_strdup("_soer=2341");
 //     // exports[4] = ft_strdup("cat=");
 //     exports[4] = NULL;
 
@@ -156,9 +176,9 @@ void    do_export(t_pipex *data, char **env, char **cmd, int fd_out)
 //     str[0] = "export";
 //     str[2] = NULL;
 
-//     env[0] = ft_strdup("dog=6");
-//     env[1] = ft_strdup("cat=7");
-//     env[2] = ft_strdup("cat=7=234sdf");
+//     env[0] = ft_strdup("env=6");
+//     env[1] = ft_strdup("env2=7");
+//     env[2] = ft_strdup("env3=7=234sdf");
 //     env[3] = NULL;
 //     do_export(data, env, exports, 2);
 //     // printf("____________________\n");
