@@ -226,11 +226,11 @@ char	*trim_cmd(char *cmd_str)
 }
 
 // forks, unless there's only one cmd and it is a builtin
-int	forking(t_pipex *data, t_node *processes)
+int	forking(t_pipex *data, t_node *process)
 {
-	if (data->count == 0 && processes->builtin)
+	if (data->count == 0 && process->builtin)
 	{
-		if (do_cmd(data, processes) == -1)
+		if (do_cmd(data, process) == -1)
 			return (-1);
 	}
 	else
@@ -239,11 +239,11 @@ int	forking(t_pipex *data, t_node *processes)
 		if (data->pids[data->count] < 0)
 		{
 			ft_printf(2, "Error\nFork failed\n");
-			return (-1);
+			return (set_exitcode(data, -1));
 		}
 		if (data->pids[data->count] == 0)
 		{
-			if (do_cmd(data, processes) == -1)
+			if (do_cmd(data, process) == -1)
 				return (-1);
 		}
 	}
