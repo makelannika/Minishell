@@ -26,7 +26,7 @@ int	main()
 		line = readline("MOOshell: ");
 		if (!line)
 		{
-			ft_printf(2, "Error: 1readline failed\n");	
+			ft_printf(2, "Error: readline failed\n");	
 				return (-1);
 		}
 		else if (line[0] == '\0')
@@ -37,7 +37,7 @@ int	main()
 			add_history(line);
 			if (count_quotes(line) % 2 != 0)
 			{
-				ft_printf(2, "Error\nEnclosed quotes\n");
+				ft_printf(2, "Error: Enclosed quotes\n");
 				continue;
 			}
 			parse_input(line, &processes);
@@ -49,6 +49,5 @@ int	main()
 			free_list(&processes);
 		}
 	}
-	printf("hwerew\n");
 	return (data.exitcode);
 }
