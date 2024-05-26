@@ -67,14 +67,14 @@ static t_node	*parse_process(char	*string, t_node **processes)
 	if(!node)
 	{
 		free(string);
+		free_list(processes);
 		return (NULL);
 	}
 	add_back(processes, node);
 	get_redir_arr(string, node);
 	node->cmd = string;
-	if (builtin_check(string, node) == -1)
-		return (NULL);
-	if (!node->redirs || !node->cmd)
+	if (builtin_check(string, node) == -1
+		|| !node->redirs || !node->cmd)
 	{
 		free(string);
 		free_list(processes);
