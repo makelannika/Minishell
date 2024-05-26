@@ -127,12 +127,18 @@ int	init_data(t_pipex *data, t_node *processes)
 // initializes env and path in the main
 int	first_inits(t_pipex *data)
 {
-	if (get_env(data) == -1)
-		return (-1);
-	if (get_paths(data) == -1)
+	if (!data->env)
 	{
-		free_str_array(data->env);
+		if (get_env(data) == -1)
 		return (-1);
+	}
+	if (!data->paths)
+	{
+		if (get_paths(data) == -1)
+		{
+			free_str_array(data->env);
+			return (-1);
+		}
 	}
 	return (0);
 }
@@ -140,17 +146,16 @@ int	first_inits(t_pipex *data)
 int	pipex(t_node *processes, t_pipex *data)
 {	
 	if (init_data(data, processes) == -1)
-		return (-1);
+		return (set_exitcode(data, -1));
 	while (data->count < data->cmds)
 	{
-		// ft_printf(2, "in pipex's loop\n");
 		data->exitcode = 0;
 		if (get_fds(data, processes) == -1)
-			return (-1);
+			return (close_and_free(data));
 		if (data->exitcode == 0)
 		{
 			if (forking(data, processes) == -1
-				|| (data->pids[data->count] == 0 && !processes->builtin))
+				|| (data->pids[data->count] == 0))
 					return (close_and_free(data));
 		}
 		close(data->ends[0]);
