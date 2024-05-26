@@ -77,7 +77,6 @@ int		get_list_length(t_node *processes);
 int		counter(char *string, char c);
 void	get_redir_arr(char	*string, t_node *node);
 void	init_flags(t_flags *f);
-int		expand_that_shit(char **cmd, char **env, t_pipex data);
 char	*trim_cmd(char *cmd_str);
 char	*quote_remover(char *cmd);
 int		get_env(t_pipex *data);
@@ -88,12 +87,13 @@ _Bool	is_builtin(char *cmd);
 
 int		init_data(t_pipex *data, t_node *processes);
 int		pipex(t_node *processes, t_pipex *data);
-int		get_fds(t_pipex *data, t_node *processes);
-void	handle_redirs(t_node *processes, t_pipex *data);
-int		forking(t_pipex *data, t_node *processes);
+int		get_fds(t_pipex *data, t_node *process);
+void	handle_redirs(t_node *process, t_pipex *data);
+int		forking(t_pipex *data, t_node *process);
 int		parse_cmd(t_pipex *data, char **cmd);
 
 /********************************--CLEANING--***************************************/
+
 int		close_and_free(t_pipex *data);
 void	free_list(t_node **processes);
 void	free_str_array(char **array);
@@ -101,6 +101,7 @@ int		set_exitcode(t_pipex *data, int exitcode);
 
 /*********************************--BUILT_IN--*************************************/
 
+int		expand_that_shit(char **cmd, char **env, t_pipex data);
 void	do_export(t_pipex *data, char **env, char **cmd, int fd_out);
 void	do_echo(t_pipex *data, char **cmd, int fd_out);
 void	put_env(char **env, int fd_out);
