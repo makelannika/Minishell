@@ -14,22 +14,24 @@
 
 _Bool check_option(char *a)
 {
-	int p;
+	int i;
 
-	p = 0;
-    if (!a[p])
+	i = 0;
+    if (!a[i])
         return (1);
-    if (a[p] == '-')
-        p++;
-	while (a[p])
+    if (a[i] != '-')
+        return (0);
+    if (a[i] == '-')
+        i++;
+	while (a[i])
 	{
-		if (a[p] != 'n')
+		if (a[i] != 'n')
 			return (0);
-		p++;
+		i++;
 	}
 	return (1);
 }
-//FIXME: need to redo -n so that it prints all at once
+
 void	do_echo(char **cmd, int fd_out)
 {
 	int		i;
@@ -44,7 +46,6 @@ void	do_echo(char **cmd, int fd_out)
         }
         else
         {
-            printf("here\n");
             if (cmd[i + 1] == '\0')
             {
                 if(!(check_option(cmd[1])))
@@ -58,5 +59,4 @@ void	do_echo(char **cmd, int fd_out)
     }
     if (!cmd[1])
         ft_printf(fd_out, "\n");
-
 }
