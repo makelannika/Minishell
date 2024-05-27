@@ -22,15 +22,15 @@ int	array_len(char **a)
 	return (i);
 }
 
-void	remove_string(char **src, int index)
+void	remove_string(char **env, int index)
 {
-	free(src[index]);
-	while (src[index + 1])
+	free(env[index]);
+	while (env[index + 1])
 	{
-		src[index] = src[index + 1];
+		env[index] = env[index + 1];
 		index++;
 	}
-	src[index] = NULL;
+	env[index] = NULL;
 }
 
 _Bool	ft_isdigit_str(char *str)

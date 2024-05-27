@@ -32,7 +32,7 @@ void put_pwd(t_pipex *data, int fd_out)
 	s = getcwd(NULL, 0);
 	if (!s)
 		return (set_error_and_print(data, -1, "getcwd failed"));
-	ft_printf(1, fd_out, "%s\n", s);
+	ft_printf(fd_out, "%s\n", s);
 }
 
 void do_cd(t_pipex *data, char *path, char**environ)
@@ -70,21 +70,22 @@ void do_cd(t_pipex *data, char *path, char**environ)
 	}
 }
 
-// FIXME: unset $(env | awk -F= '{print $1}')
-// FIXME: take multiple variables
 void do_unset(char **env, char **cmd)
 {
 	int	i;
 	int	j;
+	int len;
 
 	i = 0;
 	j = 1;
 	while (cmd[j])
 	{
+		len = ft_strlen(cmd[j]);
 		i = 0;
 		while (env[i])
 		{
-			if (ft_strncmp(env[i], cmd[j], ft_strlen(cmd[j]) + 1) == 0)
+ 			if (ft_strncmp(env[i], cmd[j], len) == 0 && 
+				(env[i][len] == '=' || env[i][len] == '\0'))
 				remove_string(env, i);
 			i++;
 		}
