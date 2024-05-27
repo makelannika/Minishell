@@ -28,7 +28,7 @@ static int	redir_out(char *file, t_pipex *data)
 	if (data->ends[1] < 0)
 	{
 		if (access(&file[1], F_OK) != 0)
-			ft_printf(2, "no such file or directory: %s\n", &file[1]);
+			ft_printf(2, "1no such file or directory: %s\n", &file[1]);
 		else
 			ft_printf(2, "1permission denied: %s\n", &file[1]);
 		data->error = true;
@@ -90,7 +90,7 @@ static int	redir_in(char *file, t_pipex *data)
 	if (data->ends[0] < 0)
 	{
 		if (access(&file[1], F_OK) != 0)
-			ft_printf(2, "no such file or directory: %s\n", &file[1]);
+			ft_printf(2, "2no such file or directory: %s\n", &file[1]);
 		else
 			ft_printf(2, "2permission denied: %s\n", &file[1]);
 		data->error = true;

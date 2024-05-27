@@ -105,7 +105,7 @@ void	do_echo(char **cmd, int fd_out);
 void	put_env(char **env, int fd_out);
 void	put_pwd(t_pipex *data, int	fd_out);
 void	do_cd(t_pipex *data, char *path, char **env);
-void	do_unset(char **env, char *key);
+void	do_unset(char **env, char **key);
 void	sort_strings(char **arr);
 char	**putstr_in_array(t_pipex *data, char **env, char *cmd);
 void	do_exit(char **cmd, t_pipex *data);

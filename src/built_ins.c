@@ -32,6 +32,7 @@ void put_pwd(t_pipex *data, int fd_out)
 	s = getcwd(NULL, 0);
 	if (!s)
 	{
+		printf("getcwd failed\n");
 		ft_printf(2, "%s\n", strerror(errno));
 		data->exitcode = errno;
 		return ;
@@ -48,7 +49,10 @@ void do_cd(t_pipex *data, char *path, char**environ)
     oldpwd = getcwd(NULL, 0);
 	i = 0;
 	if (chdir(path) == -1)
+	{
+		printf("chdir failed\n");
 		ft_printf(2, "%s\n", strerror(errno));
+	}
 	while (environ[i])
 	{
 		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
@@ -72,16 +76,23 @@ void do_cd(t_pipex *data, char *path, char**environ)
 
 // FIXME: unset $(env | awk -F= '{print $1}')
 // FIXME: take multiple variables
-void do_unset(char **env, char *key)
+void do_unset(char **env, char **cmd)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (env[i])
+	j = 1;
+	while (cmd[j])
 	{
-		if (ft_strncmp(env[i], key, ft_strlen(key)) == 0)
-			remove_string(env, i);
-		i++;
+		i = 0;
+		while (env[i])
+		{
+			if (ft_strncmp(env[i], cmd[j], ft_strlen(cmd[j]) + 1) == 0)
+				remove_string(env, i);
+			i++;
+		}
+		j++;
 	}
 }
 
