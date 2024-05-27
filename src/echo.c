@@ -44,6 +44,7 @@ void	do_echo(char **cmd, int fd_out)
         }
         else
         {
+            printf("here\n");
             if (cmd[i + 1] == '\0')
             {
                 if(!(check_option(cmd[1])))
