@@ -55,4 +55,7 @@ void	do_echo(char **cmd, int fd_out)
                 ft_printf(fd_out, "%s ", cmd[i++]);
         }
     }
+    if (!cmd[1])
+        ft_printf(fd_out, "\n");
+
 }
