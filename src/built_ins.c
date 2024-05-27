@@ -31,13 +31,8 @@ void put_pwd(t_pipex *data, int fd_out)
 
 	s = getcwd(NULL, 0);
 	if (!s)
-	{
-		printf("getcwd failed\n");
-		ft_printf(2, "%s\n", strerror(errno));
-		data->exitcode = errno;
-		return ;
-	}
-	ft_printf(fd_out, "%s\n", s);
+		return (set_error_and_print(data, -1, "getcwd failed"));
+	ft_printf(1, fd_out, "%s\n", s);
 }
 
 void do_cd(t_pipex *data, char *path, char**environ)
@@ -46,29 +41,30 @@ void do_cd(t_pipex *data, char *path, char**environ)
 	char *oldpwd;
 	char *newpwd;
 	
-    oldpwd = getcwd(NULL, 0);
 	i = 0;
+    oldpwd = getcwd(NULL, 0);
+	if (!oldpwd)
+		return (set_error_and_print(data, -1, "getcwd failed"));
 	if (chdir(path) == -1)
-	{
-		printf("chdir failed\n");
-		ft_printf(2, "%s\n", strerror(errno));
-	}
+		return (set_error_and_print(data, -1, "chdir failed"));
 	while (environ[i])
 	{
 		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
 		{
 			newpwd = getcwd(NULL, 0);
+			if (!newpwd)
+				return (set_error_and_print(data, -1, "getcwd failed"));
 			free(environ[i]);
 			environ[i] = ft_strjoin("PWD=", newpwd);
 			if (!environ[i])
-				set_error_and_print(data, -1, "strjoin failed");
+				return (set_error_and_print(data, -1, "strjoin failed"));
 		}
 		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
 		{
 			free(environ[i]);
 			environ[i] = ft_strjoin("OLDPWD=", oldpwd);
 			if (!environ[i])
-				set_error_and_print(data, -1, "strjoin failed");
+				return (set_error_and_print(data, -1, "strjoin failed"));
 		}
 		i++;
 	}

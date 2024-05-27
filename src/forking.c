@@ -123,7 +123,7 @@ static int	path_check(t_pipex *data)
 		start--;
 	if (is_builtin(&data->cmd[0][start + 1]))
 	{
-		ft_printf(2, "3no such file or directory: %s\n", data->cmd[0]);
+		ft_printf(2, "no such file or directory: %s\n", data->cmd[0]);
 		return (set_exitcode(data, 127));
 	}
 	if (access(data->cmd[0], F_OK) == 0)
@@ -131,7 +131,7 @@ static int	path_check(t_pipex *data)
 		data->path = ft_substr(data->cmd[0], 0, ft_strlen(data->cmd[0]));
 		return (0);
 	}
-	ft_printf(2, "4no such file or directory: %s\n", data->cmd[0]);
+	ft_printf(2, "no such file or directory: %s\n", data->cmd[0]);
 	return (set_exitcode(data, 127));
 }
 
