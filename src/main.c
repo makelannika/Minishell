@@ -14,10 +14,11 @@
 
 int	main()
 {
-	char			*line;
-	t_node			*processes = NULL;
-	t_pipex			data;
+	char				*line;
+	t_node				*processes;
+	t_pipex				data;
 	
+	processes = NULL;
 	data = (t_pipex){0};
 	if (first_inits(&data) == -1)
 		return (-1);
@@ -26,6 +27,7 @@ int	main()
 		line = readline("MOOshell: ");
 		if (!line)
 		{
+
 			ft_printf(2, "Error: 1readline failed\n");	
 				return (-1);
 		}
