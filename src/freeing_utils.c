@@ -27,7 +27,10 @@ void	free_str_array(char **array)
 static void	free_node(t_node *node)
 {
 	if (node->redirs)
+	{
 		free_str_array(node->redirs);
+		node->redirs = NULL;
+	}
 	if (node->cmd)
 		free(node->cmd);
 	free(node);
@@ -46,7 +49,7 @@ void	free_list(t_node **processes)
 		free_node(temp);
 	}
 	free_node(*processes);
-	processes = NULL;
+	*processes = NULL;
 }
 
 void	reset_data(t_pipex *data)

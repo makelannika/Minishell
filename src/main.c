@@ -43,7 +43,11 @@ int	main()
 			parse_input(line, &processes);
 			free(line);
 			if (!processes)
+			{
+				free_str_array(data.env);
+				free_str_array(data.paths);
 				return (-1);
+			}
 			if (pipex(processes, &data) == -1)
 				return (data.exitcode);
 			free_list(&processes);
