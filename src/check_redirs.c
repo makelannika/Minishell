@@ -44,12 +44,12 @@ static int	do_heredoc(char *file)
 	heredoc = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC | O_APPEND, 0644);
 	if (heredoc == -1)
 		return (-1);
-	delimiter = trim_cmd(&file[2]);
+	delimiter = ft_strdup(&file[2]);
 	if (!delimiter)
 		return (-1);
 	len = ft_strlen(delimiter);
 	line = readline("> ");
-	while (line && ft_strncmp(line, delimiter, len) != 0)
+	while (line && ft_strncmp(line, delimiter, len + 1) != 0)
 	{
 		ft_printf(heredoc, "%s\n", line);
 		free(line);

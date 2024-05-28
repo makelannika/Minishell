@@ -27,25 +27,38 @@ char *trim_redir(char *redir_str)
 {
 	int		i;
 	int		j;
-	int		trim;
 	char	*new_redir;
 	
-	i = 0;
 	j = 0;
-	trim = 0;
-	trim = counter(redir_str, ' ');
-	new_redir = ft_calloc(ft_strlen(redir_str) - trim + 1, sizeof(char));
+	i = counter(redir_str, ' ');
+	new_redir = ft_calloc(ft_strlen(redir_str) - i + 1, sizeof(char));
 	if (!new_redir)
 		return (NULL);
 	i = 0;
-	while (redir_str[i])
-	{
-		while (redir_str[i] == ' ')
-			i++;
+	while (redir_str[i] == '<' || redir_str[i] == '>')
 		new_redir[j++] = redir_str[i++];
+	if (redir_str[i] == ' ')
+	{
+		while(redir_str[i] == ' ')
+			i++;
 	}
+	while (redir_str[i])
+	new_redir[j++] = redir_str[i++];
 	free(redir_str);
 	return (new_redir);
+}
+
+int	get_redir_len(char	*str)
+{
+	int		i;
+	char	quote;
+
+	i = 0;
+	quote = str[i];
+	i++;
+	while (str[i] && str[i] != quote)
+		i++;
+	return (i + 1);
 }
 
 // returns one redirection at a time to be stored in the 2d array
@@ -58,18 +71,30 @@ static char	*get_redir(char *string)
 	i = 1;
 	while (string[i])
 	{
+		if ((string[i] == '<' && string[i - 1] == '>')
+			|| (string[i] == '>' && string[i - 1] == '<'))
+		{
+			ft_printf(2, "syntax error near unexpected token `%c'\n", string[i]);
+			return (NULL);
+		}
 		if ((string[i] == '<' && string[i - 1] == '<')
 			|| (string[i] == '>' && string[i - 1] == '>'))
 			i++;
 		while (string[i] == ' ')
 			i++;
-		while (string[i] && string[i] != ' ')
-			i++;
+		if (string[i] == '\'' || string[i] == '\"')
+			i += get_redir_len(&string[i]);
+		else
+		{
+			while (string[i] && string[i] != ' ')
+				i++;
+		}
 		redir_str = ft_substr(string, 0, i);
 		if (!redir_str)
 			return (NULL);
 		redir_str = trim_redir(redir_str); // add check
 		tmp = redir_str;
+		ft_printf(2, "trimmed redir: %s\n", redir_str);
 		redir_str = quote_remover(redir_str); // add check
 		free(tmp);	
 		remove_redir(&string, 0, i);
@@ -115,7 +140,10 @@ void	get_redir_arr(char	*string, t_node *node)
 	count = counter(string, '<') + counter(string, '>');
 	node->redirs = ft_calloc(count + 1, sizeof(char *));
 	if (get_redirs(string, node) == -1)
+	{
 		free_str_array(node->redirs);
+		node->redirs = NULL;
+	}
 	if (!node->redirs)
 		return ;
 }
