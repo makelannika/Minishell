@@ -228,7 +228,7 @@ char	*trim_cmd(char *cmd_str)
 // forks, unless there's only one cmd and it is a builtin
 int	forking(t_pipex *data, t_node *process)
 {
-	if (data->count == 0 && process->builtin)
+	if (data->cmds == 1 && process->builtin)
 	{
 		if (do_cmd(data, process) == -1)
 			return (-1);
