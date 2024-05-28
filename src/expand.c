@@ -77,7 +77,7 @@ char	*get_value(int key_start, int key_len, char **env, char **cmd)
 	{
 		if ((*cmd)[start] == '"' || (*cmd)[start] == '\'')
 		{
-			// printf("here1\n");
+			printf("here1\n");
 			i = 0;
 			char *new_str = ft_calloc(ft_strlen(*cmd), sizeof(char));
 			while (i < start - 1)
@@ -93,7 +93,7 @@ char	*get_value(int key_start, int key_len, char **env, char **cmd)
 		}
 		else
 		{
-			// printf("here2\n");
+			printf("here2\n");
 			i = 0;
 			char *new_str = ft_calloc(ft_strlen(*cmd), sizeof(char));
 			while (i < start - 1)
@@ -173,8 +173,8 @@ int		expand_that_shit(char **cmd, char **env, t_pipex data)
 //     env[2] = ft_strdup("HAIR=black");
 //     env[3] = NULL;
 	
-// 	// char *str = ft_strdup("echo $? \"'$HOME'\" '\"$HOME\"' What $$$HOME $HOME $AGE'$ HOME'");
-// 	// char *str = ft_strdup("echo $\"HOME\"");
+// 	char *str = ft_strdup("echo $? \"'$HOME'\" '\"$HOME\"' What $$$HOME $HOME $AGE'$ HOME'");
+// 	char *str = ft_strdup("echo $\"HOME\"");
 // 	char *str = ft_strdup("echo $ e");
 // 	// char *str = ft_strdup("echo $word");
 // 	// str = "echo $ e";
