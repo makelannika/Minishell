@@ -6,7 +6,7 @@
 #    By: amakela <amakela@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/05/22 17:11:40 by amakela          ###   ########.fr        #
+#    Updated: 2024/05/23 12:44:09 by amakela          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ CFILES		=	src/input_parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c	
 OFILES		=	$(CFILES:.c=.o)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(READLINEH) $(INCLUDE)
+	@$(CC) $(CFLAGS) -c $< -o $@ $(READLINEH) $(INCLUDE)
 
 all: $(NAME)
 
@@ -45,12 +45,12 @@ debug: $(OFILES) $(LIBFT)
 	$(CC) $(DEBUGFLAGS) $(READLINELIB) $(OFILES) $(LIBFT) -o $(NAME)
 
 clean:
-	rm -f $(OFILES)
-	make -C $(LIBFTDIR) clean
+	@rm -f $(OFILES)
+	@make -C $(LIBFTDIR) clean
 
 fclean: clean
-	rm -f $(NAME)
-	rm -f $(LIBFT)
+	@rm -f $(NAME)
+	@rm -f $(LIBFT)
 
 re: fclean all
 

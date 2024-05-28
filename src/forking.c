@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/22 18:59:26 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/24 15:22:07 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,22 +177,19 @@ static int	get_cmd(char *cmd, t_pipex *data)
 }
 
 // execve here
-static int	do_cmd(t_pipex *data, t_node *processes)
+static int	do_cmd(t_pipex *data, t_node *process)
 {
-	if (!data->builtin)
+	if (!process->builtin)
 	{
-		if (data->read_end != -1)
-			close(data->read_end);
+		close(data->read_end);
 		dup2(data->ends[0], STDIN_FILENO);
 		dup2(data->ends[1], STDOUT_FILENO);
-		if (data->ends[0] != -1)
-			close(data->ends[0]);
-		if (data->ends[1] != -1)
-			close(data->ends[1]);
+		close(data->ends[0]);
+		close(data->ends[1]);
 	}
-	if (parse_cmd(data, &processes->cmd) == -1)
+	if (parse_cmd(data, &process->cmd) == -1)
 		return (-1);
-	if (data->builtin)
+	if (process->builtin)
 		return (get_cmd(data->cmd_str, data));
 	if (get_cmd(data->cmd_str, data) == -1)
 		return (-1);
@@ -229,19 +226,11 @@ char	*trim_cmd(char *cmd_str)
 }
 
 // forks, unless there's only one cmd and it is a builtin
-int	forking(t_pipex *data, t_node *processes)
+int	forking(t_pipex *data, t_node *process)
 {
-	char	*trimmed;
-
-	trimmed = trim_cmd(processes->cmd);
-	if (!trimmed)
-		return (-1);
-	if (is_builtin(trimmed))
-		data->builtin = 1;
-	free(trimmed);
-	if (data->count == 0 && data->builtin)
+	if (data->cmds == 1 && process->builtin)
 	{
-		if (do_cmd(data, processes) == -1)
+		if (do_cmd(data, process) == -1)
 			return (-1);
 	}
 	else
@@ -250,11 +239,11 @@ int	forking(t_pipex *data, t_node *processes)
 		if (data->pids[data->count] < 0)
 		{
 			ft_printf(2, "Error\nFork failed\n");
-			return (-1);
+			return (set_exitcode(data, -1));
 		}
 		if (data->pids[data->count] == 0)
 		{
-			if (do_cmd(data, processes) == -1)
+			if (do_cmd(data, process) == -1)
 				return (-1);
 		}
 	}

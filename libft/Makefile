@@ -6,11 +6,13 @@
 #    By: amakela <amakela@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/10 19:33:06 by amakela           #+#    #+#              #
-#    Updated: 2024/05/22 17:10:09 by amakela          ###   ########.fr        #
+#    Updated: 2024/05/23 11:47:05 by amakela          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
+
+CFLAGS = -Wall -Wextra -Werror
 
 CFILES = ft_atoi.c			ft_bzero.c		ft_calloc.c		ft_isalnum.c	\
 		 ft_isalpha.c		ft_isascii.c	ft_isdigit.c	ft_isprint.c	\
@@ -32,12 +34,15 @@ OFILES = $(CFILES:.c=.o)
 
 BOFILES = $(BONUSES:.c=.o)
 
+%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@ -I
+
 CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 	
 $(NAME): $(OFILES)
-	ar rcs $(NAME) $(OFILES)
+	@ar rcs $(NAME) $(OFILES)
 
 bonus : .bonus
 
@@ -46,10 +51,10 @@ bonus : .bonus
 	@touch .bonus
 
 clean:
-	rm -f $(OFILES) $(BOFILES) .bonus
+	@rm -f $(OFILES) $(BOFILES) .bonus
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean $(NAME)
 

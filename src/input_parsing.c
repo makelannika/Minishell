@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:13:07 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/18 19:04:19 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/23 17:20:07 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,25 @@ int	counter(char *string, char c)
 	return (count);
 }
 
+static int	builtin_check(char	*string, t_node *process)
+{
+	char *cmd;
+	char *tmp;
+
+	cmd = trim_cmd(string);
+	if (!cmd)
+		return (-1);
+	tmp = cmd;
+	cmd = quote_remover(cmd);
+	free(tmp);
+	if (!cmd)
+		return (-1);
+	if (is_builtin(cmd))
+		process->builtin = 1;
+	free(cmd);
+	return (0);
+}
+
 // parses one process at a time
 static t_node	*parse_process(char	*string, t_node **processes)
 {
@@ -48,12 +67,14 @@ static t_node	*parse_process(char	*string, t_node **processes)
 	if(!node)
 	{
 		free(string);
+		free_list(processes);
 		return (NULL);
 	}
 	add_back(processes, node);
 	get_redir_arr(string, node);
 	node->cmd = string;
-	if (!node->redirs || !node->cmd)
+	if (builtin_check(string, node) == -1
+		|| !node->redirs || !node->cmd)
 	{
 		free(string);
 		free_list(processes);

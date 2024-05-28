@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/17 20:11:17 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/24 15:52:26 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 // checks rights to a redir file with '>'
 // clears files with '>' but not with '>>'
-static int	redir_out(char *file, t_pipex *data)
+static void	redir_out(char *file, t_pipex *data)
 {
 	int i;
 
 	i = 1;
-	if (data->ends[1] != -1)
-		close(data->ends[1]);
+	close(data->ends[1]);
 	if (file[1] == '>')
 		data->ends[1] = open(&file[2], O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else
@@ -31,10 +30,8 @@ static int	redir_out(char *file, t_pipex *data)
 			ft_printf(2, "no such file or directory: %s\n", &file[1]);
 		else
 			ft_printf(2, "permission denied: %s\n", &file[1]);
-		data->error = true;
-		return (-1);
+		data->exitcode = 1;
 	}
-	return (0);
 }
 
 static int	do_heredoc(char *file)
@@ -66,26 +63,27 @@ static int	do_heredoc(char *file)
 	return (0);
 }
 
-static int	handle_heredoc(char *file, t_pipex *data)
+static void	handle_heredoc(char *file, t_pipex *data)
 {
-	if (data->ends[0] != -1)
-		close(data->ends[0]);
+	close(data->ends[0]);
 	if (do_heredoc(file) == -1)
 	{
 		ft_printf(2, "heredoc failed\n");
-		data->error = true;
-		return (-1);
+		data->exitcode = -1;
 	}
 	data->ends[0] = open(".heredoc", O_RDONLY);
+	if (data->ends[0] == -1)
+	{
+		ft_printf(2, "heredoc failed\n");
+		data->exitcode = -1;
+	}
 	unlink(".heredoc");
-	return (0);
 }
 
 // checks rights to a redir file with '<'
-static int	redir_in(char *file, t_pipex *data)
+static void	redir_in(char *file, t_pipex *data)
 {
-	if (data->ends[0] != -1)
-		close(data->ends[0]);
+	close(data->ends[0]);
 	data->ends[0] = open(&file[1], O_RDONLY);
 	if (data->ends[0] < 0)
 	{
@@ -93,35 +91,26 @@ static int	redir_in(char *file, t_pipex *data)
 			ft_printf(2, "no such file or directory: %s\n", &file[1]);
 		else
 			ft_printf(2, "permission denied: %s\n", &file[1]);
-		data->error = true;
-		return (-1);
+		data->exitcode = 1;
 	}
-	return (0);
 }
 
 // checks rights to all redir files and clears ones with '>'
-void	handle_redirs(t_node *processes, t_pipex *data)
+void	handle_redirs(t_node *process, t_pipex *data)
 {
 	int	i;
 
 	i = 0;
-	while (processes->redirs[i])
+	while (process->redirs[i])
 	{
-		if (ft_strncmp(processes->redirs[i], "<<", 2) == 0)
-		{
-			if (handle_heredoc(processes->redirs[i], data) == -1)
-				return ;
-		}
-		else if (ft_strncmp(processes->redirs[i], "<", 1) == 0)
-		{
-			if (redir_in(processes->redirs[i], data) == -1)
-				return ;
-		}
-		else if (ft_strncmp(processes->redirs[i], ">", 1) == 0)
-		{
-			if (redir_out(processes->redirs[i], data) == -1)
-				return ;
-		}
+		if (ft_strncmp(process->redirs[i], "<<", 2) == 0)
+			handle_heredoc(process->redirs[i], data);
+		else if (ft_strncmp(process->redirs[i], "<", 1) == 0)
+			redir_in(process->redirs[i], data);
+		else if (ft_strncmp(process->redirs[i], ">", 1) == 0)
+			redir_out(process->redirs[i], data);
 		i++;
+		if (data->exitcode != 0)
+			return ;
 	}
 }

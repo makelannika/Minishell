@@ -6,23 +6,24 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 17:47:58 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/22 12:33:18 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/24 15:52:08 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 // opens and closes correct fds for last child process
-static int	last_child(t_pipex *data, t_node *processes)
+static int	last_child(t_pipex *data, t_node *process)
 {
 	dup2(data->read_end, data->ends[0]);
-	dup2(STDOUT_FILENO, data->ends[1]);
-	handle_redirs(processes, data);
+	close(data->read_end);
+	data->ends[1] = dup(STDOUT_FILENO);
+	handle_redirs(process, data);
 	return (0);
 }
 
 // opens and closes correct fds for middle child processes
-static int	middle_child(t_pipex *data, t_node *processess)
+static int	middle_child(t_pipex *data, t_node *process)
 {
 	int	tmp;
 
@@ -35,39 +36,37 @@ static int	middle_child(t_pipex *data, t_node *processess)
 	tmp = dup(data->read_end);
 	dup2(data->ends[0], data->read_end);
 	dup2(tmp, data->ends[0]);
-	if (tmp != -1)
-		close(tmp);
-	handle_redirs(processess, data);
-	return (0);
+	close(tmp);
+	handle_redirs(process, data);
+	return (data->exitcode);
 }
 
 // opens and closes correct fds for first child process
-static int	first_child(t_pipex *data, t_node *processes)
+static int	first_child(t_pipex *data, t_node *process)
 {
+	if (pipe(data->ends) == -1)
+	{
+		ft_printf(2, "Error opening a pipe\n");
+		return (set_exitcode(data, -1));
+	}
 	data->read_end = dup(data->ends[0]);
 	close(data->ends[0]);
-	handle_redirs(processes, data);
-	return (0);
-}
-
-// opens and closes correct fds for parent process (only one builtin cmd)
-static int	parent(t_pipex *data, t_node *processes)
-{
-	dup2(STDIN_FILENO, data->ends[0]);
-	dup2(STDOUT_FILENO, data->ends[1]);
-	handle_redirs(processes, data);
-	return (0);
+	handle_redirs(process, data);
+	return (data->exitcode);
 }
 
 // opens and closes correct fds based on the process
-int	get_fds(t_pipex *data, t_node *processes)
+int	get_fds(t_pipex *data, t_node *process)
 {
 	if (data->cmds == 1)
-		return (parent(data, processes));
+	{
+		handle_redirs(process, data);
+		return (data->exitcode);
+	}
 	if (data->count == 0)
-		return (first_child(data, processes));
+		return (first_child(data, process));
 	if (data->count == data->cmds - 1)
-		return (last_child(data, processes));
+		return (last_child(data, process));
 	else
-		return (middle_child(data, processes));
+		return (middle_child(data, process));
 }

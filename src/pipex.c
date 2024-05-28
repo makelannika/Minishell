@@ -6,7 +6,7 @@
 /*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:10:49 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/22 19:30:13 by amakela          ###   ########.fr       */
+/*   Updated: 2024/05/24 15:39:58 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,8 @@ int	init_data(t_pipex *data, t_node *processes)
 {
 	data->cmds = get_list_length(processes);
 	data->count = 0;
-	if (pipe(data->ends) == -1)
-	{
-		ft_printf(2, "Error opening a pipe\n");
-		return (set_exitcode(data, -1));
-	}
+	data->ends[0] = dup(STDIN_FILENO);
+	data->ends[1] = dup(STDOUT_FILENO);
 	data->read_end = -1;
 	data->cmd_str = NULL;
 	data->cmd = NULL;
@@ -123,21 +120,25 @@ int	init_data(t_pipex *data, t_node *processes)
 	if (!data->pids)
 		return (close_and_free(data));
 	data->pids[0] = -1;
-	data->error = 0;
 	data->exitcode = 0;
-	data->builtin = NULL;
 	return (0);
 }
 
 // initializes env and path in the main
 int	first_inits(t_pipex *data)
 {
-	if (get_env(data) == -1)
-		return (-1);
-	if (get_paths(data) == -1)
+	if (!data->env)
 	{
-		free_str_array(data->env);
+		if (get_env(data) == -1)
 		return (-1);
+	}
+	if (!data->paths)
+	{
+		if (get_paths(data) == -1)
+		{
+			free_str_array(data->env);
+			return (-1);
+		}
 	}
 	return (0);
 }
@@ -145,26 +146,20 @@ int	first_inits(t_pipex *data)
 int	pipex(t_node *processes, t_pipex *data)
 {	
 	if (init_data(data, processes) == -1)
-		return (-1);
+		return (set_exitcode(data, -1));
 	while (data->count < data->cmds)
 	{
-		data->error = 0;
-		data->builtin = 0;
+		data->exitcode = 0;
 		if (get_fds(data, processes) == -1)
-			exit(EXIT_FAILURE);
-		if (data->error == 0)
+			return (close_and_free(data));
+		if (data->exitcode == 0)
 		{
-			forking(data, processes);
-			if (data->pids[data->count] == 0)
-			{
-				close_and_free(data);
-				return (1);
-			}
+			if (forking(data, processes) == -1
+				|| (data->pids[data->count] == 0))
+					return (close_and_free(data));
 		}
-		if (data->ends[0] != -1)
-			close(data->ends[0]);
-		if (data->ends[1] != -1)
-			close(data->ends[1]);
+		close(data->ends[0]);
+		close(data->ends[1]);
 		data->count++;
 		processes = processes->next;
 	}
