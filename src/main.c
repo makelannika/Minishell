@@ -59,10 +59,7 @@ int	main()
 			if (!processes)
 				return (free_first_inits(&data));
 			else if (pipex(processes, &data) == -1)
-			{
-				if (data.exit)
-					return (data.exitcode);
-			}
+				return (data.exitcode);
 			free_list(&processes);
 		}
 	}

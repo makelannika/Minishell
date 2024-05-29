@@ -18,7 +18,8 @@ static int	last_child(t_pipex *data, t_node *process)
 	dup2(data->read_end, data->ends[0]);
 	close(data->read_end);
 	data->ends[1] = dup(STDOUT_FILENO);
-	return (handle_redirs(process, data));
+	handle_redirs(process, data);
+	return (0);
 }
 
 // opens and closes correct fds for middle child processes
@@ -36,7 +37,8 @@ static int	middle_child(t_pipex *data, t_node *process)
 	dup2(data->ends[0], data->read_end);
 	dup2(tmp, data->ends[0]);
 	close(tmp);
-	return (handle_redirs(process, data));
+	handle_redirs(process, data);
+	return (data->exitcode);
 }
 
 // opens and closes correct fds for first child process
@@ -49,14 +51,18 @@ static int	first_child(t_pipex *data, t_node *process)
 	}
 	data->read_end = dup(data->ends[0]);
 	close(data->ends[0]);
-	return (handle_redirs(process, data));
+	handle_redirs(process, data);
+	return (data->exitcode);
 }
 
 // opens and closes correct fds based on the process
 int	get_fds(t_pipex *data, t_node *process)
 {
 	if (data->cmds == 1)
-		return (handle_redirs(process, data));
+	{
+		handle_redirs(process, data);
+		return (data->exitcode);
+	}
 	if (data->count == 0)
 		return (first_child(data, process));
 	if (data->count == data->cmds - 1)

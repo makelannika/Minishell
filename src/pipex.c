@@ -120,7 +120,7 @@ int	init_data(t_pipex *data, t_node *processes)
 	if (!data->pids)
 		return (close_and_free(data));
 	data->pids[0] = -1;
-	data->exit = 1;
+	data->execute = 1;
 	data->exitcode = 0;
 	return (0);
 }
@@ -154,7 +154,7 @@ int	pipex(t_node *processes, t_pipex *data)
 		data->exitcode = 0;
 		if (get_fds(data, processes) == -1)
 			return (close_and_free(data));
-		if (data->exitcode == 0)
+		if (data->execute && data->exitcode == 0)
 		{
 			if (forking(data, processes) == -1
 				|| (data->pids[data->count] == 0))
