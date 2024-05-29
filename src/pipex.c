@@ -120,6 +120,7 @@ int	init_data(t_pipex *data, t_node *processes)
 	if (!data->pids)
 		return (close_and_free(data));
 	data->pids[0] = -1;
+	data->exit = 1;
 	data->exitcode = 0;
 	return (0);
 }

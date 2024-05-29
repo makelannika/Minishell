@@ -12,6 +12,15 @@
 
 #include "../include/minishell.h"
 
+int	free_first_inits(t_pipex *data)
+{
+	free_str_array(data->env);
+	data->env = NULL;
+	free_str_array(data->paths);
+	data->paths = NULL;
+	return (data->exitcode);
+}
+
 int	main()
 {
 	char			*line;
@@ -26,7 +35,7 @@ int	main()
 		line = readline("MOOshell: ");
 		if (!line)
 		{
-			ft_printf(2, "Error: readline failed\n");	
+			ft_printf(2, "MOOshell: error: readline failed\n");	
 				return (-1);
 		}
 		else if (line[0] == '\0')
@@ -37,22 +46,23 @@ int	main()
 			add_history(line);
 			if (count_quotes(line) % 2 != 0)
 			{
-				ft_printf(2, "Error: Enclosed quotes\n");
+				ft_printf(2, "MOOshell: error: enclosed quotes\n");
 				continue;
 			}
-			parse_input(&data, line, &processes);
+			if (check_syntax_error(&data, line) != 0)
+			{
+				free_first_inits(&data);
+				continue ;
+			}
+			parse_input(line, &processes);
 			free(line);
 			if (!processes)
-			{
-				free_str_array(data.env);
-				data.env = NULL;
-				free_str_array(data.paths);
-				data.paths = NULL;
-				if (data.exitcode == -1)
-					return (-1);
-			}
+				return (free_first_inits(&data));
 			else if (pipex(processes, &data) == -1)
-				return (data.exitcode);
+			{
+				if (data.exit)
+					return (data.exitcode);
+			}
 			free_list(&processes);
 		}
 	}
