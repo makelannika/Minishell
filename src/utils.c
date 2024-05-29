@@ -62,3 +62,10 @@ void	free_and_exit(t_pipex *data, int exitcode) //use only for exit builtin
 	close_and_free(data);
 	exit(exitcode);
 }
+
+char	*set_error_return(t_pipex *data, int error, char *msg)
+{
+	data->exitcode = error;
+	ft_printf(2, "%s\n", msg);
+	return (NULL);
+}
