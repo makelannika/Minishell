@@ -55,7 +55,7 @@ static int	builtin_check(char	*string, t_node *process)
 }
 
 // parses one process at a time
-static t_node	*parse_process(t_pipex *data, char	*string, t_node **processes)
+static t_node	*parse_process(char	*string, t_node **processes)
 {
 	int	i;
 	int	j;
@@ -63,7 +63,6 @@ static t_node	*parse_process(t_pipex *data, char	*string, t_node **processes)
 	
 	i = 0;
 	j = 0;
-	// syntax error if [0] == |
 	node = create_node();
 	if(!node)
 	{
@@ -72,7 +71,7 @@ static t_node	*parse_process(t_pipex *data, char	*string, t_node **processes)
 		return (NULL);
 	}
 	add_back(processes, node);
-	get_redir_arr(data, string, node);
+	get_redir_arr(string, node);
 	node->cmd = string;
 	if (builtin_check(string, node) == -1
 		|| !node->redirs || !node->cmd)
@@ -90,7 +89,7 @@ void	init_flags(t_flags *f)
 }
 
 // parses the complete line returned from readline
-t_node	**parse_input(t_pipex *data, char *line, t_node **processes)
+t_node	**parse_input(char *line, t_node **processes)
 {
 	int	i;
 	int	start;
@@ -107,13 +106,13 @@ t_node	**parse_input(t_pipex *data, char *line, t_node **processes)
 			f.in_double *= -1;
 		if (line[i] == '|' && f.in_single == -1 && f.in_double == -1)
 		{
-			if (!parse_process(data, ft_substr(line, start, i - start), processes))
+			if (!parse_process(ft_substr(line, start, i - start), processes))
 				return (NULL);
 			start = i + 1;
 		}
 		i++;
 	}
-	if (!parse_process(data, ft_substr(line, start, i - start), processes))
+	if (!parse_process(ft_substr(line, start, i - start), processes))
 		return (NULL);
 	return (processes);
 }

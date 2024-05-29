@@ -107,7 +107,7 @@ static int	find_path(t_pipex *data)
 			i++;
 		}
 	}
-	ft_printf(2, "command not found: %s\n", data->cmd[0]);
+	ft_printf(2, "MOOshell: command not found: %s\n", data->cmd[0]);
 	close_and_free(data);
 	return (set_exitcode(data, 127));
 }
@@ -123,7 +123,7 @@ static int	path_check(t_pipex *data)
 		start--;
 	if (is_builtin(&data->cmd[0][start + 1]))
 	{
-		ft_printf(2, "no such file or directory: %s\n", data->cmd[0]);
+		ft_printf(2, "MOOshell: no such file or directory: %s\n", data->cmd[0]);
 		return (set_exitcode(data, 127));
 	}
 	if (access(data->cmd[0], F_OK) == 0)
@@ -131,7 +131,7 @@ static int	path_check(t_pipex *data)
 		data->path = ft_substr(data->cmd[0], 0, ft_strlen(data->cmd[0]));
 		return (0);
 	}
-	ft_printf(2, "no such file or directory: %s\n", data->cmd[0]);
+	ft_printf(2, "MOOshell: no such file or directory: %s\n", data->cmd[0]);
 	return (set_exitcode(data, 127));
 }
 
@@ -162,12 +162,12 @@ static int	get_cmd(char *cmd, t_pipex *data)
 	data->cmd = ft_split(cmd, 7);
 	if (!data->cmd)
 	{
-		ft_printf(2, "Error\nSplit failed when getting a command\n");
+		ft_printf(2, "MOOshell: error: split failed\n");
 		return (set_exitcode(data, -1));
 	}
 	if (data->cmd[0] == '\0')
 	{
-		ft_printf(2, "command not found: %s\n", cmd);
+		ft_printf(2, "MOOshell: command not found: %s\n", cmd);
 		close_and_free(data);
 		return (set_exitcode(data, 127));
 	}
@@ -195,11 +195,11 @@ static int	do_cmd(t_pipex *data, t_node *process)
 		return (-1);
 	if (!data->path)
 	{
-		ft_printf(2, "command not found: %s\n", data->cmd[0]);
+		ft_printf(2, "MOOshell: command not found: %s\n", data->cmd[0]);
 		return (set_exitcode(data, 127));
 	}
 	execve(data->path, data->cmd, data->env);
-	ft_printf(2, "permission denied: %s\n", data->cmd[0]);
+	ft_printf(2, "MOOshell: permission denied: %s\n", data->cmd[0]);
 	return (set_exitcode(data, 1));
 }
 
@@ -238,7 +238,7 @@ int	forking(t_pipex *data, t_node *process)
 		data->pids[data->count] = fork();
 		if (data->pids[data->count] < 0)
 		{
-			ft_printf(2, "Error\nFork failed\n");
+			ft_printf(2, "MOOshell: error: fork failed\n");
 			return (set_exitcode(data, -1));
 		}
 		if (data->pids[data->count] == 0)
