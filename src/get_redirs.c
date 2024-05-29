@@ -63,22 +63,35 @@ int	get_redir_len(char	*str)
 
 int	check_syntax_error(t_pipex *data, char *string)
 {
-	if (string[1] == '\0')
+	int	i;
+
+	i = 0;
+	if (string[0] == '|')
 	{
-		ft_printf(2, "syntax error near unexpected token `newline'\n");
+		ft_printf(2, "MOOshell: syntax error near unexpected token `|'\n");
 		return (set_exitcode(data, 258));
 	}
-	if ((string[0] == '<' && string[1] == '>')
-		|| (string[0] == '>' && string[1] == '<'))
+	while (string[i])
 	{
-		ft_printf(2, "syntax error near unexpected token `%c'\n", string[0]);
-		return (set_exitcode(data, 258));
+		if ((string[i] == '>' && string[i + 1] == '<')
+		|| (string[i] == '|' && string[i + 1] == '|'))
+		{
+			ft_printf(2, "MOOshell: syntax error near unexpected token `%c'\n", string[i + 1]);
+			return (set_exitcode(data, 258));
+		}
+		i++;
 	}
+	if (string[i - 1] == '<' || string[i - 1] == '>'
+		|| string[i - 1] == '|')
+		{
+			ft_printf(2, "MOOshell: syntax error near unexpected token `newline'\n");
+			return (set_exitcode(data, 258));
+		}
 	return (0);
 }
 
 // returns one redirection at a time to be stored in the 2d array
-static char	*get_redir(t_pipex *data, char *string)
+static char	*get_redir(char *string)
 {
 	int		i;
 	char	*redir_str;
@@ -87,8 +100,6 @@ static char	*get_redir(t_pipex *data, char *string)
 	i = 1;
 	while (string[i])
 	{
-		if (check_syntax_error(data, string) == -1)
-			return (NULL);
 		if ((string[i] == '<' && string[i - 1] == '<')
 			|| (string[i] == '>' && string[i - 1] == '>'))
 			i++;
@@ -115,7 +126,7 @@ static char	*get_redir(t_pipex *data, char *string)
 }
 
 // saves all redirs to the redir_arr
-int	get_redirs(t_pipex *data, char *string, t_node *node)
+int	get_redirs(char *string, t_node *node)
 {
 	int	i;
 	int	j;
@@ -132,7 +143,7 @@ int	get_redirs(t_pipex *data, char *string, t_node *node)
 			f.in_double *= -1;
 		if ((string[i] == '<' || string[i] == '>') && (f.in_single == -1 & f.in_double == -1))
 		{
-			node->redirs[j++] = get_redir(data, &string[i]); 
+			node->redirs[j++] = get_redir(&string[i]); 
 			if (!node->redirs[j - 1])
 				return (-1);
 			if ((string[i] == '<' && string[i + 1] == '<') || (string[i] == '>' && string[i + 1] == '>'))
@@ -144,13 +155,13 @@ int	get_redirs(t_pipex *data, char *string, t_node *node)
 }
 
 // makes a 2d array to store all redirections of a single process
-void	get_redir_arr(t_pipex *data, char *string, t_node *node)
+void	get_redir_arr(char *string, t_node *node)
 {
 	int	count;
 	
 	count = counter(string, '<') + counter(string, '>');
 	node->redirs = ft_calloc(count + 1, sizeof(char *));
-	if (get_redirs(data, string, node) == -1)
+	if (get_redirs(string, node) == -1)
 	{
 		free_str_array(node->redirs);
 		node->redirs = NULL;
