@@ -19,10 +19,10 @@ int	main()
 	t_pipex			data;
 	
 	data = (t_pipex){0};
-	if (first_inits(&data) == -1)
-		return (-1);
 	while (1) 
 	{
+		if (first_inits(&data) == -1)
+		return (-1);
 		line = readline("MOOshell: ");
 		if (!line)
 		{
@@ -40,15 +40,18 @@ int	main()
 				ft_printf(2, "Error: Enclosed quotes\n");
 				continue;
 			}
-			parse_input(line, &processes);
+			parse_input(&data, line, &processes);
 			free(line);
 			if (!processes)
 			{
 				free_str_array(data.env);
+				data.env = NULL;
 				free_str_array(data.paths);
-				return (-1);
+				data.paths = NULL;
+				if (data.exitcode == -1)
+					return (-1);
 			}
-			if (pipex(processes, &data) == -1)
+			else if (pipex(processes, &data) == -1)
 				return (data.exitcode);
 			free_list(&processes);
 		}

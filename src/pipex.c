@@ -137,6 +137,7 @@ int	first_inits(t_pipex *data)
 		if (get_paths(data) == -1)
 		{
 			free_str_array(data->env);
+			data->env = NULL;
 			return (-1);
 		}
 	}
@@ -144,7 +145,7 @@ int	first_inits(t_pipex *data)
 }
 
 int	pipex(t_node *processes, t_pipex *data)
-{	
+{
 	if (init_data(data, processes) == -1)
 		return (set_exitcode(data, -1));
 	while (data->count < data->cmds)
@@ -164,5 +165,5 @@ int	pipex(t_node *processes, t_pipex *data)
 		processes = processes->next;
 	}
 	wait_children(data->pids, data->cmds, &data->exitcode);
-	return (0);
+	return (data->exitcode);
 }

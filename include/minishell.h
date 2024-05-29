@@ -69,13 +69,13 @@ typedef struct s_pipex
 
 /*********************************--PARSING--**************************************/
 
-t_node	**parse_input(char *line, t_node **processes);
+t_node	**parse_input(t_pipex *data, char *line, t_node **processes);
 t_node	*create_node();
 int		count_quotes(char *string);
 void	add_back(t_node **lst, t_node *new);
 int		get_list_length(t_node *processes);
 int		counter(char *string, char c);
-void	get_redir_arr(char	*string, t_node *node);
+void	get_redir_arr(t_pipex *data, char	*string, t_node *node);
 void	init_flags(t_flags *f);
 char	*trim_cmd(char *cmd_str);
 char	*quote_remover(char *cmd);
