@@ -53,7 +53,7 @@ int	main()
 			{
 				free_first_inits(&data);
 				free(line);
-				return (0);
+				continue ;
 			}
 			parse_input(line, &processes);
 			free(line);
