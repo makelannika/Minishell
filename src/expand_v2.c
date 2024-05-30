@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../include/minishell.h"
 
 void	check_quotes(t_quote *quote, char c)
 {
@@ -7,17 +7,17 @@ void	check_quotes(t_quote *quote, char c)
 	i = 0;
 	if (c == '\'' || c == '"')
 	{
-		if (quote == NONE)
+		if (*quote == NONE)
 		{
 			if (c == '\'')
-				quote = SINGLE;
+				*quote = SINGLE;
 			else
-				quote = DOUBLE;
+				*quote = DOUBLE;
 		}
-		else if (c == '\'' && quote == SINGLE)	
-			quote = NONE;
-		else if (c == '"' && quote == DOUBLE)
-			quote = NONE;
+		else if (c == '\'' && *quote == SINGLE)	
+			*quote = NONE;
+		else if (c == '"' && *quote == DOUBLE)
+			*quote = NONE;
 	}	
 }
 
@@ -27,11 +27,13 @@ char	*get_value(char *key, t_pipex *data)
 	char	*value;
 	char	*key_wequal;
 
+	// printf("key is %s\n", key);
 	key_wequal = ft_strjoin(key, "=");
 	if (!key_wequal)
 		return (set_error_return(data, -1, "Malloc failed in get_value"));
 	value = NULL;
 	i = 0;
+// printf("HERE\n");
 	while (data->env[i])
 	{
 		if (key[0] != '\0' && ft_strncmp(key_wequal, data->env[i], ft_strlen(key_wequal)) == 0)
@@ -55,11 +57,9 @@ char	*get_key(char **cmd, t_pipex *data, int key_start)
 	i = key_start;
 	while(ft_isalnum((*cmd)[i]) || (*cmd)[i] == '_')
 		i++;
-	key = ft_calloc(i - key_start, sizeof(char));
+	key = ft_substr(*cmd, key_start, i - key_start);
 	if (!key)
 		return(set_error_return(data, -1, "Malloc failed in get_key"));
-	while (k < i - key_start)
-		key[k++] = (*cmd)[key_start++];
 	return(key);
 }
 
@@ -76,34 +76,27 @@ char	*replace_key_with_value(char *value, char **cmd, int key_start, t_pipex *da
 	new_str = ft_calloc(ft_strlen(value) + ft_strlen(*cmd) - key_len, sizeof(char));
 	if (!new_str)
 		return (set_error_return(data, -1, "Malloc failed in replace_key_with_value"));
-	i = 0;
-	while (i < key_start - 1)
-	{
-		new_str[i] = (*cmd)[i];
-		i++;
-	}
-	k = 0;
-	while (value[k])
-		new_str[i++] = value[k++];
-	if (k < key_len)
-		key_len = k;
-	while ((*cmd)[key_start + key_len])
-		new_str[i++] = (*cmd)[key_start + key_len++];
+	new_str = ft_memcpy(new_str, *cmd, key_start - 1);
+	new_str = ft_memcat(new_str, value);
+	new_str = ft_memcat(new_str, &cmd[0][key_len]);
 	free(*cmd);
 	*cmd = new_str;
 	return (*cmd);
 }
 
-int	expandsion(char **cmd, t_pipex *data, int key_start)
+int	expansion(char **cmd, t_pipex *data, int key_start)
 {
 	char	*value;
 	int		i;
+	int		end_of_value;
 	char	*key;
 
 	key = get_key(cmd, data, key_start);
 	if (!key)
 		return (-1);
 	value = get_value(key, data);
+	// printf("key: %s\n", key);
+	// printf("value: %s\n", value);
 	if (!value)
 	{
 		free(key);
@@ -114,8 +107,11 @@ int	expandsion(char **cmd, t_pipex *data, int key_start)
 		free(key);
 		return (-1);
 	}
+	end_of_value = key_start - 1 + ft_strlen(value);
+	// printf("cmd: %s\n", *cmd);
+	// printf("end_of_value: %d\n", end_of_value);
 	free(key);
-	return (key_start + ft_strlen(value));
+	return (end_of_value);
 }
 
 int		expandable(char **cmd, t_pipex *data, int key)
@@ -124,30 +120,28 @@ int		expandable(char **cmd, t_pipex *data, int key)
 
 	if ((*cmd)[key] == '_' || ft_isalpha((*cmd)[key]))
 	{
-		//get_value and replace value into string 
-		end_of_value = expandsion(cmd, data, key);
+		end_of_value = expansion(cmd, data, key);
 		if (end_of_value == -1)
-		//free
 			return (-1);
 		return (end_of_value);
 	}
-	else if ((*cmd)[key] == '$')
-	{
-		// if more $ do stuff
-		//else delete entire string
-	}
-	else if ((*cmd)[key] == '?' )
-	{
-		//turn into ascii and replace into string
-	}
-	else if ((*cmd)[key] == '\'')
-	{
-		// print string with $
-	}
-	else if ((*cmd)[key] == '"')
-	{
-		// get rid of $
-	}
+	// else if ((*cmd)[key] == '$')
+	// {
+	// 	// if more $ do stuff
+	// 	//else delete entire string
+	// }
+	// else if ((*cmd)[key] == '?' )
+	// {
+	// 	//turn into ascii and replace into string
+	// }
+	// else if ((*cmd)[key] == '\'')
+	// {
+	// 	// print string with $
+	// }
+	// else if ((*cmd)[key] == '"')
+	// {
+	// 	// get rid of $
+	// }
 	return (0);
 }
 
@@ -158,6 +152,7 @@ int	expand_v2(t_pipex *data, char **cmd)
 	t_quote	quote;
 	char	*new_str;
 	
+	printf("cmd: %s\n", *cmd);
 	quote = NONE;
 	i = 0;
 	if (strchr(*cmd, '$') == NULL)
@@ -167,10 +162,39 @@ int	expand_v2(t_pipex *data, char **cmd)
 		check_quotes(&quote, (*cmd)[i]);
 		if ((*cmd)[i] == '$' && quote != SINGLE)
 		{
-			if(expandable(cmd, data, i + 1) == -1)
+			i = expandable(cmd, data, i + 1);
+			// printf("cmd: %s\n", *cmd);
+			if (i == -1)
 				return (-1);
+			continue ;
 		}	
 		i++;
 	}
 	return (0);
 }
+int main()
+{
+	t_pipex data;
+	data = (t_pipex){0};
+    char **env = malloc(4 * sizeof(char*));
+    env[0] = ft_strdup("HOME=Michael");
+    env[1] = ft_strdup("AGE=36");
+    env[2] = ft_strdup("HAIR=black");
+    env[3] = NULL;
+	data.env = env;
+	// char *str = ft_strdup("echo $? \"'$HOME'\" '\"$HOME\"' What $$$HOME $HOME $AGE'$ HOME'");
+	// char *str = ft_strdup("echo $\"HOME\"");
+	char *str = ft_strdup("echo $HOME \"$HOME\" \'\"$HOME\'\" \"'$HOME'\"");
+	// char *str = ft_strdup("echo $word");
+	// str = "echo $ e";
+	// str = "echo $$$$NAME";
+	expand_v2 (&data, &str);
+	printf("%s\n", str);
+	// int i = 0;
+	// while (env[i])
+	// 	free(env[i++]);
+	// free(env);
+	// free(str);
+}
+
+// echo $HOME "$HOME" \'"$HOME"\' "'$HOME'" ALL OF THIS EXPANDS
