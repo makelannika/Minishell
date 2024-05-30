@@ -52,7 +52,8 @@ int	main()
 			if (check_syntax_error(&data, line) != 0)
 			{
 				free_first_inits(&data);
-				continue ;
+				free(line);
+				return (0);
 			}
 			parse_input(line, &processes);
 			free(line);
