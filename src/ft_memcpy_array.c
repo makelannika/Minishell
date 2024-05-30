@@ -25,7 +25,6 @@ void    *ft_memcpy_array(void *dst, const void *src, size_t sizeof_src)
 
 void	*ft_memcat(void *dst, const void *src)
 {
-	int			len;
 	char		*d;
 	const char	*s;
 
@@ -35,8 +34,10 @@ void	*ft_memcat(void *dst, const void *src)
 		return (dst);
 	while (*d)
 		d++;
-	while (*s)
+	while (*s != '\0')
 		*d++ = *s++;
 	*d = '\0';
 	return (dst);
 }
+// echo Michael "Michael" '"$HOME"' "'$HOME'"
+// echo Michael "Michael" '"$HOME"' "'Michael'"

@@ -102,6 +102,7 @@ int		set_exitcode(t_pipex *data, int exitcode);
 /*********************************--BUILT_IN--*************************************/
 
 int		expand_that_shit(char **cmd, char **env, t_pipex data);
+int		expand_v2(t_pipex *data, char **cmd);
 void	do_export(t_pipex *data, char **env, char **cmd, int fd_out);
 void	do_echo(char **cmd, int fd_out);
 void	put_env(char **env, int fd_out);
