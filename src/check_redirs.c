@@ -41,7 +41,7 @@ static int	do_heredoc(char *file)
 	int		len;
 	int		heredoc;
 	
-	heredoc = open(".heredoc", O_CREAT | O_RDWR | O_APPEND, 0644);
+	heredoc = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC | O_APPEND, 0644);
 	if (heredoc == -1)
 		return (-1);
 	delimiter = ft_strdup(&file[2]);
@@ -107,8 +107,7 @@ int	is_empty(char *string)
 	return (1);
 }
 
-// checks rights to all redir files and clears ones with '>'
-int	handle_redirs(t_node *process, t_pipex *data)
+void	handle_heredocs(t_node *process, t_pipex *data)
 {
 	int	i;
 	int heredoc;
@@ -123,6 +122,25 @@ int	handle_redirs(t_node *process, t_pipex *data)
 			handle_heredoc(process->redirs[i], data);
 			heredoc = 1;
 		}
+		i++;
+	}
+	if (heredoc && is_empty(process->cmd))
+		data->execute = 0;
+}
+
+// checks rights to all redir files and clears ones with '>'
+int	handle_redirs(t_node *process, t_pipex *data)
+{
+	int	i;
+
+	i = 0;
+	handle_heredocs(process, data);
+	while (process->redirs[i])
+	{
+		if (data->exitcode != 0)
+			return (data->exitcode);
+		if (ft_strncmp(process->redirs[i], "<<", 2) == 0)
+			i++;
 		else if (ft_strncmp(process->redirs[i], "<", 1) == 0)
 			redir_in(process->redirs[i], data);
 		else if (ft_strncmp(process->redirs[i], ">", 1) == 0)
@@ -131,7 +149,5 @@ int	handle_redirs(t_node *process, t_pipex *data)
 		if (data->exitcode != 0)
 			return (data->exitcode);
 	}
-	if (heredoc && is_empty(process->cmd))
-		data->execute = 0;
 	return (0);
 }
