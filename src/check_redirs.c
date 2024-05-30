@@ -41,7 +41,7 @@ static int	do_heredoc(char *file)
 	int		len;
 	int		heredoc;
 	
-	heredoc = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC | O_APPEND, 0644);
+	heredoc = open(".heredoc", O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (heredoc == -1)
 		return (-1);
 	delimiter = ft_strdup(&file[2]);
@@ -77,7 +77,6 @@ static void	handle_heredoc(char *file, t_pipex *data)
 		ft_printf(2, "MOOshell: MOOshell: heredoc failed\n");
 		data->exitcode = -1;
 	}
-	unlink(".heredoc");
 }
 
 // checks rights to a redir file with '<'

@@ -60,6 +60,7 @@ int	main()
 				return (free_first_inits(&data));
 			else if (pipex(processes, &data) == -1)
 				return (data.exitcode);
+			unlink(".heredoc");
 			free_list(&processes);
 		}
 	}
