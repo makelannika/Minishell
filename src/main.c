@@ -26,11 +26,12 @@ int	main()
 	char				*line;
 	t_node				*processes;
 	t_pipex				data;
-	
-	processes = NULL;
+
 	data = (t_pipex){0};
 	data.sa.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &data.sa, NULL);
+	
+	processes = NULL;
 	while (1) 
 	{
 		if (first_inits(&data) == -1)
@@ -39,7 +40,7 @@ int	main()
 		line = readline("MOOshell: ");
 		if (!line)
 		{
-			ft_printf(2, "MOOshell: error: readline failed\n");	
+			ft_printf(2, "exit\n");	
 				return (-1);
 		}
 		else if (line[0] == '\0')
