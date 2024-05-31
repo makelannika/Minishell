@@ -171,7 +171,7 @@ void	remove_not_expandable(char **cmd, int key_start)
 	(*cmd)[key_start + i] = '\0';
 }
 
-int		expandable(char **cmd, t_pipex *data, int key)
+int		expandable(char **cmd, t_pipex *data, int key, t_quote quote)
 {
 	int end_of_value;
 
@@ -182,7 +182,7 @@ int		expandable(char **cmd, t_pipex *data, int key)
 			return (-1);
 		return (end_of_value);
 	}
-	else if ((*cmd)[key] == '"')
+	else if ((*cmd)[key] == '"' || ((*cmd)[key] == '\'' && quote != DOUBLE))
 		remove_dollar_sign(cmd, key - 1, 1);
 	else if ((*cmd)[key] == '?' )
 	{
@@ -194,8 +194,6 @@ int		expandable(char **cmd, t_pipex *data, int key)
 		remove_dollar_sign(cmd, key - 1, 2);
 		key = key - 1;
 	}
-	// else
-	// 	remove_not_expandable(cmd, key);
 	// printf("cmd: %s\n", *cmd);
 	// printf("key: %d\n", key);
 	return (key);
@@ -216,7 +214,7 @@ int	expand_v2(t_pipex *data, char **cmd)
 		check_quotes(&quote, (*cmd)[i]);
 		if ((*cmd)[i] == '$' && quote != SINGLE)
 		{
-			i = expandable(cmd, data, i + 1);
+			i = expandable(cmd, data, i + 1, quote);
 			// printf("i: %d\n", i);
 			// printf("cmd: %s\n", *cmd);
 			if (i == -1)
