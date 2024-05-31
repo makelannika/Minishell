@@ -29,10 +29,13 @@ int	main()
 	
 	processes = NULL;
 	data = (t_pipex){0};
+	data.sa.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &data.sa, NULL);
 	while (1) 
 	{
 		if (first_inits(&data) == -1)
 		return (-1);
+		// ft_printf(2, "exitcode: %d\n", data.exitcode);
 		line = readline("MOOshell: ");
 		if (!line)
 		{
@@ -62,6 +65,7 @@ int	main()
 				return (free_first_inits(&data));
 			else if (pipex(processes, &data) == -1)
 				return (data.exitcode);
+			// ft_printf(2, "exitcode in main: %d\n", data.exitcode);
 			unlink(".heredoc");
 			free_list(&processes);
 		}

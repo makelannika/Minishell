@@ -29,7 +29,7 @@ static void	redir_out(char *file, t_pipex *data)
 		if (access(&file[1], F_OK) != 0)
 			ft_printf(2, "MOOshell: no such file or directory: %s\n", &file[1]);
 		else
-			ft_printf(2, "MOOshell: permission denied: %s\n", &file[1]);
+			ft_printf(2, "MOOshell: 1permission denied: %s\n", &file[1]);
 		data->exitcode = 1;
 	}
 }
@@ -147,7 +147,10 @@ int	handle_redirs(t_node *process, t_pipex *data)
 			redir_out(process->redirs[i], data);
 		i++;
 		if (data->exitcode != 0)
+		{
+			ft_printf(2, "returning with exitcode: %d\n", data->exitcode);
 			return (data->exitcode);
+		}
 	}
 	return (0);
 }

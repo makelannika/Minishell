@@ -19,7 +19,7 @@ static int	last_child(t_pipex *data, t_node *process)
 	close(data->read_end);
 	data->ends[1] = dup(STDOUT_FILENO);
 	handle_redirs(process, data);
-	return (0);
+	return (data->exitcode);
 }
 
 // opens and closes correct fds for middle child processes

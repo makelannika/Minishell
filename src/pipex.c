@@ -25,9 +25,13 @@ static int	wait_children(int *pids, int count, int *exitcode)
 		if (WIFEXITED(status) && i == count - 1)
 			*exitcode = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
+		{
+			ft_printf(2, "Quit: 3\n");
 			*exitcode = WTERMSIG(status);
+		}
 		i++;
 	}
+
 	return (*exitcode);
 }
 
@@ -160,11 +164,13 @@ int	pipex(t_node *processes, t_pipex *data)
 				|| (data->pids[data->count] == 0))
 				return (close_and_free(data));
 		}
+		// ft_printf(2, "exitcode in pipex: %d\n", data->exitcode);
 		close(data->ends[0]);
 		close(data->ends[1]);
 		data->count++;
 		processes = processes->next;
 	}
 	wait_children(data->pids, data->cmds, &data->exitcode);
+	// ft_printf(2, "exitcode in pipex: %d\n", data->exitcode);
 	return (data->exitcode);
 }
