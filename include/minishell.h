@@ -65,7 +65,7 @@ typedef struct s_pipex
 	int		exitcode;
 	int		execute;
 	_Bool	builtin;
-	struct sigaction *sa;
+	struct sigaction sa;
 }	t_pipex;
 
 /*********************************--PARSING--**************************************/

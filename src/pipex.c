@@ -25,7 +25,11 @@ static int	wait_children(int *pids, int count, int *exitcode)
 		if (WIFEXITED(status) && i == count - 1)
 			*exitcode = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
+		{
+			printf("here\n");
 			*exitcode = WTERMSIG(status);
+			printf("exitcode: %d\n", *exitcode);
+		}
 		i++;
 	}
 	return (*exitcode);
