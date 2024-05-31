@@ -108,8 +108,10 @@ int	expansion(char **cmd, t_pipex *data, int key_start)
 		return (-1);
 	value = get_value(key, data);
 	if (!value)
+	{
 		remove_str(cmd, key_start - 1, key_start + ft_strlen(key));
 		return (key_start - 1);
+	}
 	if (!replace_key_with_value(value, cmd, key_start, data))
 	{
 		free(key);
@@ -204,7 +206,7 @@ int	expand_v2(t_pipex *data, char **cmd)
 	int		i;
 	t_quote	quote;
 	
-	printf("first cmd: %s\n", *cmd);
+	// printf("first cmd: %s\n", *cmd);
 	quote = NONE;
 	i = 0;
 	if (strchr(*cmd, '$') == NULL)
@@ -215,13 +217,14 @@ int	expand_v2(t_pipex *data, char **cmd)
 		if ((*cmd)[i] == '$' && quote != SINGLE)
 		{
 			i = expandable(cmd, data, i + 1);
+			// printf("i: %d\n", i);
+			// printf("cmd: %s\n", *cmd);
 			if (i == -1)
 				return (-1);
 			continue ;
 		}	
 		i++;
 	}
-	printf("cmd: %s\n", *cmd);
 	return (0);
 }
 // int main()
@@ -236,7 +239,7 @@ int	expand_v2(t_pipex *data, char **cmd)
 // 	data.env = env;
 // 	// char *str = ft_strdup("echo $? \"'$HOME'\" '\"$HOME\"' What $$$HOME $HOME $AGE'$ HOME'");
 // 	// char *str = ft_strdup("echo $\"HOME\"");
-// 	char *str = ft_strdup("echo $wer \"$'HOME'\"");
+// 	char *str = ft_strdup("echo $AGE");
 // 	// char *str = ft_strdup("echo $word");
 // 	// str = "echo $ e";
 // 	// str = "echo $$$$NAME";
@@ -249,4 +252,5 @@ int	expand_v2(t_pipex *data, char **cmd)
 // 	// free(str);
 // }
 
+// echo $HOME "$HOME" "'$HOME'" $? $$$ $wer $"HOME" $'HOME' "$'HOME'" "$HO"me
 // echo $HOME "$HOME" \'"$HOME"\' "'$HOME'" ALL OF THIS EXPANDS
