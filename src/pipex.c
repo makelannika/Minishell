@@ -131,7 +131,7 @@ int	first_inits(t_pipex *data)
 	if (!data->env)
 	{
 		if (get_env(data) == -1)
-		return (-1);
+			return (-1);
 	}
 	if (!data->paths)
 	{
@@ -158,7 +158,7 @@ int	pipex(t_node *processes, t_pipex *data)
 		{
 			if (forking(data, processes) == -1
 				|| (data->pids[data->count] == 0))
-					return (close_and_free(data));
+				return (close_and_free(data));
 		}
 		close(data->ends[0]);
 		close(data->ends[1]);
