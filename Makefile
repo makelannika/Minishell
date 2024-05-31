@@ -20,13 +20,14 @@ READLINELIB	=	-L ~/.brew/Cellar/readline/8.2.10/lib/ -lreadline
 INCLUDE		=	-I /include
 
 CFLAGS		=	-Wall -Wextra -Werror
-DEBUGFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
+DEBUGFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
 CC			=	cc
 
 CFILES		=	src/input_parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c		\
 				src/pipex.c				src/fd_utils.c			src/check_redirs.c	src/forking.c	\
 				src/cmd_parsing.c		src/list_utils.c		src/get_redirs.c	src/main.c		\
-				src/utils.c				src/export.c			src/expand.c
+				src/utils.c				src/export.c									\
+				src/ft_memcpy_array.c	src/expand_v2.c
 
 OFILES		=	$(CFILES:.c=.o)
 

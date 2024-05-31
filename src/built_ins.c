@@ -31,11 +31,7 @@ void put_pwd(t_pipex *data, int fd_out)
 
 	s = getcwd(NULL, 0);
 	if (!s)
-	{
-		ft_printf(2, "%s\n", strerror(errno));
-		data->exitcode = errno;
-		return ;
-	}
+		return (set_error_and_print(data, -1, "getcwd failed"));
 	ft_printf(fd_out, "%s\n", s);
 }
 
@@ -45,44 +41,55 @@ void do_cd(t_pipex *data, char *path, char**environ)
 	char *oldpwd;
 	char *newpwd;
 	
-    oldpwd = getcwd(NULL, 0);
 	i = 0;
+    oldpwd = getcwd(NULL, 0);
+	if (!oldpwd)
+		return (set_error_and_print(data, -1, "getcwd failed"));
 	if (chdir(path) == -1)
-		ft_printf(2, "%s\n", strerror(errno));
+		return (set_error_and_print(data, -1, "chdir failed"));
 	while (environ[i])
 	{
 		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
 		{
 			newpwd = getcwd(NULL, 0);
+			if (!newpwd)
+				return (set_error_and_print(data, -1, "getcwd failed"));
 			free(environ[i]);
 			environ[i] = ft_strjoin("PWD=", newpwd);
 			if (!environ[i])
-				set_error_and_print(data, -1, "strjoin failed");
+				return (set_error_and_print(data, -1, "strjoin failed"));
 		}
 		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
 		{
 			free(environ[i]);
 			environ[i] = ft_strjoin("OLDPWD=", oldpwd);
 			if (!environ[i])
-				set_error_and_print(data, -1, "strjoin failed");
+				return (set_error_and_print(data, -1, "strjoin failed"));
 		}
 		i++;
 	}
 }
 
-// FIXME: unset $(env | awk -F= '{print $1}')
-// FIXME: take multiple variables
-// FIXME: 
-void do_unset(char **env, char *key)
+void do_unset(char **env, char **cmd)
 {
 	int	i;
+	int	j;
+	int len;
 
 	i = 0;
-	while (env[i])
+	j = 1;
+	while (cmd[j])
 	{
-		if (ft_strncmp(env[i], key, ft_strlen(key)) == 0)
-			remove_string(env, i);
-		i++;
+		len = ft_strlen(cmd[j]);
+		i = 0;
+		while (env[i])
+		{
+ 			if (ft_strncmp(env[i], cmd[j], len) == 0 && 
+				(env[i][len] == '=' || env[i][len] == '\0'))
+				remove_string(env, i);
+			i++;
+		}
+		j++;
 	}
 }
 
@@ -104,9 +111,9 @@ void	do_exit(char **cmd, t_pipex *data)
 			if (code < 0)
 				print_error_and_exit(my_printf, cmd[0], cmd[1], 255);
 			else if (code > 255)
-				exit (code % 256);
+				free_and_exit(data, code % 256);
 			else
-				exit (code);
+				free_and_exit(data, code);
 		}
 		else if (!ft_isdigit_str(cmd[1]))
 			print_error_and_exit(my_printf, cmd[0], cmd[1], 255);

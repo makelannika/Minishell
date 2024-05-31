@@ -14,25 +14,26 @@
 
 _Bool check_option(char *a)
 {
-	int p;
+	int i;
 
-	p = 0;
-    if (!a[p])
+	i = 0;
+    if (!a[i])
         return (1);
-    if (a[p] == '-')
-        p++;
-	while (a[p])
+    if (a[i] != '-')
+        return (0);
+    if (a[i] == '-')
+        i++;
+	while (a[i])
 	{
-		if (a[p] != 'n')
+		if (a[i] != 'n')
 			return (0);
-		p++;
+		i++;
 	}
 	return (1);
 }
-//FIXME: need to redo -n so that it prints all at once
-void	do_echo(t_pipex *data, char **cmd, int fd_out)
+
+void	do_echo(char **cmd, int fd_out)
 {
-    (void)data;
 	int		i;
 
 	i = 1;
@@ -56,4 +57,6 @@ void	do_echo(t_pipex *data, char **cmd, int fd_out)
                 ft_printf(fd_out, "%s ", cmd[i++]);
         }
     }
+    if (!cmd[1])
+        ft_printf(fd_out, "\n");
 }

@@ -33,7 +33,7 @@ void sort_strings(char **arr)
         i = 0;
         while (i < size - 1)
 		{
-            if (ft_strncmp(arr[i], arr[i + 1], 400) > 0)
+            if (ft_strncmp(arr[i], arr[i + 1], ft_strlen(arr[i]) + ft_strlen(arr[i + 1])) > 0)
 			{
                 swap_strings(&arr[i], &arr[i + 1]);
                 swapped = 1;
@@ -43,7 +43,33 @@ void sort_strings(char **arr)
     }
 }
 
-char    **putstr_in_array(char **env, char *str)
+_Bool   update_key(t_pipex *data, char **env, char *str)
+{
+    char *equal;
+    char **tmp;
+    int i;
+    int flag;
+
+    i = 0;
+    flag = 0;
+    tmp = env;
+    while (tmp[i])
+    {
+        equal = ft_strchr(tmp[i], '=');
+        if (ft_strncmp(tmp[i], str, equal - tmp[i] + 1) == 0)
+        {
+            flag = 1;
+            free(tmp[i]);
+            env[i] = ft_strdup(str);
+            if (!env[i])
+                data->exitcode = -1;
+        }
+        i++;
+    }
+    return (flag);
+}
+
+char    **putstr_in_array(t_pipex *data, char **env, char *str)
 {
     char **tmp;
 	int i;
@@ -51,13 +77,14 @@ char    **putstr_in_array(char **env, char *str)
     i = 0;
     tmp = env;
     env = malloc(sizeof(char*) *(array_len(env) + 2));
+    if (!env)
+        data->exitcode = -1;
     while (tmp[i])
     {
-        // ft_strchr(tmp[i], '=');
         env[i] = ft_strdup(tmp[i]);
+        if (!env[i])
+            data->exitcode = -1;
         free(tmp[i]);
-        // if (!*env)
-        //     FREE and PRINT error ft
 		i++;
     }
     env[i++] = ft_strdup(str);
@@ -65,12 +92,13 @@ char    **putstr_in_array(char **env, char *str)
     free(tmp);
     return (env);
 }
+
 _Bool check_key(char *str)
 {
     int i;
 
     i = 1;
-    if (!(ft_isalpha(str[0]) && str[0] != '_'))
+    if (!(ft_isalpha(str[0]) || str[0] == '_'))
         return (0);
     while (str[i] && str[i] != '=')
     {
@@ -88,9 +116,9 @@ void    print_export(char *str, int fd_out)
 
     i = 0;
     tmp = ft_strchr(str, '=');
-    if (!tmp) //prints string without =
+    if (!tmp)
         ft_printf(fd_out, "declare -x %s\n", str);
-    else if (*(tmp + 1) == '\0') //prints strings with = at the end
+    else if (*(tmp + 1) == '\0')
         ft_printf(fd_out, "declare -x %s\"\"\n", str);
     else
         printf("declare -x %.*s\"%s\"\n", (int)(tmp - str + 1), str, tmp + 1);
@@ -98,7 +126,6 @@ void    print_export(char *str, int fd_out)
 
 void    do_export(t_pipex *data, char **env, char **cmd, int fd_out)
 {
-    (void)data;
 	int     i;
 	
 	i = 0;
@@ -118,38 +145,40 @@ void    do_export(t_pipex *data, char **env, char **cmd, int fd_out)
                 ft_printf(2, "export: `%s': not a valid identifier\n", cmd[i++]);
                 continue;
             }
-		    env = putstr_in_array(env, cmd[i++]);
+            if (update_key(data, env, cmd[i]))
+            {
+                i++;
+                continue;
+            }    
+		    env = putstr_in_array(data, env, cmd[i++]);
         }
-        // printf("AFTER EXPORT_________\n");
-        // for (int p = 0; env[p]; p++)
-        //     printf("%s\n", env[p]);
-        // printf("\n\n\n");
     }
     data->env = env;
 }   
 // int main()
 // {
+//     t_pipex *data = malloc(sizeof(t_pipex));
 //     char **exports = malloc(sizeof(char *) * 8);
 //     char **env = malloc(sizeof(char *) * 9);
-
+// // export what the= theo="" "wer"
 //     exports[0] = ft_strdup("export");
-//     exports[1] = ft_strdup("1cat=10");
-//     exports[2] = ft_strdup("cat=9");
-//     exports[3] = ft_strdup("cat");
-//     exports[4] = ft_strdup("cat=");
-//     exports[5] = NULL;
+//     exports[1] = ft_strdup("what");
+//     exports[2] = ft_strdup("the=");
+//     exports[3] = ft_strdup("theo=""");
+//     exports[4] = ft_strdup("cat");
+//     exports[5] = ft_strdup("sin=");
+//     exports[6] = NULL;
 
 //     char **str= malloc(sizeof(char *) * 9);
 //     str[0] = "export";
 //     str[2] = NULL;
 
-//     env[0] = ft_strdup("dog=6");
-//     env[1] = ft_strdup("dog=7");
-//     env[2] = ft_strdup("dog=7=234sdf");
+//     env[0] = ft_strdup("env=6");
+//     env[1] = ft_strdup("env2=7");
+//     env[2] = ft_strdup("env3=7=234sdf");
 //     env[3] = NULL;
-//     do_export(env, exports, 2);
-//     printf("____________________\n");
-//     do_export(env, str ,2);
+//     do_export(data, env, exports, 2);
+//     // printf("____________________\n");
+//     do_export(data, data->env, str ,2);
 // }
-//TODO: figure out exit or return
-//TODO: update key that aleady exists
+

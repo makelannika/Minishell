@@ -23,10 +23,11 @@ int	free_first_inits(t_pipex *data)
 
 int	main()
 {
-	char			*line;
-	t_node			*processes = NULL;
-	t_pipex			data;
+	char				*line;
+	t_node				*processes;
+	t_pipex				data;
 	
+	processes = NULL;
 	data = (t_pipex){0};
 	while (1) 
 	{

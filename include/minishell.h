@@ -104,15 +104,21 @@ int		set_exitcode(t_pipex *data, int exitcode);
 /*********************************--BUILT_IN--*************************************/
 
 int		expand_that_shit(char **cmd, char **env, t_pipex data);
+int		expand_v2(t_pipex *data, char **cmd);
 void	do_export(t_pipex *data, char **env, char **cmd, int fd_out);
-void	do_echo(t_pipex *data, char **cmd, int fd_out);
+void	do_echo(char **cmd, int fd_out);
 void	put_env(char **env, int fd_out);
 void	put_pwd(t_pipex *data, int	fd_out);
 void	do_cd(t_pipex *data, char *path, char **env);
-void	do_unset(char **env, char *key);
+void	do_unset(char **env, char **key);
 void	sort_strings(char **arr);
-char	**putstr_in_array(char **env, char *cmd);
+char	**putstr_in_array(t_pipex *data, char **env, char *cmd);
 void	do_exit(char **cmd, t_pipex *data);
+
+/***********************************--MEM_FT--**************************************/
+
+void	*ft_memcat(void *dst, const void *src);
+void    *ft_memcpy_array(void *dst, const void *src, size_t sizeof_src);
 
 /***********************************--UTILS--**************************************/
 
@@ -121,6 +127,8 @@ void	remove_string(char **src, int index);
 _Bool	ft_isdigit_str(char *str);
 void	set_error_and_print(t_pipex *data, int error, char *msg);
 void	print_error_and_exit(my_printffd my_printf, char *cmd0,
-	char *cmd1, int exitcode);
+		char *cmd1, int exitcode);
+void	free_and_exit(t_pipex *data, int exitcode);
+char	*set_error_return(t_pipex *data, int error, char *msg);
 
 #endif
