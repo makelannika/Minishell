@@ -76,7 +76,6 @@ static t_node	*parse_process(char	*string, t_node **processes)
 	if (builtin_check(string, node) == -1
 		|| !node->redirs || !node->cmd)
 	{
-		free(string);
 		free_list(processes);
 		return (NULL);
 	}

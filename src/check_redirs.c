@@ -27,9 +27,9 @@ static void	redir_out(char *file, t_pipex *data)
 	if (data->ends[1] < 0)
 	{
 		if (access(&file[1], F_OK) != 0)
-			ft_printf(2, "no such file or directory: %s\n", &file[1]);
+			ft_printf(2, "MOOshell: no such file or directory: %s\n", &file[1]);
 		else
-			ft_printf(2, "permission denied: %s\n", &file[1]);
+			ft_printf(2, "MOOshell: permission denied: %s\n", &file[1]);
 		data->exitcode = 1;
 	}
 }
@@ -44,12 +44,12 @@ static int	do_heredoc(char *file)
 	heredoc = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC | O_APPEND, 0644);
 	if (heredoc == -1)
 		return (-1);
-	delimiter = trim_cmd(&file[2]);
+	delimiter = ft_strdup(&file[2]);
 	if (!delimiter)
 		return (-1);
 	len = ft_strlen(delimiter);
 	line = readline("> ");
-	while (line && ft_strncmp(line, delimiter, len) != 0)
+	while (line && ft_strncmp(line, delimiter, len + 1) != 0)
 	{
 		ft_printf(heredoc, "%s\n", line);
 		free(line);
@@ -68,16 +68,15 @@ static void	handle_heredoc(char *file, t_pipex *data)
 	close(data->ends[0]);
 	if (do_heredoc(file) == -1)
 	{
-		ft_printf(2, "heredoc failed\n");
+		ft_printf(2, "MOOshell: MOOshell: heredoc failed\n");
 		data->exitcode = -1;
 	}
 	data->ends[0] = open(".heredoc", O_RDONLY);
 	if (data->ends[0] == -1)
 	{
-		ft_printf(2, "heredoc failed\n");
+		ft_printf(2, "MOOshell: MOOshell: heredoc failed\n");
 		data->exitcode = -1;
 	}
-	unlink(".heredoc");
 }
 
 // checks rights to a redir file with '<'
@@ -88,29 +87,67 @@ static void	redir_in(char *file, t_pipex *data)
 	if (data->ends[0] < 0)
 	{
 		if (access(&file[1], F_OK) != 0)
-			ft_printf(2, "no such file or directory: %s\n", &file[1]);
+			ft_printf(2, "MOOshell: no such file or directory: %s\n", &file[1]);
 		else
-			ft_printf(2, "permission denied: %s\n", &file[1]);
+			ft_printf(2, "MOOshell: permission denied: %s\n", &file[1]);
 		data->exitcode = 1;
 	}
 }
 
-// checks rights to all redir files and clears ones with '>'
-void	handle_redirs(t_node *process, t_pipex *data)
+int	is_empty(char *string)
 {
 	int	i;
 
 	i = 0;
+	while (string[i])
+	{
+		if (string[i++] != ' ')
+			return (0);
+	}
+	return (1);
+}
+
+void	handle_heredocs(t_node *process, t_pipex *data)
+{
+	int	i;
+	int heredoc;
+
+	i = 0;
+	heredoc = 0;
+	data->execute = 1;
 	while (process->redirs[i])
 	{
 		if (ft_strncmp(process->redirs[i], "<<", 2) == 0)
+		{
 			handle_heredoc(process->redirs[i], data);
+			heredoc = 1;
+		}
+		i++;
+	}
+	if (heredoc && is_empty(process->cmd))
+		data->execute = 0;
+}
+
+// checks rights to all redir files and clears ones with '>'
+int	handle_redirs(t_node *process, t_pipex *data)
+{
+	int	i;
+
+	i = 0;
+	handle_heredocs(process, data);
+	while (process->redirs[i])
+	{
+		if (data->exitcode != 0)
+			return (data->exitcode);
+		if (ft_strncmp(process->redirs[i], "<<", 2) == 0)
+			i++;
 		else if (ft_strncmp(process->redirs[i], "<", 1) == 0)
 			redir_in(process->redirs[i], data);
 		else if (ft_strncmp(process->redirs[i], ">", 1) == 0)
 			redir_out(process->redirs[i], data);
 		i++;
 		if (data->exitcode != 0)
-			return ;
+			return (data->exitcode);
 	}
+	return (0);
 }

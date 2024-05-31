@@ -29,7 +29,7 @@ static int	middle_child(t_pipex *data, t_node *process)
 
 	if (pipe(data->ends) == -1)
 	{
-		ft_printf(2, "Error opening a pipe\n");
+		ft_printf(2, "MOOshell: error opening a pipe\n");
 		data->exitcode = -1;
 		return (close_and_free(data));
 	}
@@ -46,7 +46,7 @@ static int	first_child(t_pipex *data, t_node *process)
 {
 	if (pipe(data->ends) == -1)
 	{
-		ft_printf(2, "Error opening a pipe\n");
+		ft_printf(2, "MOOshell: error opening a pipe\n");
 		return (set_exitcode(data, -1));
 	}
 	data->read_end = dup(data->ends[0]);

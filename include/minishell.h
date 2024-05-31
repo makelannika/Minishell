@@ -63,12 +63,14 @@ typedef struct s_pipex
 	char	*path;
 	int		*pids;
 	int		exitcode;
+	int		execute;
 	_Bool	builtin;
 	struct sigaction *sa;
 }	t_pipex;
 
 /*********************************--PARSING--**************************************/
 
+int		check_syntax_error(t_pipex *data, char *string);
 t_node	**parse_input(char *line, t_node **processes);
 t_node	*create_node();
 int		count_quotes(char *string);
@@ -88,7 +90,7 @@ _Bool	is_builtin(char *cmd);
 int		init_data(t_pipex *data, t_node *processes);
 int		pipex(t_node *processes, t_pipex *data);
 int		get_fds(t_pipex *data, t_node *process);
-void	handle_redirs(t_node *process, t_pipex *data);
+int		handle_redirs(t_node *process, t_pipex *data);
 int		forking(t_pipex *data, t_node *process);
 int		parse_cmd(t_pipex *data, char **cmd);
 

@@ -27,25 +27,73 @@ char *trim_redir(char *redir_str)
 {
 	int		i;
 	int		j;
-	int		trim;
 	char	*new_redir;
 	
-	i = 0;
 	j = 0;
-	trim = 0;
-	trim = counter(redir_str, ' ');
-	new_redir = ft_calloc(ft_strlen(redir_str) - trim + 1, sizeof(char));
+	i = counter(redir_str, ' ');
+	new_redir = ft_calloc(ft_strlen(redir_str) - i + 1, sizeof(char));
 	if (!new_redir)
 		return (NULL);
 	i = 0;
-	while (redir_str[i])
-	{
-		while (redir_str[i] == ' ')
-			i++;
+	while (redir_str[i] == '<' || redir_str[i] == '>')
 		new_redir[j++] = redir_str[i++];
+	if (redir_str[i] == ' ')
+	{
+		while(redir_str[i] == ' ')
+			i++;
 	}
+	while (redir_str[i])
+	new_redir[j++] = redir_str[i++];
 	free(redir_str);
 	return (new_redir);
+}
+
+int	get_redir_len(char	*str)
+{
+	int		i;
+	char	quote;
+
+	i = 0;
+	quote = str[i];
+	i++;
+	while (str[i] && str[i] != quote)
+		i++;
+	return (i + 1);
+}
+
+int	check_syntax_error(t_pipex *data, char *string)
+{
+	int	i;
+
+	i = 0;
+	if (string[i] == '|')
+	{
+		ft_printf(2, "MOOshell: syntax error near unexpected token `|'\n");
+		return (set_exitcode(data, 258));
+	}
+	while (string[i])
+	{
+		if ((string[i] == '<' || string[i] == '>') && string[i + 1] == ' ' 
+			&& (string[i + 2] == '>' || string[i + 2] == '<'))
+		{
+			ft_printf(2, "MOOshell: syntax error near unexpected token `%c'\n", string[i + 2]);
+			return (set_exitcode(data, 258));
+		}
+		if ((string[i] == '>' && string[i + 1] == '<')
+			|| (string[i] == '|' && string[i + 1] == '|'))
+		{
+			ft_printf(2, "MOOshell: syntax error near unexpected token `%c'\n", string[i + 1]);
+			return (set_exitcode(data, 258));
+		}
+		i++;
+	}
+	if (string[i - 1] == '|' || string[i - 1] == '<' 
+		|| (string[i - 1] == '>' && string[i - 2] != '<'))
+		{
+			ft_printf(2, "MOOshell: syntax error near unexpected token `newline'\n");
+			return (set_exitcode(data, 258));
+		}
+	return (0);
 }
 
 // returns one redirection at a time to be stored in the 2d array
@@ -63,8 +111,13 @@ static char	*get_redir(char *string)
 			i++;
 		while (string[i] == ' ')
 			i++;
-		while (string[i] && string[i] != ' ')
-			i++;
+		if (string[i] == '\'' || string[i] == '\"')
+			i += get_redir_len(&string[i]);
+		else
+		{
+			while (string[i] && string[i] != ' ')
+				i++;
+		}
 		redir_str = ft_substr(string, 0, i);
 		if (!redir_str)
 			return (NULL);
@@ -94,7 +147,9 @@ int	get_redirs(char *string, t_node *node)
 			f.in_single *= -1;
 		else if (string[i] == '\"')
 			f.in_double *= -1;
-		if ((string[i] == '<' || string[i] == '>') && (f.in_single == -1 & f.in_double == -1))
+		if (string[i] == '<' && string[i + 1] == '>')
+			i++;
+		else if ((string[i] == '<' || string[i] == '>') && (f.in_single == -1 & f.in_double == -1))
 		{
 			node->redirs[j++] = get_redir(&string[i]); 
 			if (!node->redirs[j - 1])
@@ -107,15 +162,45 @@ int	get_redirs(char *string, t_node *node)
 	return (1);
 }
 
+int	count_redirs(char *string)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (string[i])
+	{
+		if (string[i] == '<')
+		{
+			if (string[i + 1] != '>')
+				count++;
+			if (string[i + 1] == '<' || string[i + 1] == '>')
+				i++;;
+		}
+		else if (string[i] == '>')
+		{
+			count++;
+			if (string[i + 1] == '>')
+				i ++;
+		}
+		i++;
+	}
+	return (count);
+}
+
 // makes a 2d array to store all redirections of a single process
-void	get_redir_arr(char	*string, t_node *node)
+void	get_redir_arr(char *string, t_node *node)
 {
 	int	count;
 	
-	count = counter(string, '<') + counter(string, '>');
+	count = count_redirs(string);
 	node->redirs = ft_calloc(count + 1, sizeof(char *));
 	if (get_redirs(string, node) == -1)
+	{
 		free_str_array(node->redirs);
+		node->redirs = NULL;
+	}
 	if (!node->redirs)
 		return ;
 }
