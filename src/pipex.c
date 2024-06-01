@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-static int	wait_children(int *pids, int count, int *exitcode)
+static int	wait_children(int *pids, int count, int *curr_exitcode)
 {
 	int	status;
 	int	i;
@@ -21,18 +21,22 @@ static int	wait_children(int *pids, int count, int *exitcode)
 	status = 0;
 	while (i < count)
 	{
+		if (pids[i] == -1)
+		{
+			i++;
+			continue ;
+		}
 		waitpid(pids[i], &status, 0);
 		if (WIFEXITED(status) && i == count - 1)
-			*exitcode = WEXITSTATUS(status);
+			*curr_exitcode = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 		{
 			ft_printf(2, "Quit: 3\n");
-			*exitcode = WTERMSIG(status);
+			*curr_exitcode = WTERMSIG(status) + 128;
 		}
 		i++;
 	}
-
-	return (*exitcode);
+	return (*curr_exitcode);
 }
 
 // adds a slash to the end of each path
@@ -97,7 +101,7 @@ int	get_env(t_pipex *data)
 	data->env = ft_calloc(i + 1, sizeof(char *));
 	if (!data->env)
 	{
-		data->exitcode = -1;
+		data->curr_exitcode = -1;
 		return (-1);
 	}
 	i = 0;
@@ -125,7 +129,7 @@ int	init_data(t_pipex *data, t_node *processes)
 		return (close_and_free(data));
 	data->pids[0] = -1;
 	data->execute = 1;
-	data->exitcode = 0;
+	// data->curr_exitcode = 0;
 	return (0);
 }
 
@@ -155,22 +159,19 @@ int	pipex(t_node *processes, t_pipex *data)
 		return (set_exitcode(data, -1));
 	while (data->count < data->cmds)
 	{
-		data->exitcode = 0;
 		if (get_fds(data, processes) == -1)
 			return (close_and_free(data));
-		if (data->execute && data->exitcode == 0)
+		if (data->execute)
 		{
 			if (forking(data, processes) == -1
 				|| (data->pids[data->count] == 0))
 				return (close_and_free(data));
 		}
-		// ft_printf(2, "exitcode in pipex: %d\n", data->exitcode);
 		close(data->ends[0]);
 		close(data->ends[1]);
 		data->count++;
 		processes = processes->next;
 	}
-	wait_children(data->pids, data->cmds, &data->exitcode);
-	// ft_printf(2, "exitcode in pipex: %d\n", data->exitcode);
-	return (data->exitcode);
+	wait_children(data->pids, data->cmds, &data->curr_exitcode);
+	return (data->curr_exitcode);
 }

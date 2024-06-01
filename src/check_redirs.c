@@ -29,8 +29,8 @@ static void	redir_out(char *file, t_pipex *data)
 		if (access(&file[1], F_OK) != 0)
 			ft_printf(2, "MOOshell: no such file or directory: %s\n", &file[1]);
 		else
-			ft_printf(2, "MOOshell: 1permission denied: %s\n", &file[1]);
-		data->exitcode = 1;
+			ft_printf(2, "MOOshell: permission denied: %s\n", &file[1]);
+		data->curr_exitcode = 1;
 		data->execute = 0;
 	}
 }
@@ -70,13 +70,13 @@ static void	handle_heredoc(char *file, t_pipex *data)
 	if (do_heredoc(file) == -1)
 	{
 		ft_printf(2, "MOOshell: MOOshell: heredoc failed\n");
-		data->exitcode = -1;
+		data->curr_exitcode = -1;
 	}
 	data->ends[0] = open(".heredoc", O_RDONLY);
 	if (data->ends[0] == -1)
 	{
 		ft_printf(2, "MOOshell: MOOshell: heredoc failed\n");
-		data->exitcode = -1;
+		data->curr_exitcode = -1;
 	}
 }
 
@@ -91,7 +91,7 @@ static void	redir_in(char *file, t_pipex *data)
 			ft_printf(2, "MOOshell: no such file or directory: %s\n", &file[1]);
 		else
 			ft_printf(2, "MOOshell: permission denied: %s\n", &file[1]);
-		data->exitcode = 1;
+		data->curr_exitcode = 1;
 		data->execute = 0;
 	}
 }
@@ -139,8 +139,8 @@ int	handle_redirs(t_node *process, t_pipex *data)
 	handle_heredocs(process, data);
 	while (process->redirs[i])
 	{
-		if (data->exitcode != 0)
-			return (data->exitcode);
+		if (data->curr_exitcode != 0)
+			return (data->curr_exitcode);
 		if (ft_strncmp(process->redirs[i], "<<", 2) == 0)
 		{
 			i++;
@@ -151,8 +151,8 @@ int	handle_redirs(t_node *process, t_pipex *data)
 		else if (ft_strncmp(process->redirs[i], ">", 1) == 0)
 			redir_out(process->redirs[i], data);
 		i++;
-		if (data->exitcode != 0)
-			return (data->exitcode);
+		if (data->curr_exitcode != 0)
+			return (data->curr_exitcode);
 	}
-	return (data->exitcode);
+	return (data->curr_exitcode);
 }

@@ -102,7 +102,7 @@ void	do_exit(char **cmd, t_pipex *data)
 	if (data->count == 0 && data->cmds > 1)
 		return ;
 	if (!cmd[1])
-		exit (data->exitcode);
+		exit (data->curr_exitcode);
 	if (cmd[1])
 	{
 		if (ft_isdigit_str(cmd[1]))

@@ -12,9 +12,9 @@
 
 #include "../include/minishell.h"
 
-int	set_exitcode(t_pipex *data, int exitcode)
+int	set_exitcode(t_pipex *data, int curr_exitcode)
 {
-	data->exitcode = exitcode;
+	data->curr_exitcode = curr_exitcode;
 	return (-1);
 }
 
@@ -59,7 +59,7 @@ int	call_builtin(t_pipex *data, char *cmd)
 		else if (check_case(cmd, "echo"))
 			do_echo(data->cmd, data->ends[1]);
 	}
-	return (data->exitcode);
+	return (data->curr_exitcode);
 }
 
 // checks if command is a builtin
@@ -146,7 +146,7 @@ static int	get_path(t_pipex *data)
 	else if (is_builtin(data->cmd[0]))
 	{
 		call_builtin(data, data->cmd[0]);
-		return (data->exitcode);
+		return (data->curr_exitcode);
 	}
 	else
 	{
@@ -254,7 +254,7 @@ int	forking(t_pipex *data, t_node *process)
 		if (data->pids[data->count] == 0)
 		{
 			// ft_bzero(&data->sa, sizeof(struct sigaction));
-			data->sa.sa_handler = SIG_DFL;
+			data->sa.sa_handler = sq_handler;
 			sigaction(SIGQUIT, &data->sa, NULL);
 			if (do_cmd(data, process) == -1)
 				return (-1);

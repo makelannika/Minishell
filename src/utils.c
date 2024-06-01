@@ -46,26 +46,26 @@ _Bool	ft_isdigit_str(char *str)
 
 void	set_error_and_print(t_pipex *data, int error, char *msg)
 {
-	data->exitcode = error;
+	data->curr_exitcode = error;
 	ft_printf(2, "%s\n", msg);
 }
 
-void	print_error_and_exit(my_printffd my_printf, char *cmd0, char *cmd1, int exitcode) //use only for exit builtin
+void	print_error_and_exit(my_printffd my_printf, char *cmd0, char *cmd1, int curr_exitcode) //use only for exit builtin
 {
 	if	(my_printf && cmd0 && cmd1)
 		my_printf(2, "%s %s: numeric argument required\n", cmd0, cmd1);
-	exit(exitcode);
+	exit(curr_exitcode);
 }
 
-void	free_and_exit(t_pipex *data, int exitcode) //use only for exit builtin
+void	free_and_exit(t_pipex *data, int curr_exitcode) //use only for exit builtin
 {
 	close_and_free(data);
-	exit(exitcode);
+	exit(curr_exitcode);
 }
 
 char	*set_error_return(t_pipex *data, int error, char *msg)
 {
-	data->exitcode = error;
+	data->curr_exitcode = error;
 	ft_printf(2, "%s\n", msg);
 	return (NULL);
 }

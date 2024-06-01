@@ -18,7 +18,7 @@ int	free_first_inits(t_pipex *data)
 	data->env = NULL;
 	free_str_array(data->paths);
 	data->paths = NULL;
-	return (data->exitcode);
+	return (data->curr_exitcode);
 }
 
 int	main()
@@ -30,7 +30,8 @@ int	main()
 	data = (t_pipex){0};
 	data.sa.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &data.sa, NULL);
-	
+	// data.sa.sa_handler = handler;
+	// sigaction(SIGINT, &data.sa, NULL);
 	processes = NULL;
 	while (1) 
 	{
@@ -65,11 +66,12 @@ int	main()
 			if (!processes)
 				return (free_first_inits(&data));
 			else if (pipex(processes, &data) == -1)
-				return (data.exitcode);
-			// ft_printf(2, "exitcode in main: %d\n", data.exitcode);
+				return (data.curr_exitcode);
+			data.prev_exitcode = data.curr_exitcode;
+			data.curr_exitcode = 0;
 			unlink(".heredoc");
 			free_list(&processes);
 		}
 	}
-	return (data.exitcode);
+	return (data.curr_exitcode);
 }
