@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-void put_env(char **env, int fd_out)
+void put_env(char **env, int fd_out, t_pipex *data)
 {
 	int	i;
 
@@ -23,6 +23,7 @@ void put_env(char **env, int fd_out)
 			ft_printf(fd_out, "%s\n", env[i]);
 		i++;
 	}
+	data->exitcode = 0;
 }
 
 void put_pwd(t_pipex *data, int fd_out)
@@ -33,6 +34,7 @@ void put_pwd(t_pipex *data, int fd_out)
 	if (!s)
 		return (set_error_and_print(data, -1, "getcwd failed"));
 	ft_printf(fd_out, "%s\n", s);
+	data->exitcode = 0;
 }
 
 void do_cd(t_pipex *data, char *path, char**environ)
@@ -68,9 +70,10 @@ void do_cd(t_pipex *data, char *path, char**environ)
 		}
 		i++;
 	}
+	data->exitcode = 0;
 }
 
-void do_unset(char **env, char **cmd)
+void do_unset(char **env, char **cmd, t_pipex *data)
 {
 	int	i;
 	int	j;
@@ -91,6 +94,7 @@ void do_unset(char **env, char **cmd)
 		}
 		j++;
 	}
+	data->exitcode = 0;
 }
 
 void	do_exit(char **cmd, t_pipex *data)
@@ -120,4 +124,5 @@ void	do_exit(char **cmd, t_pipex *data)
 		else
 			print_error_and_exit(my_printf, cmd[0], cmd[1], 127);
 	}
+	data->exitcode = 0;
 }

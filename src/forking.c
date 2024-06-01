@@ -44,7 +44,7 @@ int	call_builtin(t_pipex *data, char *cmd)
 	else if (ft_strncmp(cmd, "export", 7) == 0)
 		do_export(data, data->env, data->cmd, data->ends[1]);
 	else if (ft_strncmp(cmd, "unset", 6) == 0)
-		do_unset(data->env, data->cmd);
+		do_unset(data->env, data->cmd, data);
 	else if (ft_strncmp(cmd, "exit", 5) == 0)
 		do_exit(data->cmd, data);
 	else if (cmd[0] == 'p' || cmd[0] == 'P')
@@ -55,9 +55,9 @@ int	call_builtin(t_pipex *data, char *cmd)
 	else if (cmd[0] == 'e' || cmd[0] == 'E')
 	{
 		if (check_case(cmd, "env"))
-			put_env(data->env, data->ends[1]);
+			put_env(data->env, data->ends[1], data);
 		else if (check_case(cmd, "echo"))
-			do_echo(data->cmd, data->ends[1]);
+			do_echo(data->cmd, data->ends[1], data);
 	}
 	return (data->exitcode);
 }
@@ -225,14 +225,6 @@ char	*trim_cmd(char *cmd_str)
 	return (ft_substr(cmd_str, start, len));
 }
 
-// void sq_handler(int signum)
-// {
-// 	write(2, "hello\n", 6);
-// 	write(2, "hello\n", 6);
-// 	if (signum == SIGQUIT)
-// 		ft_printf(1, "Quit:\n");
-// }
-// forks, unless there's only one cmd and it is a builtin
 int	forking(t_pipex *data, t_node *process)
 {
 	if (data->cmds == 1 && process->builtin)

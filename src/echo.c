@@ -32,7 +32,7 @@ _Bool check_option(char *a)
 	return (1);
 }
 
-void	do_echo(char **cmd, int fd_out)
+void	do_echo(char **cmd, int fd_out, t_pipex *data)
 {
 	int		i;
 
@@ -59,4 +59,5 @@ void	do_echo(char **cmd, int fd_out)
     }
     if (!cmd[1])
         ft_printf(fd_out, "\n");
+    data->exitcode = 0;
 }

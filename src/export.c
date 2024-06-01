@@ -154,6 +154,7 @@ void    do_export(t_pipex *data, char **env, char **cmd, int fd_out)
         }
     }
     data->env = env;
+    data->exitcode = 0;
 }   
 // int main()
 // {

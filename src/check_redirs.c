@@ -31,6 +31,7 @@ static void	redir_out(char *file, t_pipex *data)
 		else
 			ft_printf(2, "MOOshell: permission denied: %s\n", &file[1]);
 		data->exitcode = 1;
+		data->execute = 0;
 	}
 }
 
@@ -91,6 +92,7 @@ static void	redir_in(char *file, t_pipex *data)
 		else
 			ft_printf(2, "MOOshell: permission denied: %s\n", &file[1]);
 		data->exitcode = 1;
+		data->execute = 0;
 	}
 }
 
@@ -149,5 +151,5 @@ int	handle_redirs(t_node *process, t_pipex *data)
 		if (data->exitcode != 0)
 			return (data->exitcode);
 	}
-	return (0);
+	return (data->exitcode);
 }

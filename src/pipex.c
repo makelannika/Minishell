@@ -36,6 +36,11 @@ static int	wait_children(int *pids, int count, int *exitcode)
 	sigaction(SIGINT, &data, NULL);
 	while (i < count)
 	{
+		if (pids[i] == -1)
+		{
+			i++;
+			continue ;
+		}
 		waitpid(pids[i], &status, 0);
 		if (WIFEXITED(status) && i == count - 1)
 			*exitcode = WEXITSTATUS(status);
@@ -142,7 +147,6 @@ int	init_data(t_pipex *data, t_node *processes)
 		return (close_and_free(data));
 	data->pids[0] = -1;
 	data->execute = 1;
-	data->exitcode = 0;
 	return (0);
 }
 
@@ -172,10 +176,9 @@ int	pipex(t_node *processes, t_pipex *data)
 		return (set_exitcode(data, -1));
 	while (data->count < data->cmds)
 	{
-		data->exitcode = 0;
 		if (get_fds(data, processes) == -1)
 			return (close_and_free(data));
-		if (data->execute && data->exitcode == 0)
+		if (data->execute)
 		{
 			if (forking(data, processes) == -1
 				|| (data->pids[data->count] == 0))
