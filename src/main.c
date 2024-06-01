@@ -25,14 +25,13 @@ void	si_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		// write(2, "in signal handler\n", 18);
 		write(2, "\n", 1);
+		rl_redisplay();
 		rl_replace_line("", 0);
 		rl_on_new_line();
-		rl_redisplay();
 	}
 }
-void update_shlvl(char **env)
+int update_shlvl(char **env)
 {
 	int		shlvl;
 	char	*new_shlvl;
@@ -41,10 +40,31 @@ void update_shlvl(char **env)
 	shlvl = ft_atoi(*env + 6);
 	shlvl++;
 	new_shlvl = ft_itoa(shlvl);
+	if (!new_shlvl)
+		return (-1);
 	tmp = ft_strjoin("SHLVL=", new_shlvl);
+	if (!tmp)
+	{
+		free(new_shlvl);
+		return (-1);
+	}
 	free(new_shlvl);
 	free(*env);
 	*env = tmp;
+	return (0);
+}
+
+void	carrot_char(int on)
+{
+	struct termios	term;
+
+	term = (struct termios){0};
+	tcgetattr(STDIN_FILENO, &term);
+	if (!on)
+		term.c_lflag &= ~ECHOCTL;
+	else
+		term.c_lflag |= ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
 int	main()
@@ -60,6 +80,7 @@ int	main()
 	sigaction(SIGQUIT, &data.sa, NULL);
 	data.sa.sa_handler = si_handler;
 	sigaction(SIGINT, &data.sa, NULL);
+	carrot_char(0);
 	processes = NULL;
 	while (1) 
 	{
@@ -77,7 +98,11 @@ int	main()
 			{
 				if (ft_strncmp(data.env[i], "SHLVL=", 6) == 0)
 				{
-					update_shlvl(&data.env[i]);
+					if (update_shlvl(&data.env[i]) == -1)
+					{
+						free(line);
+						return (free_first_inits(&data));
+					}
 					break;
 				}
 				i++;

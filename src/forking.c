@@ -242,9 +242,6 @@ int	forking(t_pipex *data, t_node *process)
 	}
 	else
 	{
-		// data.sa_handler = SIG_IGN;
-		// 	sigaction(SIGQUIT, &data, NULL);
-		// 	sigaction(SIGINT, &data, NULL);
 		data->pids[data->count] = fork();
 		if (data->pids[data->count] < 0)
 		{
@@ -255,8 +252,6 @@ int	forking(t_pipex *data, t_node *process)
 		{
 			data->sa.sa_handler = SIG_DFL;
 			sigaction(SIGQUIT, &data->sa, NULL);
-			dprintf(2, "child\n");
-			// ft_bzero(&data->sa, sizeof(struct sigaction));
 			if (do_cmd(data, process) == -1)
 				return (-1);
 		}

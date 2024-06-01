@@ -40,11 +40,11 @@ static int	wait_children(int *pids, int count, int *exitcode)
 		if (WIFEXITED(status) && i == count - 1)
 			*exitcode = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-		{
-			printf("here\n");
-			*exitcode = WTERMSIG(status);
-			printf("exitcode: %d\n", *exitcode);
-		}
+			*exitcode = WTERMSIG(status) + 128;
+		if (*exitcode == 131)
+			ft_putstr_fd("^\\Quit: 3\n", 2);
+		else if (*exitcode == 130)
+			ft_putstr_fd("^C\n", 2);
 		i++;
 	}
 	data.sa_handler = si_handler2;
