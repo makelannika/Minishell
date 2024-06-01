@@ -178,7 +178,6 @@ int	main()
 	{
 		if (first_inits(&data) == -1)
 		return (-1);
-		// ft_printf(2, "exitcode: %d\n", data.exitcode);
 		line = readline("MOOshell: ");
 		if (!line)
 		{
