@@ -59,7 +59,13 @@ static int	do_heredoc(char *file)
 	close(heredoc);
 	free(delimiter);
 	if (!line)
-		return (-1);
+	{
+		// write(2, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		return (0);
+	}
 	free(line);
 	return (0);
 }
@@ -69,13 +75,13 @@ static void	handle_heredoc(char *file, t_pipex *data)
 	close(data->ends[0]);
 	if (do_heredoc(file) == -1)
 	{
-		ft_printf(2, "MOOshell: MOOshell: heredoc failed\n");
+		ft_printf(2, "1 MOOshell: heredoc failed\n");
 		data->exitcode = -1;
 	}
 	data->ends[0] = open(".heredoc", O_RDONLY);
 	if (data->ends[0] == -1)
 	{
-		ft_printf(2, "MOOshell: MOOshell: heredoc failed\n");
+		ft_printf(2, "2 MOOshell: heredoc failed\n");
 		data->exitcode = -1;
 	}
 }
