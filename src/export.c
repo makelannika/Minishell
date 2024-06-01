@@ -62,7 +62,7 @@ _Bool   update_key(t_pipex *data, char **env, char *str)
             free(tmp[i]);
             env[i] = ft_strdup(str);
             if (!env[i])
-                data->curr_exitcode = -1;
+                data->exitcode = -1;
         }
         i++;
     }
@@ -78,12 +78,12 @@ char    **putstr_in_array(t_pipex *data, char **env, char *str)
     tmp = env;
     env = malloc(sizeof(char*) *(array_len(env) + 2));
     if (!env)
-        data->curr_exitcode = -1;
+        data->exitcode = -1;
     while (tmp[i])
     {
         env[i] = ft_strdup(tmp[i]);
         if (!env[i])
-            data->curr_exitcode = -1;
+            data->exitcode = -1;
         free(tmp[i]);
 		i++;
     }

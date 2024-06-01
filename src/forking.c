@@ -12,9 +12,9 @@
 
 #include "../include/minishell.h"
 
-int	set_exitcode(t_pipex *data, int curr_exitcode)
+int	set_exitcode(t_pipex *data, int exitcode)
 {
-	data->curr_exitcode = curr_exitcode;
+	data->exitcode = exitcode;
 	return (-1);
 }
 
@@ -59,7 +59,7 @@ int	call_builtin(t_pipex *data, char *cmd)
 		else if (check_case(cmd, "echo"))
 			do_echo(data->cmd, data->ends[1]);
 	}
-	return (data->curr_exitcode);
+	return (data->exitcode);
 }
 
 // checks if command is a builtin
@@ -146,7 +146,7 @@ static int	get_path(t_pipex *data)
 	else if (is_builtin(data->cmd[0]))
 	{
 		call_builtin(data, data->cmd[0]);
-		return (data->curr_exitcode);
+		return (data->exitcode);
 	}
 	else
 	{

@@ -62,8 +62,7 @@ typedef struct s_pipex
 	char	**cmd;
 	char	*path;
 	int		*pids;
-	int		prev_exitcode;
-	int		curr_exitcode;
+	int		exitcode;
 	int		execute;
 	_Bool	builtin;
 	struct sigaction sa;

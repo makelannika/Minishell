@@ -18,7 +18,7 @@ int	free_first_inits(t_pipex *data)
 	data->env = NULL;
 	free_str_array(data->paths);
 	data->paths = NULL;
-	return (data->curr_exitcode);
+	return (data->exitcode);
 }
 
 void	si_handler(int signum)
@@ -26,9 +26,9 @@ void	si_handler(int signum)
 	if (signum == SIGINT)
 	{
 		write(2, "\n", 1);
-		rl_redisplay();
 		rl_replace_line("", 0);
 		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 int update_shlvl(char **env)
@@ -90,7 +90,7 @@ int	main()
 		if (!line)
 		{
 			ft_printf(2, "exit\n");	
-				return (-1);
+				return (0);
 		}
 		else if (ft_strncmp (line, "./minishell", 11) == 0)
 		{
@@ -130,12 +130,10 @@ int	main()
 			if (!processes)
 				return (free_first_inits(&data));
 			else if (pipex(processes, &data) == -1)
-				return (data.curr_exitcode);
-			data.prev_exitcode = data.curr_exitcode;
-			data.curr_exitcode = 0;
+				return (data.exitcode);
 			unlink(".heredoc");
 			free_list(&processes);
 		}
 	}
-	return (data.curr_exitcode);
+	return (data.exitcode);
 }

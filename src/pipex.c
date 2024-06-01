@@ -16,14 +16,13 @@ void	si_handler2(int signum)
 {
 	if (signum == SIGINT)
 	{
-		// write(2, "in signal handler\n", 18);
 		write(2, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
 }
-static int	wait_children(int *pids, int count, int *curr_exitcode)
+static int	wait_children(int *pids, int count, int *exitcode)
 {
 	int	status;
 	int	i;
@@ -43,18 +42,18 @@ static int	wait_children(int *pids, int count, int *curr_exitcode)
 		}
 		waitpid(pids[i], &status, 0);
 		if (WIFEXITED(status) && i == count - 1)
-			*curr_exitcode = WEXITSTATUS(status);
+			*exitcode = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			*curr_exitcode = WTERMSIG(status) + 128;
-		if (*curr_exitcode == 131)
+			*exitcode = WTERMSIG(status) + 128;
+		if (*exitcode == 131)
 			ft_putstr_fd("^\\Quit: 3\n", 2);
-		else if (*curr_exitcode == 130)
+		else if (*exitcode == 130)
 			ft_putstr_fd("^C\n", 2);
 		i++;
 	}
 	data.sa_handler = si_handler2;
 	sigaction(SIGINT, &data, NULL);
-	return (*curr_exitcode);
+	return (*exitcode);
 }
 
 // adds a slash to the end of each path
@@ -119,7 +118,7 @@ int	get_env(t_pipex *data)
 	data->env = ft_calloc(i + 1, sizeof(char *));
 	if (!data->env)
 	{
-		data->curr_exitcode = -1;
+		data->exitcode = -1;
 		return (-1);
 	}
 	i = 0;
@@ -147,7 +146,7 @@ int	init_data(t_pipex *data, t_node *processes)
 		return (close_and_free(data));
 	data->pids[0] = -1;
 	data->execute = 1;
-	// data->curr_exitcode = 0;
+	// data->exitcode = 0;
 	return (0);
 }
 
@@ -190,6 +189,6 @@ int	pipex(t_node *processes, t_pipex *data)
 		data->count++;
 		processes = processes->next;
 	}
-	wait_children(data->pids, data->cmds, &data->curr_exitcode);
-	return (data->curr_exitcode);
+	wait_children(data->pids, data->cmds, &data->exitcode);
+	return (data->exitcode);
 }

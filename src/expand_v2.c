@@ -142,7 +142,7 @@ int	expand_exit_code(char **cmd, t_pipex *data, int key)
 {
 	char	*exit_code;
 
-	exit_code = ft_itoa(data->prev_exitcode);
+	exit_code = ft_itoa(data->exitcode);
 	if (!exit_code)
 	{
 		ft_printf(2, "Malloc failed in expand_exit_code\n");
