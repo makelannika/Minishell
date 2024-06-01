@@ -23,7 +23,7 @@ void	si_handler2(int signum)
 		rl_redisplay();
 	}
 }
-static int	wait_children(int *pids, int count, int *exitcode)
+static int	wait_children(int *pids, int count, int *curr_exitcode)
 {
 	int	status;
 	int	i;
@@ -45,10 +45,10 @@ static int	wait_children(int *pids, int count, int *exitcode)
 		if (WIFEXITED(status) && i == count - 1)
 			*curr_exitcode = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			*exitcode = WTERMSIG(status) + 128;
-		if (*exitcode == 131)
+			*curr_exitcode = WTERMSIG(status) + 128;
+		if (*curr_exitcode == 131)
 			ft_putstr_fd("^\\Quit: 3\n", 2);
-		else if (*exitcode == 130)
+		else if (*curr_exitcode == 130)
 			ft_putstr_fd("^C\n", 2);
 		i++;
 	}
