@@ -21,16 +21,45 @@ int	free_first_inits(t_pipex *data)
 	return (data->exitcode);
 }
 
+void	si_handler(int signum)
+{
+	if (signum == SIGINT)
+	{
+		// write(2, "in signal handler\n", 18);
+		write(2, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
+void update_shlvl(char **env)
+{
+	int		shlvl;
+	char	*new_shlvl;
+	char	*tmp;
+
+	shlvl = ft_atoi(*env + 6);
+	shlvl++;
+	new_shlvl = ft_itoa(shlvl);
+	tmp = ft_strjoin("SHLVL=", new_shlvl);
+	free(new_shlvl);
+	free(*env);
+	*env = tmp;
+}
+
 int	main()
 {
 	char				*line;
 	t_node				*processes;
 	t_pipex				data;
+	int					i;
 
+	i = 0;
 	data = (t_pipex){0};
 	data.sa.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &data.sa, NULL);
-	
+	data.sa.sa_handler = si_handler;
+	sigaction(SIGINT, &data.sa, NULL);
 	processes = NULL;
 	while (1) 
 	{
@@ -41,6 +70,18 @@ int	main()
 		{
 			ft_printf(2, "exit\n");	
 				return (-1);
+		}
+		else if (ft_strncmp (line, "./minishell", 11) == 0)
+		{
+			while(data.env[i])
+			{
+				if (ft_strncmp(data.env[i], "SHLVL=", 6) == 0)
+				{
+					update_shlvl(&data.env[i]);
+					break;
+				}
+				i++;
+			}
 		}
 		else if (line[0] == '\0')
 			continue;

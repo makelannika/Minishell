@@ -12,13 +12,28 @@
 
 #include "../include/minishell.h"
 
+void	si_handler2(int signum)
+{
+	if (signum == SIGINT)
+	{
+		// write(2, "in signal handler\n", 18);
+		write(2, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
 static int	wait_children(int *pids, int count, int *exitcode)
 {
 	int	status;
 	int	i;
+	struct sigaction	data;
 
 	i = 0;
 	status = 0;
+	data.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &data, NULL);
+	sigaction(SIGINT, &data, NULL);
 	while (i < count)
 	{
 		waitpid(pids[i], &status, 0);
@@ -32,6 +47,8 @@ static int	wait_children(int *pids, int count, int *exitcode)
 		}
 		i++;
 	}
+	data.sa_handler = si_handler2;
+	sigaction(SIGINT, &data, NULL);
 	return (*exitcode);
 }
 
