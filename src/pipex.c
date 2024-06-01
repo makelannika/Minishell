@@ -12,13 +12,28 @@
 
 #include "../include/minishell.h"
 
-static int	wait_children(int *pids, int count, int *curr_exitcode)
+void	si_handler2(int signum)
+{
+	if (signum == SIGINT)
+	{
+		// write(2, "in signal handler\n", 18);
+		write(2, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
+static int	wait_children(int *pids, int count, int *exitcode)
 {
 	int	status;
 	int	i;
+	struct sigaction	data;
 
 	i = 0;
 	status = 0;
+	data.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &data, NULL);
+	sigaction(SIGINT, &data, NULL);
 	while (i < count)
 	{
 		if (pids[i] == -1)
@@ -30,12 +45,15 @@ static int	wait_children(int *pids, int count, int *curr_exitcode)
 		if (WIFEXITED(status) && i == count - 1)
 			*curr_exitcode = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-		{
-			ft_printf(2, "Quit: 3\n");
-			*curr_exitcode = WTERMSIG(status) + 128;
-		}
+			*exitcode = WTERMSIG(status) + 128;
+		if (*exitcode == 131)
+			ft_putstr_fd("^\\Quit: 3\n", 2);
+		else if (*exitcode == 130)
+			ft_putstr_fd("^C\n", 2);
 		i++;
 	}
+	data.sa_handler = si_handler2;
+	sigaction(SIGINT, &data, NULL);
 	return (*curr_exitcode);
 }
 

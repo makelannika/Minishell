@@ -225,17 +225,16 @@ char	*trim_cmd(char *cmd_str)
 	return (ft_substr(cmd_str, start, len));
 }
 
-void sq_handler(int signum)
-{
-	write(2, "hello\n", 6);
-	write(2, "hello\n", 6);
-	if (signum == SIGQUIT)
-		ft_printf(1, "Quit:\n");
-}
+// void sq_handler(int signum)
+// {
+// 	write(2, "hello\n", 6);
+// 	write(2, "hello\n", 6);
+// 	if (signum == SIGQUIT)
+// 		ft_printf(1, "Quit:\n");
+// }
 // forks, unless there's only one cmd and it is a builtin
 int	forking(t_pipex *data, t_node *process)
 {
-	
 	if (data->cmds == 1 && process->builtin)
 	{
 		// ft_printf(2, "not forking\n");
@@ -253,8 +252,7 @@ int	forking(t_pipex *data, t_node *process)
 		}
 		if (data->pids[data->count] == 0)
 		{
-			// ft_bzero(&data->sa, sizeof(struct sigaction));
-			data->sa.sa_handler = sq_handler;
+			data->sa.sa_handler = SIG_DFL;
 			sigaction(SIGQUIT, &data->sa, NULL);
 			if (do_cmd(data, process) == -1)
 				return (-1);
