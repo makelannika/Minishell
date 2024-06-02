@@ -59,10 +59,7 @@ static int	first_child(t_pipex *data, t_node *process)
 int	get_fds(t_pipex *data, t_node *process)
 {
 	if (data->cmds == 1)
-	{
-		handle_redirs(process, data);
-		return (data->exitcode);
-	}
+		return (handle_redirs(process, data));
 	if (data->count == 0)
 		return (first_child(data, process));
 	if (data->count == data->cmds - 1)
