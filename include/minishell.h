@@ -68,6 +68,9 @@ typedef struct s_pipex
 	struct sigaction sa;
 }	t_pipex;
 
+/*********************************--SIGNALS--**************************************/
+void	handle_signals(t_pipex *data);
+
 /*********************************--PARSING--**************************************/
 
 int		check_syntax_error(t_pipex *data, char *string);
