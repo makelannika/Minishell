@@ -153,6 +153,7 @@ int	expand_exit_code(char **cmd, t_pipex *data, int key)
 		free(exit_code);
 		return (-1);
 	}
+	free(exit_code);
 	return (key);
 }
 
