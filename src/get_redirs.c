@@ -61,34 +61,39 @@ int	get_redir_len(char	*str)
 	return (i + 1);
 }
 
-int	check_syntax_error(t_pipex *data, char *string)
+int	check_syntax_error(t_pipex *data, char *line)
 {
 	int	i;
 
 	i = 0;
-	if (string[i] == '|')
+	if (count_quotes(line) % 2 != 0)
+	{
+		ft_printf(2, "MOOshell: error: enclosed quotes\n");
+		return (-1);
+	}
+	if (line[i] == '|')
 	{
 		ft_printf(2, "MOOshell: syntax error near unexpected token `|'\n");
 		return (set_exitcode(data, 258));
 	}
-	while (string[i])
+	while (line[i])
 	{
-		if ((string[i] == '<' || string[i] == '>') && string[i + 1] == ' ' 
-			&& (string[i + 2] == '>' || string[i + 2] == '<'))
+		if ((line[i] == '<' || line[i] == '>') && line[i + 1] == ' ' 
+			&& (line[i + 2] == '>' || line[i + 2] == '<'))
 		{
-			ft_printf(2, "MOOshell: syntax error near unexpected token `%c'\n", string[i + 2]);
+			ft_printf(2, "MOOshell: syntax error near unexpected token `%c'\n", line[i + 2]);
 			return (set_exitcode(data, 258));
 		}
-		if ((string[i] == '>' && string[i + 1] == '<')
-			|| (string[i] == '|' && string[i + 1] == '|'))
+		if ((line[i] == '>' && line[i + 1] == '<')
+			|| (line[i] == '|' && line[i + 1] == '|'))
 		{
-			ft_printf(2, "MOOshell: syntax error near unexpected token `%c'\n", string[i + 1]);
+			ft_printf(2, "MOOshell: syntax error near unexpected token `%c'\n", line[i + 1]);
 			return (set_exitcode(data, 258));
 		}
 		i++;
 	}
-	if (string[i - 1] == '|' || string[i - 1] == '<' 
-		|| (string[i - 1] == '>' && string[i - 2] != '<'))
+	if (line[i - 1] == '|' || line[i - 1] == '<' 
+		|| (line[i - 1] == '>' && line[i - 2] != '<'))
 		{
 			ft_printf(2, "MOOshell: syntax error near unexpected token `newline'\n");
 			return (set_exitcode(data, 258));

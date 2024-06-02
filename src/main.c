@@ -65,9 +65,11 @@ int	main()
 			ft_printf(2, "exit\n");	
 				return (0);
 		}
+		else if (!*line)
+			free(line);
 		else if (ft_strncmp (line, "./minishell", 11) == 0)
 		{
-			while(data.env[i])
+			while (data.env[i])
 			{
 				if (ft_strncmp(data.env[i], "SHLVL=", 6) == 0)
 				{
@@ -81,20 +83,11 @@ int	main()
 				i++;
 			}
 		}
-		else if (!*line)
-			free(line);
 		else 
 		{
 			add_history(line);
-			if (count_quotes(line) % 2 != 0)
-			{
-				ft_printf(2, "MOOshell: error: enclosed quotes\n");
-				free (line);
-				continue;
-			}
 			if (check_syntax_error(&data, line) != 0)
 			{
-				free_first_inits(&data);
 				free(line);
 				continue ;
 			}
