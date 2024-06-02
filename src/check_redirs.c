@@ -59,7 +59,12 @@ static int	do_heredoc(char *file)
 	close(heredoc);
 	free(delimiter);
 	if (!line)
-		return (-1);
+	{
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		return (0);
+	}
 	free(line);
 	return (0);
 }

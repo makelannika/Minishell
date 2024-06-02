@@ -118,8 +118,6 @@ int	expansion(char **cmd, t_pipex *data, int key_start)
 		return (-1);
 	}
 	end_of_value = key_start - 1 + ft_strlen(value);
-	// printf("cmd: %s\n", *cmd);
-	// printf("end_of_value: %d\n", end_of_value);
 	free(key);
 	return (end_of_value);
 }
