@@ -109,7 +109,10 @@ int	main()
 			}
 		}
 		else if (line[0] == '\0')
+		{
+			free(line);
 			continue;
+		}
 		else 
 		{
 			processes = NULL;
