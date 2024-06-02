@@ -108,7 +108,8 @@ int	parse_cmd(t_pipex *data, char **cmd)
 		return (set_exitcode(data, 1));
 	}
 	space_handler(*cmd);
-	expand_v2(data, cmd); // add check
+	if (expand_v2(data, cmd) == -1)
+		return (close_and_free(data));
 	data->cmd_str = quote_remover(*cmd);
 	if (!data->cmd_str)
 		return (set_exitcode(data, -1));

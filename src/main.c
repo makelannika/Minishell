@@ -21,16 +21,6 @@ int	free_first_inits(t_pipex *data)
 	return (data->exitcode);
 }
 
-void	si_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		write(2, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
 int update_shlvl(char **env)
 {
 	int		shlvl;
@@ -54,19 +44,6 @@ int update_shlvl(char **env)
 	return (0);
 }
 
-void	carrot_char(int on)
-{
-	struct termios	term;
-
-	term = (struct termios){0};
-	tcgetattr(STDIN_FILENO, &term);
-	if (!on)
-		term.c_lflag &= ~ECHOCTL;
-	else
-		term.c_lflag |= ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
-
 int	main()
 {
 	char				*line;
@@ -76,25 +53,23 @@ int	main()
 
 	i = 0;
 	data = (t_pipex){0};
-	data.sa.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &data.sa, NULL);
-	data.sa.sa_handler = si_handler;
-	sigaction(SIGINT, &data.sa, NULL);
-	carrot_char(0);
+	handle_signals(&data);
 	processes = NULL;
 	while (1) 
 	{
 		if (first_inits(&data) == -1)
-		return (-1);
+			return (-1);
 		line = readline("MOOshell: ");
 		if (!line)
 		{
 			ft_printf(2, "exit\n");	
-				return (-1);
+				return (0);
 		}
+		else if (!*line)
+			free(line);
 		else if (ft_strncmp (line, "./minishell", 11) == 0)
 		{
-			while(data.env[i])
+			while (data.env[i])
 			{
 				if (ft_strncmp(data.env[i], "SHLVL=", 6) == 0)
 				{
@@ -108,20 +83,11 @@ int	main()
 				i++;
 			}
 		}
-		else if (line[0] == '\0')
-			continue;
 		else 
 		{
-			processes = NULL;
 			add_history(line);
-			if (count_quotes(line) % 2 != 0)
-			{
-				ft_printf(2, "MOOshell: error: enclosed quotes\n");
-				continue;
-			}
 			if (check_syntax_error(&data, line) != 0)
 			{
-				free_first_inits(&data);
 				free(line);
 				continue ;
 			}
@@ -131,6 +97,7 @@ int	main()
 				return (free_first_inits(&data));
 			else if (pipex(processes, &data) == -1)
 				return (data.exitcode);
+			close_and_free(&data);
 			unlink(".heredoc");
 			free_list(&processes);
 		}

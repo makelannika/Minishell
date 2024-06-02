@@ -229,11 +229,13 @@ int	forking(t_pipex *data, t_node *process)
 {
 	if (data->cmds == 1 && process->builtin)
 	{
+		// ft_printf(2, "not forking\n");
 		if (do_cmd(data, process) == -1)
 			return (-1);
 	}
 	else
 	{
+		// ft_printf(2, "forking\n");
 		data->pids[data->count] = fork();
 		if (data->pids[data->count] < 0)
 		{
