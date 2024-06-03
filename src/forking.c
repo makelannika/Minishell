@@ -199,6 +199,11 @@ static int	do_cmd(t_pipex *data, t_node *process)
 		return (set_exitcode(data, 127));
 	}
 	execve(data->path, data->cmd, data->env);
+	if (access(data->cmd[0], F_OK) == 0)
+	{
+		ft_printf(2, "MOOshell: %s: is a directory\n", data->cmd[0]);
+		return (set_exitcode(data, 126));
+	}
 	ft_printf(2, "MOOshell: permission denied: %s\n", data->cmd[0]);
 	return (set_exitcode(data, 1));
 }
@@ -229,13 +234,11 @@ int	forking(t_pipex *data, t_node *process)
 {
 	if (data->cmds == 1 && process->builtin)
 	{
-		// ft_printf(2, "not forking\n");
 		if (do_cmd(data, process) == -1)
 			return (-1);
 	}
 	else
 	{
-		// ft_printf(2, "forking\n");
 		data->pids[data->count] = fork();
 		if (data->pids[data->count] < 0)
 		{
