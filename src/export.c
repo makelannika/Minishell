@@ -121,19 +121,28 @@ _Bool check_key(char *str)
     return (1);
 }
 
-void    print_export(char *str, int fd_out)
+void    print_export(char *env, int fd_out)
 {
-    char    *tmp;
+    char    *equal;
     int     i;
 
     i = 0;
-    tmp = ft_strchr(str, '=');
-    if (!tmp)
-        ft_printf(fd_out, "declare -x %s\n", str);
-    else if (*(tmp + 1) == '\0')
-        ft_printf(fd_out, "declare -x %s\"\"\n", str);
+    equal = ft_strchr(env, '=');
+    if (!equal)
+        ft_printf(fd_out, "declare -x %s\n", env);
+    else if (*(equal + 1) == '\0')
+        ft_printf(fd_out, "declare -x %s\"\"\n", env);
     else
-        printf("declare -x %.*s\"%s\"\n", (int)(tmp - str + 1), str, tmp + 1);
+    {
+        write(fd_out, "declare -x ", 11);
+        while (env[i] != '=')
+            write(fd_out, &env[i++], 1);
+        i++;
+        write(fd_out, "=\"", 2);
+        while (env[i])
+            write(fd_out, &env[i++], 1);
+        write(fd_out, "\"\n", 2);
+    }
 }
 
 void    do_export(t_pipex *data, char **env, char **cmd, int fd_out)
