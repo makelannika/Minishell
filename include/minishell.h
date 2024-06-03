@@ -72,6 +72,7 @@ typedef struct s_pipex
 
 /*********************************--SIGNALS--**************************************/
 void	handle_signals(t_pipex *data);
+void	si_handler(int signum);
 
 /*********************************--PARSING--**************************************/
 

@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <sys/ioctl.h>
+
+static int signum = 0;
 
 // checks rights to a redir file with '>'
 // clears files with '>' but not with '>>'
@@ -36,13 +39,25 @@ static int	redir_out(char *file, t_pipex *data)
 	return (0);
 }
 
-static int	do_heredoc(char *file)
+void	si_heredoc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		char	str[2];
+		signum = 1;
+		str[0] = 4;
+		str[1] = 0;
+		ioctl(STDIN_FILENO, TIOCSTI, str);
+	}
+}
+
+static int	do_heredoc(char *file, t_pipex *data)
 {
 	char	*delimiter;
 	char	*line;
 	int		len;
 	int		heredoc;
-	
+
 	heredoc = open(".heredoc", O_CREAT | O_RDWR | O_TRUNC | O_APPEND, 0644);
 	if (heredoc == -1)
 		return (-1);
@@ -50,12 +65,15 @@ static int	do_heredoc(char *file)
 	if (!delimiter)
 		return (-1);
 	len = ft_strlen(delimiter);
-	line = readline("> ");
-	while (line && ft_strncmp(line, delimiter, len + 1) != 0)
+	data->sa.sa_handler = si_heredoc;
+	sigaction(SIGINT, &data->sa, NULL);
+	while (signum != 1)
 	{
+		line = readline("> ");
+		if (!line || ft_strncmp(line, delimiter, len + 1) == 0)
+			break ;
 		ft_printf(heredoc, "%s\n", line);
 		free(line);
-		line = readline("> ");
 	}
 	close(heredoc);
 	free(delimiter);
@@ -73,18 +91,16 @@ static int	do_heredoc(char *file)
 static int	handle_heredoc(char *file, t_pipex *data)
 {
 	close(data->ends[0]);
-	if (do_heredoc(file) == -1)
+	if (do_heredoc(file, data) == -1)
 	{
-		ft_printf(2, "1 MOOshell: heredoc failed\n");
+		ft_printf(2, "MOOshell: heredoc failed\n");
 		return (set_exitcode(data, -1));
-		// data->exitcode = -1;
 	}
 	data->ends[0] = open(".heredoc", O_RDONLY);
 	if (data->ends[0] == -1)
 	{
-		ft_printf(2, "2 MOOshell: heredoc failed\n");
+		ft_printf(2, "MOOshell: heredoc failed\n");
 		return (set_exitcode(data, -1));
-		// data->exitcode = -1;
 	}
 	return (0);
 }
@@ -131,9 +147,15 @@ int	handle_heredocs(t_node *process, t_pipex *data)
 	{
 		if (ft_strncmp(process->redirs[i], "<<", 2) == 0)
 		{
+			heredoc = 1;
 			if (handle_heredoc(process->redirs[i], data) == -1)
 				return (data->exitcode);
-			heredoc = 1;
+			if (signum == 1)
+			{
+				data->execute = 0;
+				signum = 0;
+				return (0);
+			}
 		}
 		i++;
 	}
@@ -148,8 +170,10 @@ int	handle_redirs(t_node *process, t_pipex *data)
 	int	i;
 
 	i = 0;
-	if (handle_heredocs(process, data) == -1)
-		return (data->exitcode);
+	{
+		if (handle_heredocs(process, data) == -1)
+			return (-1);
+	}
 	while (process->redirs[i])
 	{
 		if (ft_strncmp(process->redirs[i], "<<", 2) == 0)
