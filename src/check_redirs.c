@@ -67,7 +67,6 @@ static int	do_heredoc(char *file, t_pipex *data)
 	len = ft_strlen(delimiter);
 	data->sa.sa_handler = si_heredoc;
 	sigaction(SIGINT, &data->sa, NULL);
-	// line = readline("> ");
 	while (signum != 1)
 	{
 		line = readline("> ");
@@ -75,10 +74,7 @@ static int	do_heredoc(char *file, t_pipex *data)
 			break ;
 		ft_printf(heredoc, "%s\n", line);
 		free(line);
-		// line = readline("> ");
 	}
-	// data->sa.sa_handler = SIG_IGN;
-	// sigaction(SIGINT, &data->sa, NULL);
 	close(heredoc);
 	free(delimiter);
 	if (!line)
