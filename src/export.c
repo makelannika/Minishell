@@ -43,7 +43,16 @@ void sort_strings(char **arr)
     }
 }
 
-_Bool   update_key(t_pipex *data, char **env, char *str)
+_Bool   check_key_exist(char *env, char *cmd)
+{
+    if (ft_strncmp(env, cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    else if (ft_strncmp(env, cmd, ft_strlen(cmd) - 1) == 0 && cmd[ft_strlen(cmd) - 1] == '=')
+        return (0);
+    return (0);
+}
+
+_Bool   update_key(t_pipex *data, char **env, char *cmd)
 {
     char *equal;
     char **tmp;
@@ -55,14 +64,17 @@ _Bool   update_key(t_pipex *data, char **env, char *str)
     tmp = env;
     while (tmp[i])
     {
+        if (check_key_exist(tmp[i], cmd))
+            return (1);
         equal = ft_strchr(tmp[i], '=');
-        if (ft_strncmp(tmp[i], str, equal - tmp[i] + 1) == 0)
+        if (ft_strncmp(tmp[i], cmd, equal - tmp[i] + 1) == 0 || (!equal && ft_strncmp(tmp[i],
+            cmd, ft_strlen(tmp[i])) == 0 && cmd[ft_strlen(tmp[i])] == '='))
         {
             flag = 1;
             free(tmp[i]);
-            env[i] = ft_strdup(str);
+            env[i] = ft_strdup(cmd);
             if (!env[i])
-                data->exitcode = -1;
+                set_error_and_print(data, -1, "strdup failed in update_key");
         }
         i++;
     }

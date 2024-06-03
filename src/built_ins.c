@@ -32,12 +32,27 @@ void put_pwd(t_pipex *data, int fd_out)
 
 	s = getcwd(NULL, 0);
 	if (!s)
-		return (set_error_and_print(data, -1, "getcwd failed"));
+		s = data->pwd;
 	ft_printf(fd_out, "%s\n", s);
+	// char *s;
+	// int i;
+
+	// s = NULL;
+	// i = 0;
+	// while(data->env[i])
+	// {
+	// 	if (ft_strncmp(data->env[i], "PWD=", 4) == 0)
+	// 	{
+	// 		s = ft_strchr(data->env[i], '=') + 1;
+	// 		ft_printf(fd_out, "%s\n", s);
+	// 		break ;
+	// 	}
+	// 	i++;
+	// }
 	data->exitcode = 0;
 }
 
-void do_cd(t_pipex *data, char *path, char**environ)
+void do_cd(t_pipex *data, char **path, char**environ)
 {
 	int	i;
 	char *oldpwd;
@@ -45,19 +60,29 @@ void do_cd(t_pipex *data, char *path, char**environ)
 	
 	i = 0;
     oldpwd = getcwd(NULL, 0);
-	if (!oldpwd)
-		return (set_error_and_print(data, -1, "getcwd failed"));
-	if (chdir(path) == -1)
-		return (set_error_and_print(data, -1, "chdir failed"));
+	if (!path[1] || ft_strncmp(path[1], "~", 2) == 0)
+	{
+		if (chdir(get_value("HOME", data)) == -1)
+			return (set_error_and_print(data, 1, "HOME not set"));
+	}
+	else if (!oldpwd || chdir(path[1]) == -1)
+	{
+		ft_printf(2, "cd: %s: 1 No such file or directory\n", path[1]);
+		data->exitcode = 1;
+		return;
+	}
 	while (environ[i])
 	{
 		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
 		{
 			newpwd = getcwd(NULL, 0);
 			if (!newpwd)
-				return (set_error_and_print(data, -1, "getcwd failed"));
+				return (set_error_and_print(data, -1, "2getcwd failed"));
 			free(environ[i]);
 			environ[i] = ft_strjoin("PWD=", newpwd);
+			free (data->pwd);
+			data->pwd = ft_strdup(environ[i]);
+			// printf("PWD: %s\n", environ[i]);
 			if (!environ[i])
 				return (set_error_and_print(data, -1, "strjoin failed"));
 		}
@@ -65,6 +90,9 @@ void do_cd(t_pipex *data, char *path, char**environ)
 		{
 			free(environ[i]);
 			environ[i] = ft_strjoin("OLDPWD=", oldpwd);
+			free (data->oldpwd);
+			data->oldpwd = ft_strdup(environ[i]);
+			// printf("OLDPWD: %s\n", environ[i]);
 			if (!environ[i])
 				return (set_error_and_print(data, -1, "strjoin failed"));
 		}

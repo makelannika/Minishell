@@ -40,7 +40,7 @@ _Bool	check_case(char *cmd, char *builtin)
 int	call_builtin(t_pipex *data, char *cmd)
 {
 	if (ft_strncmp(cmd, "cd", 3) == 0)
-		do_cd(data, data->cmd[1], data->env);
+		do_cd(data, data->cmd, data->env);
 	else if (ft_strncmp(cmd, "export", 7) == 0)
 		do_export(data, data->env, data->cmd, data->ends[1]);
 	else if (ft_strncmp(cmd, "unset", 6) == 0)
