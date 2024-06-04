@@ -96,12 +96,6 @@ static void	space_handler(char *cmd)
 
 int	parse_cmd(t_pipex *data, char **cmd)
 {
-	if (!(*cmd)[0])
-	{
-		ft_printf(2, "MOOshell: permission denied: %s\n", *cmd);
-		close_and_free(data);
-		return (set_exitcode(data, 1));
-	}
 	space_handler(*cmd);
 	if (expand_v2(data, cmd) == -1)
 		return (close_and_free(data));

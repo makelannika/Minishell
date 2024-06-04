@@ -14,11 +14,27 @@
 
 int	free_first_inits(t_pipex *data)
 {
-	free_str_array(data->env);
-	data->env = NULL;
-	free_str_array(data->paths);
-	data->paths = NULL;
-	return (data->exitcode);
+	if (data->env)
+	{
+		free_str_array(data->env);
+		data->env = NULL;
+	}
+	if (data->paths)
+	{
+		free_str_array(data->paths);
+		data->paths = NULL;
+	}
+	if (data->pwd)
+	{
+		free(data->pwd);
+		data->pwd = NULL;
+	}
+	if (data->oldpwd)
+	{
+		free(data->oldpwd);
+		data->oldpwd = NULL;
+	}
+	return (-1);
 }
 
 int	update_shlvl(char **env)
@@ -63,6 +79,7 @@ int	main(void)
 		if (!line)
 		{
 			ft_printf(2, "exit\n");
+			free_first_inits(&data);
 			return (0);
 		}
 		if (!*line)

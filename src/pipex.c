@@ -117,10 +117,7 @@ int	get_env(t_pipex *data)
 		i++;
 	data->env = ft_calloc(i + 1, sizeof(char *));
 	if (!data->env)
-	{
-		data->exitcode = -1;
 		return (-1);
-	}
 	i = 0;
 	while (environ[i])
 	{
@@ -129,8 +126,12 @@ int	get_env(t_pipex *data)
 		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
 			data->oldpwd = ft_strdup(environ[i]);
 		data->env[i] = ft_strdup(environ[i]);
+		if (!data->env[i])
+			return (-1);
 		i++;
 	}
+	if (!data->pwd || !data->oldpwd)
+		return (-1);
 	return (0);
 }
 
@@ -157,16 +158,12 @@ int	first_inits(t_pipex *data)
 	if (!data->env)
 	{
 		if (get_env(data) == -1)
-			return (-1);
+			return (free_first_inits(data));
 	}
 	if (!data->paths)
 	{
 		if (get_paths(data) == -1)
-		{
-			free_str_array(data->env);
-			data->env = NULL;
-			return (-1);
-		}
+			return (free_first_inits(data));
 	}
 	return (0);
 }
