@@ -14,10 +14,26 @@
 
 int	free_first_inits(t_pipex *data)
 {
-	free_str_array(data->env);
-	data->env = NULL;
-	free_str_array(data->paths);
-	data->paths = NULL;
+	if (data->env)
+	{
+		free_str_array(data->env);
+		data->env = NULL;
+	}
+	if (data->paths)
+	{
+		free_str_array(data->paths);
+		data->paths = NULL;
+	}
+	if (data->pwd)
+	{
+		free(data->pwd);
+		data->pwd = NULL;
+	}
+	if (data->oldpwd)
+	{
+		free(data->oldpwd);
+		data->oldpwd = NULL;
+	}
 	return (data->exitcode);
 }
 
@@ -62,8 +78,9 @@ int	main()
 		line = readline("MOOshell: ");
 		if (!line)
 		{
-			ft_printf(2, "exit\n");	
-				return (0);
+			ft_printf(2, "exit\n");
+			free_first_inits(&data);
+			return (0);
 		}
 		else if (!*line)
 			free(line);
@@ -97,7 +114,7 @@ int	main()
 				return (free_first_inits(&data));
 			else if (pipex(processes, &data) == -1)
 				return (data.exitcode);
-			close_and_free(&data);
+			free_parent(&data);
 			unlink(".heredoc");
 			free_list(&processes);
 		}

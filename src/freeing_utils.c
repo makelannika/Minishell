@@ -52,28 +52,12 @@ void	free_list(t_node **processes)
 	*processes = NULL;
 }
 
-void	reset_data(t_pipex *data)
-{
-	data->env = NULL;
-	data->paths = NULL;
-	data->cmd_str = NULL;
-	data->cmd = NULL;
-	data->path = NULL;
-	data->pids = NULL;
-}
-// frees pipex data and closes fds
 int	close_and_free(t_pipex *data)
 {
-	int	i;
-
-	i = 0;
 	close(data->ends[0]);
 	close(data->ends[1]);
 	close(data->read_end);
-	if (data->env)
-		free_str_array(data->env);
-	if (data->paths)
-		free_str_array(data->paths);
+	free_first_inits(data);
 	if (data->cmd_str)
 		free(data->cmd_str);
 	if (data->cmd)
@@ -82,6 +66,25 @@ int	close_and_free(t_pipex *data)
 		free(data->path);
 	if (data->pids)
 		free(data->pids);
-	reset_data(data);
+	data->cmd_str = NULL;
+	data->cmd = NULL;
+	data->path = NULL;
+	data->pids = NULL;
 	return (-1);
+}
+
+void	free_parent(t_pipex *data)
+{
+	if (data->cmd_str)
+		free(data->cmd_str);
+	if (data->cmd)
+		free_str_array(data->cmd);
+	if (data->path)
+		free(data->path);
+	if (data->pids)
+		free(data->pids);
+	data->cmd_str = NULL;
+	data->cmd = NULL;
+	data->path = NULL;
+	data->pids = NULL;
 }
