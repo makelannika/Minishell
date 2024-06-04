@@ -34,21 +34,7 @@ void put_pwd(t_pipex *data, int fd_out)
 	if (!s)
 		s = data->pwd;
 	ft_printf(fd_out, "%s\n", s);
-	// char *s;
-	// int i;
-
-	// s = NULL;
-	// i = 0;
-	// while(data->env[i])
-	// {
-	// 	if (ft_strncmp(data->env[i], "PWD=", 4) == 0)
-	// 	{
-	// 		s = ft_strchr(data->env[i], '=') + 1;
-	// 		ft_printf(fd_out, "%s\n", s);
-	// 		break ;
-	// 	}
-	// 	i++;
-	// }
+	free (s);
 	data->exitcode = 0;
 }
 
