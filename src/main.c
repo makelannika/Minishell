@@ -68,8 +68,7 @@ int	main()
 	int					i;
 
 	i = 0;
-	ft_bzero(&data, sizeof(data));
-	// data = (t_pipex){0};
+	data = (t_pipex){0};
 	handle_signals(&data);
 	processes = NULL;
 	while (1) 
@@ -83,9 +82,9 @@ int	main()
 			free_first_inits(&data);
 			return (0);
 		}
-		else if (!*line)
+		if (!*line)
 			free(line);
-		else if (ft_strncmp (line, "./minishell", 11) == 0)
+		if (ft_strncmp (line, "./minishell", 11) == 0)
 		{
 			while (data.env[i])
 			{
@@ -101,24 +100,21 @@ int	main()
 				i++;
 			}
 		}
-		else 
+		add_history(line);
+		if (check_syntax_error(&data, line) != 0)
 		{
-			add_history(line);
-			if (check_syntax_error(&data, line) != 0)
-			{
-				free(line);
-				continue ;
-			}
-			parse_input(line, &processes);
 			free(line);
-			if (!processes)
-				return (free_first_inits(&data));
-			else if (pipex(processes, &data) == -1)
-				return (data.exitcode);
-			free_parent(&data);
-			unlink(".heredoc");
-			free_list(&processes);
+			continue ;
 		}
+		parse_input(line, &processes);
+		free(line);
+		if (!processes)
+			return (free_first_inits(&data));
+		else if (pipex(processes, &data) == -1)
+			return (data.exitcode);
+		free_parent(&data);
+		unlink(".heredoc");
+		free_list(&processes);
 	}
 	return (data.exitcode);
 }
