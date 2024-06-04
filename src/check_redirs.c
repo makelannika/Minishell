@@ -27,9 +27,9 @@ static int	redir_out(char *file, t_pipex *data)
 	if (data->ends[1] < 0)
 	{
 		if (access(&file[1], F_OK) != 0)
-			ft_printf(2, "MOOshell: no such file or directory: %s\n", &file[1]);
+			ft_printf(2, "MOOshell: %s: No such file or directory\n", &file[1]);
 		else
-			ft_printf(2, "MOOshell: permission denied: %s\n", &file[1]);
+			ft_printf(2, "MOOshell: %s: Permission denied\n", &file[1]);
 		data->execute = 0;
 		return (set_exitcode(data, 1));
 	}
@@ -106,9 +106,9 @@ static int	redir_in(char *file, t_pipex *data)
 	if (data->ends[0] < 0)
 	{
 		if (access(&file[1], F_OK) != 0)
-			ft_printf(2, "MOOshell: no such file or directory: %s\n", &file[1]);
+			ft_printf(2, "MOOshell: %s: No such file or directory\n", &file[1]);
 		else
-			ft_printf(2, "MOOshell: permission denied: %s\n", &file[1]);
+			ft_printf(2, "MOOshell: %s: Permission denied\n", &file[1]);
 		data->execute = 0;
 		return (set_exitcode(data, 1));
 	}

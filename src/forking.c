@@ -102,7 +102,7 @@ static int	find_path(t_pipex *data)
 			i++;
 		}
 	}
-	ft_printf(2, "MOOshell: command not found: %s\n", data->cmd[0]);
+	ft_printf(2, "MOOshell: %s: command not found\n", data->cmd[0]);
 	close_and_free(data);
 	return (set_exitcode(data, 127));
 }
@@ -116,7 +116,7 @@ static int	path_check(t_pipex *data)
 		start--;
 	if (is_builtin(&data->cmd[0][start + 1]))
 	{
-		ft_printf(2, "MOOshell: no such file or directory: %s\n", data->cmd[0]);
+		ft_printf(2, "MOOshell: %s: No such file or directory\n", data->cmd[0]);
 		return (set_exitcode(data, 127));
 	}
 	if (access(data->cmd[0], F_OK) == 0)
@@ -124,7 +124,7 @@ static int	path_check(t_pipex *data)
 		data->path = ft_substr(data->cmd[0], 0, ft_strlen(data->cmd[0]));
 		return (0);
 	}
-	ft_printf(2, "MOOshell: no such file or directory: %s\n", data->cmd[0]);
+	ft_printf(2, "MOOshell: %s: No such file or directory\n", data->cmd[0]);
 	return (set_exitcode(data, 127));
 }
 
@@ -158,7 +158,7 @@ static int	get_cmd(char *cmd, t_pipex *data)
 	}
 	if (data->cmd[0] == '\0')
 	{
-		ft_printf(2, "MOOshell: command not found: %s\n", cmd);
+		ft_printf(2, "MOOshell: %s: command not found\n", cmd);
 		close_and_free(data);
 		return (set_exitcode(data, 127));
 	}
@@ -185,7 +185,7 @@ static int	do_cmd(t_pipex *data, t_node *process)
 		return (-1);
 	if (!data->path)
 	{
-		ft_printf(2, "MOOshell: command not found: %s\n", data->cmd[0]);
+		ft_printf(2, "MOOshell: %s: command not found\n", data->cmd[0]);
 		return (set_exitcode(data, 127));
 	}
 	execve(data->path, data->cmd, data->env);
@@ -194,7 +194,7 @@ static int	do_cmd(t_pipex *data, t_node *process)
 		ft_printf(2, "MOOshell: %s: is a directory\n", data->cmd[0]);
 		return (set_exitcode(data, 126));
 	}
-	ft_printf(2, "MOOshell: permission denied: %s\n", data->cmd[0]);
+	ft_printf(2, "MOOshell: %s: Permission denied\n", data->cmd[0]);
 	return (set_exitcode(data, 1));
 }
 
