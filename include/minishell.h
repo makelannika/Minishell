@@ -13,19 +13,19 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<term.h>
-#include<termios.h>
-#include <unistd.h>
-#include <curses.h>
-#include <string.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <errno.h>
-#include "../libft/libft.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <term.h>
+# include <termios.h>
+# include <unistd.h>
+# include <curses.h>
+# include <string.h>
+# include <fcntl.h>
+# include <signal.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <errno.h>
+# include "../libft/libft.h"
 
 typedef int	(*t_my_printffd)(int fd, const char *format, ...);
 
@@ -70,11 +70,11 @@ typedef struct s_pipex
 	char				*oldpwd;
 }	t_pipex;
 
-/*********************************--SIGNALS--**************************************/
+/******************--SIGNALS--******************/
 void	handle_signals(t_pipex *data);
 void	si_handler(int g_signum);
 
-/*********************************--PARSING--**************************************/
+/****************--PARSING--********************/
 
 int		check_syntax_error(t_pipex *data, char *string);
 t_node	**parse_input(char *line, t_node **processes);
@@ -91,7 +91,7 @@ int		get_env(t_pipex *data);
 int		first_inits(t_pipex *data);
 _Bool	is_builtin(char *cmd);
 
-/**********************************--PIPEX--***************************************/
+/**************--PIPEX--*************************/
 
 int		init_data(t_pipex *data, t_node *processes);
 int		pipex(t_node *processes, t_pipex *data);
@@ -100,7 +100,7 @@ int		handle_redirs(t_node *process, t_pipex *data);
 int		forking(t_pipex *data, t_node *process);
 int		parse_cmd(t_pipex *data, char **cmd);
 
-/********************************--CLEANING--***************************************/
+/************--CLEANING--*************************/
 
 int		free_first_inits(t_pipex *data);
 int		close_and_free(t_pipex *data);
@@ -109,7 +109,7 @@ void	free_str_array(char **array);
 int		set_exitcode(t_pipex *data, int exitcode);
 void	free_parent(t_pipex *data);
 
-/*********************************--BUILT_IN--*************************************/
+/*************--BUILT_IN--***********************/
 
 int		expand_that_shit(char **cmd, char **env, t_pipex data);
 int		expand_v2(t_pipex *data, char **cmd);
@@ -123,11 +123,11 @@ void	sort_strings(char **arr);
 char	**putstr_in_array(t_pipex *data, char **env, char *cmd);
 void	do_exit(char **cmd, t_pipex *data);
 
-/***************************--BUILT_IN_UTILS--**************************************/
+/**********BUILT_IN_UTILS--************/
 char	*get_value(char *key, t_pipex *data);
 void	*ft_memcat(void *dst, const void *src);
 
-/***********************************--UTILS--**************************************/
+/***************--UTILS--************/
 
 int		array_len(char **a);
 void	remove_string(char **src, int index);

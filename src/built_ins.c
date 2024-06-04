@@ -66,6 +66,7 @@ void	do_cd(t_pipex *data, char **path, char**environ)
 				return (set_error_and_print(data, -1, "2getcwd failed"));
 			free(environ[i]);
 			environ[i] = ft_strjoin("PWD=", newpwd);
+			free (newpwd);
 			free (data->pwd);
 			data->pwd = ft_strdup(environ[i]);
 			if (!environ[i])
@@ -75,6 +76,7 @@ void	do_cd(t_pipex *data, char **path, char**environ)
 		{
 			free(environ[i]);
 			environ[i] = ft_strjoin("OLDPWD=", oldpwd);
+			free (oldpwd);
 			free (data->oldpwd);
 			data->oldpwd = ft_strdup(environ[i]);
 			if (!environ[i])
