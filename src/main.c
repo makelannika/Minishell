@@ -116,7 +116,6 @@ int	main(void)
 		else if (pipex(processes, &data) == -1)
 			return (data.exitcode);
 		free_parent(&data);
-		unlink(".heredoc");
 		free_list(&processes);
 	}
 	return (data.exitcode);

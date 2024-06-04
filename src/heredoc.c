@@ -104,5 +104,6 @@ int	handle_heredocs(t_node *process, t_pipex *data)
 		}
 		i++;
 	}
+	unlink(".heredoc");
 	return (0);
 }
