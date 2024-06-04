@@ -12,7 +12,6 @@
 
 #include "../include/minishell.h"
 
-// copies cmd without unwanted quotes to the parsed cmd string
 char	*remove_quotes(char *cmd, int count)
 {
 	int 	i;
@@ -39,7 +38,6 @@ char	*remove_quotes(char *cmd, int count)
 	return (new_string);
 }
 
-// counts quotes that are not within quotes
 int	count_quotes(char *string)
 {
 	int	i;
@@ -66,7 +64,6 @@ int	count_quotes(char *string)
 	return (count);
 }
 
-// creates a new parsed cmd str into pipex's struct 
 char	*quote_remover(char *cmd)
 {
 	int		remove;
@@ -77,7 +74,6 @@ char	*quote_remover(char *cmd)
 	return (remove_quotes(cmd, len));
 }
 
-// changes spaces outside of quotes to unprintable characters for split
 static void	space_handler(char *cmd)
 {
 	int		i;
@@ -98,15 +94,8 @@ static void	space_handler(char *cmd)
 	}
 }
 
-// handles spaces and quotes of the cmd
 int	parse_cmd(t_pipex *data, char **cmd)
 {
-	if (!(*cmd)[0])
-	{
-		ft_printf(2, "MOOshell: permission denied: %s\n", *cmd);
-		close_and_free(data);
-		return (set_exitcode(data, 1));
-	}
 	space_handler(*cmd);
 	if (expand_v2(data, cmd) == -1)
 		return (close_and_free(data));
