@@ -116,10 +116,7 @@ int	get_env(t_pipex *data)
 		i++;
 	data->env = ft_calloc(i + 1, sizeof(char *));
 	if (!data->env)
-	{
-		data->exitcode = -1;
 		return (-1);
-	}
 	i = 0;
 	while (environ[i])
 	{
