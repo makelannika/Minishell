@@ -141,7 +141,7 @@ int	count_redirs(char *string)
 			if (string[i + 1] != '>')
 				count++;
 			if (string[i + 1] == '<' || string[i + 1] == '>')
-				i++;;
+				i++;
 		}
 		else if (string[i] == '>')
 		{
