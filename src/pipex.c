@@ -149,7 +149,7 @@ int	init_data(t_pipex *data, t_node *processes)
 	if (!data->pids)
 		return (close_and_free(data));
 	data->pids[0] = -1;
-	data->execute = 1;
+	data->execute = is_empty(processes->cmd);
 	return (0);
 }
 

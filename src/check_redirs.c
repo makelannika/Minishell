@@ -123,9 +123,9 @@ int	is_empty(char *string)
 	while (string[i])
 	{
 		if (string[i++] != ' ')
-			return (0);
+			return (1);
 	}
-	return (1);
+	return (0);
 }
 
 int	handle_heredocs(t_node *process, t_pipex *data)
@@ -135,7 +135,6 @@ int	handle_heredocs(t_node *process, t_pipex *data)
 
 	i = 0;
 	heredoc = 0;
-	data->execute = 1;
 	while (process->redirs[i])
 	{
 		if (ft_strncmp(process->redirs[i], "<<", 2) == 0)
@@ -152,8 +151,6 @@ int	handle_heredocs(t_node *process, t_pipex *data)
 		}
 		i++;
 	}
-	if (heredoc && is_empty(process->cmd))
-		data->execute = 0;
 	return (0);
 }
 

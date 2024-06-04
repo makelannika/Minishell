@@ -99,6 +99,7 @@ int		get_fds(t_pipex *data, t_node *process);
 int		handle_redirs(t_node *process, t_pipex *data);
 int		forking(t_pipex *data, t_node *process);
 int		parse_cmd(t_pipex *data, char **cmd);
+int		is_empty(char *string);
 
 /************--CLEANING--*************************/
 

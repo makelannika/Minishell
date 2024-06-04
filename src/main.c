@@ -103,24 +103,21 @@ int	main(void)
 				i++;
 			}
 		}
-		else 
+		add_history(line);
+		if (check_syntax_error(&data, line) != 0)
 		{
-			add_history(line);
-			if (check_syntax_error(&data, line) != 0)
-			{
-				free(line);
-				continue ;
-			}
-			parse_input(line, &processes);
 			free(line);
-			if (!processes)
-				return (free_first_inits(&data));
-			else if (pipex(processes, &data) == -1)
-				return (data.exitcode);
-			free_parent(&data);
-			unlink(".heredoc");
-			free_list(&processes);
+			continue ;
 		}
+		parse_input(line, &processes);
+		free(line);
+		if (!processes)
+			return (free_first_inits(&data));
+		else if (pipex(processes, &data) == -1)
+			return (data.exitcode);
+		free_parent(&data);
+		unlink(".heredoc");
+		free_list(&processes);
 	}
 	return (data.exitcode);
 }
