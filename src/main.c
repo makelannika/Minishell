@@ -34,7 +34,7 @@ int	free_first_inits(t_pipex *data)
 		free(data->oldpwd);
 		data->oldpwd = NULL;
 	}
-	return (data->exitcode);
+	return (-1);
 }
 
 int update_shlvl(char **env)

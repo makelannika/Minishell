@@ -58,7 +58,6 @@ static int	wait_children(int *pids, int count, int *exitcode)
 	return (*exitcode);
 }
 
-// adds a slash to the end of each path
 static int	add_slash(t_pipex *data)
 {
 	int		i;
@@ -79,7 +78,6 @@ static int	add_slash(t_pipex *data)
 	return (0);
 }
 
-// saves an array of paths into pipex's struct
 static int	get_paths(t_pipex *data)
 {
 	int			i;
@@ -108,7 +106,6 @@ static int	get_paths(t_pipex *data)
 	return (0);
 }
 
-// saves a copy of env into pipex's struct
 int	get_env(t_pipex *data)
 {
 	int			i;
@@ -131,12 +128,15 @@ int	get_env(t_pipex *data)
 		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
 			data->oldpwd = ft_strdup(environ[i]);
 		data->env[i] = ft_strdup(environ[i]);
+		if (!data->env[i])
+			return (-1);
 		i++;
 	}
+	if (!data->pwd || !data->oldpwd)
+		return (-1);
 	return (0);
 }
 
-// initializes pipex's struct
 int	init_data(t_pipex *data, t_node *processes)
 {
 	data->cmds = get_list_length(processes);
@@ -155,22 +155,17 @@ int	init_data(t_pipex *data, t_node *processes)
 	return (0);
 }
 
-// initializes env and path in the main
 int	first_inits(t_pipex *data)
 {
 	if (!data->env)
 	{
 		if (get_env(data) == -1)
-			return (-1);
+			return (free_first_inits(data));
 	}
 	if (!data->paths)
 	{
 		if (get_paths(data) == -1)
-		{
-			free_str_array(data->env);
-			data->env = NULL;
-			return (-1);
-		}
+			return (free_first_inits(data));
 	}
 	return (0);
 }
