@@ -19,11 +19,7 @@ static int	wait_children(t_pipex *data, int *pids, int count, int *exitcode)
 
 	i = 0;
 	status = 0;
-	data->sa.sa_handler = SIG_IGN;
-	data->sa.sa_flags = 0;
-	data->sa.sa_mask = 0;
-	sigaction(SIGQUIT, &data->sa, NULL);
-	sigaction(SIGINT, &data->sa, NULL);
+	ignore_signals(data);
 	while (i < count)
 	{
 		if (pids[i] == -1)
@@ -42,57 +38,7 @@ static int	wait_children(t_pipex *data, int *pids, int count, int *exitcode)
 			ft_putstr_fd("^C\n", 2);
 		i++;
 	}
-	data->sa.sa_handler = si_handler;
-	sigaction(SIGINT, &data->sa, NULL);
 	return (*exitcode);
-}
-
-static int	add_slash(t_pipex *data)
-{
-	int		i;
-	char	*old;
-	char	*new;
-
-	i = 0;
-	while (data->paths[i])
-	{
-		old = data->paths[i];
-		new = ft_strjoin(old, "/");
-		if (new == NULL)
-			return (-1);
-		free(old);
-		data->paths[i] = new;
-		i++;
-	}
-	return (0);
-}
-
-static int	get_paths(t_pipex *data)
-{
-	int			i;
-	char		*envpaths;
-	extern char	**environ;
-
-	i = 0;
-	while (environ[i])
-	{
-		if (ft_strncmp(environ[i], "PATH=", 4) == 0)
-		{
-			envpaths = ft_substr(environ[i], 5, ft_strlen(environ[i]) - 5);
-			if (!envpaths)
-				return (-1);
-			data->paths = ft_split(envpaths, ':');
-			free(envpaths);
-			if (!data->paths)
-				return (-1);
-			if (add_slash(data) == -1)
-				return (-1);
-			return (0);
-		}
-		i++;
-	}
-	data->paths = NULL;
-	return (0);
 }
 
 int	get_env(t_pipex *data)
@@ -177,5 +123,7 @@ int	pipex(t_node *processes, t_pipex *data)
 		processes = processes->next;
 	}
 	wait_children(data, data->pids, data->cmds, &data->exitcode);
+	data->sa.sa_handler = si_handler;
+	sigaction(SIGINT, &data->sa, NULL);
 	return (data->exitcode);
 }

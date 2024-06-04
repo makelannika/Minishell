@@ -80,6 +80,7 @@ typedef struct s_pipex
 
 /******************--SIGNALS--******************/
 void	handle_signals(t_pipex *data);
+void	ignore_signals(t_pipex *data);
 void	si_handler(int signum);
 
 /****************--PARSING--********************/
@@ -103,6 +104,7 @@ _Bool	is_builtin(char *cmd);
 /**************--PIPEX--*************************/
 
 int		init_data(t_pipex *data, t_node *processes);
+int		get_paths(t_pipex *data);
 int		pipex(t_node *processes, t_pipex *data);
 int		get_fds(t_pipex *data, t_node *process);
 int		handle_heredocs(t_node *process, t_pipex *data);

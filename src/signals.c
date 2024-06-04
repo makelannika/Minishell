@@ -23,6 +23,15 @@ void	si_handler(int signum)
 	}
 }
 
+void	ignore_signals(t_pipex *data)
+{
+	data->sa.sa_handler = SIG_IGN;
+	data->sa.sa_flags = 0;
+	data->sa.sa_mask = 0;
+	sigaction(SIGQUIT, &data->sa, NULL);
+	sigaction(SIGINT, &data->sa, NULL);
+}
+
 void	carrot_char(int on)
 {
 	struct termios	term;
