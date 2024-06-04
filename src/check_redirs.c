@@ -77,13 +77,8 @@ static int	do_heredoc(char *file, t_pipex *data)
 	}
 	close(heredoc);
 	free(delimiter);
-	if (!line)
-	{
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		return (0);
-	}
+	if (!line && signum != 1)
+		write(1, "\033[1A\033[2C", 9);
 	free(line);
 	return (0);
 }
