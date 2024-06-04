@@ -53,7 +53,7 @@ void do_cd(t_pipex *data, char **path, char**environ)
 	}
 	else if (!oldpwd || chdir(path[1]) == -1)
 	{
-		ft_printf(2, "cd: %s: 1 No such file or directory\n", path[1]);
+		ft_printf(2, "cd: %s: No such file or directory\n", path[1]);
 		data->exitcode = 1;
 		return;
 	}

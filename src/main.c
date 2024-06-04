@@ -68,7 +68,8 @@ int	main()
 	int					i;
 
 	i = 0;
-	data = (t_pipex){0};
+	ft_bzero(&data, sizeof(data));
+	// data = (t_pipex){0};
 	handle_signals(&data);
 	processes = NULL;
 	while (1) 
