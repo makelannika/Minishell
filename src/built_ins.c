@@ -73,7 +73,7 @@ void do_cd(t_pipex *data, char **path, char**environ)
 	}
 	while (environ[i])
 	{
-		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
+		if (ft_strncmp(environ[i], "PWD=", 4) == 0 || (ft_strncmp(environ[i], "PWD", 3) == 0))
 		{
 			newpwd = getcwd(NULL, 0);
 			if (!newpwd)
@@ -86,7 +86,7 @@ void do_cd(t_pipex *data, char **path, char**environ)
 			if (!environ[i])
 				return (set_error_and_print(data, -1, "strjoin failed"));
 		}
-		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
+		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0 || (ft_strncmp(environ[i], "OLDPWD", 6) == 0))
 		{
 			free(environ[i]);
 			environ[i] = ft_strjoin("OLDPWD=", oldpwd);

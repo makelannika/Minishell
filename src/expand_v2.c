@@ -193,8 +193,6 @@ int		expandable(char **cmd, t_pipex *data, int key, t_quote quote)
 		remove_dollar_sign(cmd, key - 1, 2);
 		key = key - 1;
 	}
-	// printf("cmd: %s\n", *cmd);
-	// printf("key: %d\n", key);
 	return (key);
 }
 
