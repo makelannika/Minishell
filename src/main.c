@@ -68,8 +68,7 @@ int	main(void)
 	int					i;
 
 	i = 0;
-	ft_bzero(&data, sizeof(data));
-	// data = (t_pipex){0};
+	data = (t_pipex){0};
 	handle_signals(&data);
 	processes = NULL;
 	while (1)
@@ -84,10 +83,7 @@ int	main(void)
 			return (0);
 		}
 		if (!*line)
-		{
 			free(line);
-			continue ;
-		}
 		if (ft_strncmp (line, "./minishell", 11) == 0)
 		{
 			while (data.env[i])
@@ -116,7 +112,7 @@ int	main(void)
 			return (free_first_inits(&data));
 		else if (pipex(processes, &data) == -1)
 			return (data.exitcode);
-		close_and_free(&data);
+		free_parent(&data);
 		unlink(".heredoc");
 		free_list(&processes);
 	}
