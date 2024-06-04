@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 17:38:41 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/17 20:40:37 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/04 13:47:09 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	array_len(char **a)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(a[i])
+	while (a[i])
 		i++;
 	return (i);
 }
@@ -50,14 +50,15 @@ void	set_error_and_print(t_pipex *data, int error, char *msg)
 	ft_printf(2, "%s\n", msg);
 }
 
-void	print_error_and_exit(my_printffd my_printf, char *cmd0, char *cmd1, int exitcode) //use only for exit builtin
+void	print_error_and_exit(t_my_printffd my_printf,
+		char *cmd0, char *cmd1, int exitcode)
 {
-	if	(my_printf && cmd0 && cmd1)
+	if (my_printf && cmd0 && cmd1)
 		my_printf(2, "%s %s: numeric argument required\n", cmd0, cmd1);
 	exit(exitcode);
 }
 
-void	free_and_exit(t_pipex *data, int exitcode) //use only for exit builtin
+void	free_and_exit(t_pipex *data, int exitcode)
 {
 	close_and_free(data);
 	exit(exitcode);
@@ -69,6 +70,7 @@ char	*set_error_return(t_pipex *data, int error, char *msg)
 	ft_printf(2, "%s\n", msg);
 	return (NULL);
 }
+
 void	*ft_memcat(void *dst, const void *src)
 {
 	char		*d;
@@ -85,27 +87,3 @@ void	*ft_memcat(void *dst, const void *src)
 	*d = '\0';
 	return (dst);
 }
-
-
-// void    *ft_memcpy_array(void *dst, const void *src, size_t sizeof_src)
-// {
-//     size_t      i;
-//     size_t      j;
-//     char        *d;
-//     const char  **s;
-
-//     d = (char *)dst;
-//     s = (const char **)src;
-//     if (!dst || !src)
-//         return (dst);
-//     i = 0;
-//     while (i < sizeof_src)
-//     {
-//         j = 0;
-//         while (s[i][j])
-//             *d++ = s[i][j++];
-//         i++;
-//     }
-//     *d = '\0';
-//     return (dst);
-// }

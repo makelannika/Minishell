@@ -12,7 +12,6 @@
 
 #include "../include/minishell.h"
 
-// returns the number of nodes/processes
 int	get_list_length(t_node *processes)
 {
 	int	length;
@@ -26,7 +25,6 @@ int	get_list_length(t_node *processes)
 	return (length);
 }
 
-// adds a node to the back of the process list
 void	add_back(t_node **lst, t_node *new)
 {
 	t_node	*current;
@@ -42,8 +40,7 @@ void	add_back(t_node **lst, t_node *new)
 	current->next = new;
 }
 
-// creates a node to store information of a single process
-t_node	*create_node()
+t_node	*create_node(void)
 {
 	t_node	*new_node;
 

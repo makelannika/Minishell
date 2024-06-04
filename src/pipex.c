@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:10:49 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/24 15:39:58 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/04 13:49:21 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	si_handler2(int signum)
+void	si_handler2(int g_signum)
 {
-	if (signum == SIGINT)
+	if (g_signum == SIGINT)
 	{
 		write(2, "\n", 1);
 		rl_replace_line("", 0);
@@ -22,12 +22,13 @@ void	si_handler2(int signum)
 		rl_redisplay();
 	}
 }
+
 static int	wait_children(int *pids, int count, int *exitcode)
 {
-	int	status;
-	int	i;
+	int					status;
+	int					i;
 	struct sigaction	si_data;
-	
+
 	i = 0;
 	status = 0;
 	si_data.sa_handler = SIG_IGN;

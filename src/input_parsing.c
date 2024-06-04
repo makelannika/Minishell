@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   input_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:13:07 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/23 17:20:07 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/04 13:51:34 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// returns the number of character c outside of quotes and single quotes in a string
 int	counter(char *string, char c)
 {
-	int	i;
-	int	count;
+	int		i;
+	int		count;
 	t_flags	f;
-	
+
 	i = 0;
 	count = 0;
 	init_flags(&f);
@@ -37,8 +36,8 @@ int	counter(char *string, char c)
 
 static int	builtin_check(char	*string, t_node *process)
 {
-	char *cmd;
-	char *tmp;
+	char	*cmd;
+	char	*tmp;
 
 	cmd = trim_cmd(string);
 	if (!cmd)
@@ -54,17 +53,16 @@ static int	builtin_check(char	*string, t_node *process)
 	return (0);
 }
 
-// parses one process at a time
 static t_node	*parse_process(char	*string, t_node **processes)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	t_node	*node;
-	
+
 	i = 0;
 	j = 0;
 	node = create_node();
-	if(!node)
+	if (!node)
 	{
 		free(string);
 		free_list(processes);
@@ -88,11 +86,10 @@ void	init_flags(t_flags *f)
 	f->in_double = -1;
 }
 
-// parses the complete line returned from readline
 t_node	**parse_input(char *line, t_node **processes)
 {
-	int	i;
-	int	start;
+	int		i;
+	int		start;
 	t_flags	f;
 
 	i = 0;

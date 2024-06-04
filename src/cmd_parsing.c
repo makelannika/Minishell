@@ -14,7 +14,7 @@
 
 char	*remove_quotes(char *cmd, int count)
 {
-	int 	i;
+	int		i;
 	int		j;
 	char	*new_string;
 	t_flags	f;
@@ -40,8 +40,8 @@ char	*remove_quotes(char *cmd, int count)
 
 int	count_quotes(char *string)
 {
-	int	i;
-	int	count;
+	int		i;
+	int		count;
 	t_flags	f;
 
 	i = 0;

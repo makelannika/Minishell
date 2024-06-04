@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   forking.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/24 15:22:07 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/04 13:56:59 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int	set_exitcode(t_pipex *data, int exitcode)
 	return (-1);
 }
 
-// checks all case combinations for builtin commands
-// is called only for pwd, env & echo
 _Bool	check_case(char *cmd, char *builtin)
 {
 	int		i;
@@ -36,7 +34,6 @@ _Bool	check_case(char *cmd, char *builtin)
 	return (1);
 }
 
-// calls the correct builtin function
 int	call_builtin(t_pipex *data, char *cmd)
 {
 	if (ft_strncmp(cmd, "cd", 3) == 0)
@@ -62,7 +59,6 @@ int	call_builtin(t_pipex *data, char *cmd)
 	return (data->exitcode);
 }
 
-// checks if command is a builtin
 _Bool	is_builtin(char *cmd)
 {
 	if (ft_strncmp(cmd, "cd\0", 3) == 0)
@@ -84,7 +80,6 @@ _Bool	is_builtin(char *cmd)
 	return (0);
 }
 
-// finds correct path for cmd / checks if command exists
 static int	find_path(t_pipex *data)
 {
 	int		i;
@@ -112,12 +107,10 @@ static int	find_path(t_pipex *data)
 	return (set_exitcode(data, 127));
 }
 
-// checks path/cmd when relative/absolute path is given
-// gives an error if cmd is a builtin
 static int	path_check(t_pipex *data)
 {
 	int	start;
-	
+
 	start = ft_strlen(data->cmd[0]);
 	while (data->cmd[0][start] != '/')
 		start--;
@@ -135,7 +128,6 @@ static int	path_check(t_pipex *data)
 	return (set_exitcode(data, 127));
 }
 
-// gets path for cmd if needed & calls builtin functions
 static int	get_path(t_pipex *data)
 {
 	if (ft_strchr(data->cmd[0], '/'))
@@ -156,7 +148,6 @@ static int	get_path(t_pipex *data)
 	return (0);
 }
 
-// gets cmd array
 static int	get_cmd(char *cmd, t_pipex *data)
 {
 	data->cmd = ft_split(cmd, 7);
@@ -176,7 +167,6 @@ static int	get_cmd(char *cmd, t_pipex *data)
 	return (0);
 }
 
-// execve here
 static int	do_cmd(t_pipex *data, t_node *process)
 {
 	if (!process->builtin)
@@ -208,8 +198,6 @@ static int	do_cmd(t_pipex *data, t_node *process)
 	return (set_exitcode(data, 1));
 }
 
-// returns a string containing only the cmd from the cmd string
-// needed to check if the cmd is a builtin and we don't want to fork
 char	*trim_cmd(char *cmd_str)
 {
 	int		i;
