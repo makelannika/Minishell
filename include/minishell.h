@@ -29,6 +29,14 @@
 
 typedef int	(*t_my_printffd)(int fd, const char *format, ...);
 
+typedef struct s_heredoc
+{
+	char	*dlm;
+	char	*line;
+	int		dlm_len;
+	int		fd;
+}	t_heredoc;
+
 typedef struct s_flags
 {
 	int	in_single;
@@ -96,10 +104,11 @@ _Bool	is_builtin(char *cmd);
 int		init_data(t_pipex *data, t_node *processes);
 int		pipex(t_node *processes, t_pipex *data);
 int		get_fds(t_pipex *data, t_node *process);
+int		handle_heredocs(t_node *process, t_pipex *data);
 int		handle_redirs(t_node *process, t_pipex *data);
 int		forking(t_pipex *data, t_node *process);
 int		parse_cmd(t_pipex *data, char **cmd);
-int		is_empty(char *string);
+int		check_cmd(char *string);
 
 /************--CLEANING--*************************/
 

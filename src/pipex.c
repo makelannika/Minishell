@@ -149,7 +149,7 @@ int	init_data(t_pipex *data, t_node *processes)
 	if (!data->pids)
 		return (close_and_free(data));
 	data->pids[0] = -1;
-	data->execute = is_empty(processes->cmd);
+	data->execute = 0;
 	return (0);
 }
 
@@ -174,6 +174,7 @@ int	pipex(t_node *processes, t_pipex *data)
 		return (set_exitcode(data, -1));
 	while (data->count < data->cmds)
 	{
+		data->execute = check_cmd(processes->cmd);
 		if (get_fds(data, processes) == -1)
 			return (close_and_free(data));
 		if (data->execute)
