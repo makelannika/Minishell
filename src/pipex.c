@@ -12,30 +12,18 @@
 
 #include "../include/minishell.h"
 
-void	si_handler2(int signum)
-{
-	if (signum == SIGINT)
-	{
-		write(2, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-
-static int	wait_children(int *pids, int count, int *exitcode)
+static int	wait_children(t_pipex *data, int *pids, int count, int *exitcode)
 {
 	int					status;
 	int					i;
-	struct sigaction	si_data;
 
 	i = 0;
 	status = 0;
-	si_data.sa_handler = SIG_IGN;
-	si_data.sa_flags = 0;
-	si_data.sa_mask = 0;
-	sigaction(SIGQUIT, &si_data, NULL);
-	sigaction(SIGINT, &si_data, NULL);
+	data->sa.sa_handler = SIG_IGN;
+	data->sa.sa_flags = 0;
+	data->sa.sa_mask = 0;
+	sigaction(SIGQUIT, &data->sa, NULL);
+	sigaction(SIGINT, &data->sa, NULL);
 	while (i < count)
 	{
 		if (pids[i] == -1)
@@ -54,8 +42,8 @@ static int	wait_children(int *pids, int count, int *exitcode)
 			ft_putstr_fd("^C\n", 2);
 		i++;
 	}
-	si_data.sa_handler = si_handler2;
-	sigaction(SIGINT, &si_data, NULL);
+	data->sa.sa_handler = si_handler;
+	sigaction(SIGINT, &data->sa, NULL);
 	return (*exitcode);
 }
 
@@ -188,6 +176,6 @@ int	pipex(t_node *processes, t_pipex *data)
 		data->count++;
 		processes = processes->next;
 	}
-	wait_children(data->pids, data->cmds, &data->exitcode);
+	wait_children(data, data->pids, data->cmds, &data->exitcode);
 	return (data->exitcode);
 }

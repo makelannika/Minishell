@@ -85,6 +85,7 @@ void	si_handler(int signum);
 /****************--PARSING--********************/
 
 int		input_validation(t_pipex *data, char *string);
+int		quote_check(char *line);
 t_node	**parse_input(char *line, t_node **processes);
 t_node	*create_node(void);
 int		count_quotes(char *string);
