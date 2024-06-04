@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   freeing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 17:52:16 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/24 14:37:58 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/04 13:56:23 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "../include/minishell.h"
+#include "../include/minishell.h"
 
 // frees an array of strings
 void	free_str_array(char **array)
@@ -23,7 +23,6 @@ void	free_str_array(char **array)
 	free(array);
 }
 
-// frees a single process node
 static void	free_node(t_node *node)
 {
 	if (node->redirs)
@@ -36,10 +35,10 @@ static void	free_node(t_node *node)
 	free(node);
 }
 
-// frees the list of process nodes
 void	free_list(t_node **processes)
 {
 	t_node	*temp;
+
 	if (processes == NULL || *processes == NULL)
 		return ;
 	while ((*processes)->next != NULL)
@@ -61,7 +60,7 @@ void	reset_data(t_pipex *data)
 	data->path = NULL;
 	data->pids = NULL;
 }
-// frees pipex data and closes fds
+
 int	close_and_free(t_pipex *data)
 {
 	int	i;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/24 14:33:08 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/04 13:50:17 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	free_first_inits(t_pipex *data)
 	return (data->exitcode);
 }
 
-int update_shlvl(char **env)
+int	update_shlvl(char **env)
 {
 	int		shlvl;
 	char	*new_shlvl;
@@ -44,7 +44,7 @@ int update_shlvl(char **env)
 	return (0);
 }
 
-int	main()
+int	main(void)
 {
 	char				*line;
 	t_node				*processes;
@@ -55,19 +55,22 @@ int	main()
 	data = (t_pipex){0};
 	handle_signals(&data);
 	processes = NULL;
-	while (1) 
+	while (1)
 	{
 		if (first_inits(&data) == -1)
 			return (-1);
 		line = readline("MOOshell: ");
 		if (!line)
 		{
-			ft_printf(2, "exit\n");	
-				return (0);
+			ft_printf(2, "exit\n");
+			return (0);
 		}
-		else if (!*line)
+		if (!*line)
+		{
 			free(line);
-		else if (ft_strncmp (line, "./minishell", 11) == 0)
+			continue ;
+		}
+		if (ft_strncmp (line, "./minishell", 11) == 0)
 		{
 			while (data.env[i])
 			{
@@ -78,29 +81,26 @@ int	main()
 						free(line);
 						return (free_first_inits(&data));
 					}
-					break;
+					break ;
 				}
 				i++;
 			}
 		}
-		else 
+		add_history(line);
+		if (check_syntax_error(&data, line) != 0)
 		{
-			add_history(line);
-			if (check_syntax_error(&data, line) != 0)
-			{
-				free(line);
-				continue ;
-			}
-			parse_input(line, &processes);
 			free(line);
-			if (!processes)
-				return (free_first_inits(&data));
-			else if (pipex(processes, &data) == -1)
-				return (data.exitcode);
-			close_and_free(&data);
-			unlink(".heredoc");
-			free_list(&processes);
+			continue ;
 		}
+		parse_input(line, &processes);
+		free(line);
+		if (!processes)
+			return (free_first_inits(&data));
+		else if (pipex(processes, &data) == -1)
+			return (data.exitcode);
+		close_and_free(&data);
+		unlink(".heredoc");
+		free_list(&processes);
 	}
 	return (data.exitcode);
 }

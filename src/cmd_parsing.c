@@ -12,10 +12,9 @@
 
 #include "../include/minishell.h"
 
-// copies cmd without unwanted quotes to the parsed cmd string
 char	*remove_quotes(char *cmd, int count)
 {
-	int 	i;
+	int		i;
 	int		j;
 	char	*new_string;
 	t_flags	f;
@@ -39,11 +38,10 @@ char	*remove_quotes(char *cmd, int count)
 	return (new_string);
 }
 
-// counts quotes that are not within quotes
 int	count_quotes(char *string)
 {
-	int	i;
-	int	count;
+	int		i;
+	int		count;
 	t_flags	f;
 
 	i = 0;
@@ -66,7 +64,6 @@ int	count_quotes(char *string)
 	return (count);
 }
 
-// creates a new parsed cmd str into pipex's struct 
 char	*quote_remover(char *cmd)
 {
 	int		remove;
@@ -77,7 +74,6 @@ char	*quote_remover(char *cmd)
 	return (remove_quotes(cmd, len));
 }
 
-// changes spaces outside of quotes to unprintable characters for split
 static void	space_handler(char *cmd)
 {
 	int		i;
@@ -98,7 +94,6 @@ static void	space_handler(char *cmd)
 	}
 }
 
-// handles spaces and quotes of the cmd
 int	parse_cmd(t_pipex *data, char **cmd)
 {
 	if (!(*cmd)[0])

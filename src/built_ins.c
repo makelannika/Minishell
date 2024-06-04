@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/22 19:00:56 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/04 13:40:12 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void put_env(char **env, int fd_out, t_pipex *data)
+void	put_env(char **env, int fd_out, t_pipex *data)
 {
 	int	i;
 
@@ -26,9 +26,9 @@ void put_env(char **env, int fd_out, t_pipex *data)
 	data->exitcode = 0;
 }
 
-void put_pwd(t_pipex *data, int fd_out)
+void	put_pwd(t_pipex *data, int fd_out)
 {
-	char *s;
+	char	*s;
 
 	s = getcwd(NULL, 0);
 	if (!s)
@@ -38,14 +38,14 @@ void put_pwd(t_pipex *data, int fd_out)
 	data->exitcode = 0;
 }
 
-void do_cd(t_pipex *data, char **path, char**environ)
+void	do_cd(t_pipex *data, char **path, char**environ)
 {
-	int	i;
-	char *oldpwd;
-	char *newpwd;
-	
+	int		i;
+	char	*oldpwd;
+	char	*newpwd;
+
 	i = 0;
-    oldpwd = getcwd(NULL, 0);
+	oldpwd = getcwd(NULL, 0);
 	if (!path[1] || ft_strncmp(path[1], "~", 2) == 0)
 	{
 		if (chdir(get_value("HOME", data)) == -1)
@@ -55,7 +55,7 @@ void do_cd(t_pipex *data, char **path, char**environ)
 	{
 		ft_printf(2, "cd: %s: 1 No such file or directory\n", path[1]);
 		data->exitcode = 1;
-		return;
+		return ;
 	}
 	while (environ[i])
 	{
@@ -68,7 +68,6 @@ void do_cd(t_pipex *data, char **path, char**environ)
 			environ[i] = ft_strjoin("PWD=", newpwd);
 			free (data->pwd);
 			data->pwd = ft_strdup(environ[i]);
-			// printf("PWD: %s\n", environ[i]);
 			if (!environ[i])
 				return (set_error_and_print(data, -1, "strjoin failed"));
 		}
@@ -78,7 +77,6 @@ void do_cd(t_pipex *data, char **path, char**environ)
 			environ[i] = ft_strjoin("OLDPWD=", oldpwd);
 			free (data->oldpwd);
 			data->oldpwd = ft_strdup(environ[i]);
-			// printf("OLDPWD: %s\n", environ[i]);
 			if (!environ[i])
 				return (set_error_and_print(data, -1, "strjoin failed"));
 		}
@@ -87,11 +85,11 @@ void do_cd(t_pipex *data, char **path, char**environ)
 	data->exitcode = 0;
 }
 
-void do_unset(char **env, char **cmd, t_pipex *data)
+void	do_unset(char **env, char **cmd, t_pipex *data)
 {
 	int	i;
 	int	j;
-	int len;
+	int	len;
 
 	i = 0;
 	j = 1;
@@ -101,8 +99,8 @@ void do_unset(char **env, char **cmd, t_pipex *data)
 		i = 0;
 		while (env[i])
 		{
- 			if (ft_strncmp(env[i], cmd[j], len) == 0 && 
-				(env[i][len] == '=' || env[i][len] == '\0'))
+			if (ft_strncmp(env[i], cmd[j], len) == 0 && (env[i][len] == '='
+				|| env[i][len] == '\0'))
 				remove_string(env, i);
 			i++;
 		}
@@ -113,9 +111,9 @@ void do_unset(char **env, char **cmd, t_pipex *data)
 
 void	do_exit(char **cmd, t_pipex *data)
 {
-	long	code;
-	my_printffd my_printf;
-	
+	long			code;
+	t_my_printffd	my_printf;
+
 	my_printf = ft_printf;
 	if (data->count == 0 && data->cmds > 1)
 		return ;

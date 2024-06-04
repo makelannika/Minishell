@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 17:24:13 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/03 17:24:15 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/04 13:48:21 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,11 @@ int	check_ending(t_pipex *data, char *line)
 	int	len;
 
 	len = ft_strlen(line);
-	if (line[len - 1] == '|' || line[len - 1] == '<' 
+	if (line[len - 1] == '|' || line[len - 1] == '<'
 		|| (line[len - 1] == '>'))
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `newline'\n");
+		ft_printf(2,
+			"MOOshell: syntax error near unexpected token `newline'\n");
 		return (set_exitcode(data, 258));
 	}
 	return (0);

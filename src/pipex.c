@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:10:49 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/24 15:39:58 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/04 13:49:21 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	si_handler2(int signum)
+void	si_handler2(int g_signum)
 {
-	if (signum == SIGINT)
+	if (g_signum == SIGINT)
 	{
 		write(2, "\n", 1);
 		rl_replace_line("", 0);
@@ -22,12 +22,13 @@ void	si_handler2(int signum)
 		rl_redisplay();
 	}
 }
+
 static int	wait_children(int *pids, int count, int *exitcode)
 {
-	int	status;
-	int	i;
+	int					status;
+	int					i;
 	struct sigaction	si_data;
-	
+
 	i = 0;
 	status = 0;
 	si_data.sa_handler = SIG_IGN;
@@ -58,7 +59,6 @@ static int	wait_children(int *pids, int count, int *exitcode)
 	return (*exitcode);
 }
 
-// adds a slash to the end of each path
 static int	add_slash(t_pipex *data)
 {
 	int		i;
@@ -79,7 +79,6 @@ static int	add_slash(t_pipex *data)
 	return (0);
 }
 
-// saves an array of paths into pipex's struct
 static int	get_paths(t_pipex *data)
 {
 	int			i;
@@ -108,7 +107,6 @@ static int	get_paths(t_pipex *data)
 	return (0);
 }
 
-// saves a copy of env into pipex's struct
 int	get_env(t_pipex *data)
 {
 	int			i;
@@ -136,7 +134,6 @@ int	get_env(t_pipex *data)
 	return (0);
 }
 
-// initializes pipex's struct
 int	init_data(t_pipex *data, t_node *processes)
 {
 	data->cmds = get_list_length(processes);
@@ -155,7 +152,6 @@ int	init_data(t_pipex *data, t_node *processes)
 	return (0);
 }
 
-// initializes env and path in the main
 int	first_inits(t_pipex *data)
 {
 	if (!data->env)

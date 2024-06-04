@@ -13,13 +13,10 @@
 #include "../include/minishell.h"
 #include <sys/ioctl.h>
 
-static int signum = 0;
-
-// checks rights to a redir file with '>'
-// clears files with '>' but not with '>>'
+static int	g_signum = 0;
 static int	redir_out(char *file, t_pipex *data)
 {
-	int i;
+	int		i;
 
 	i = 1;
 	close(data->ends[1]);
@@ -41,10 +38,11 @@ static int	redir_out(char *file, t_pipex *data)
 
 void	si_heredoc(int sig)
 {
+	char	str[2];
+
 	if (sig == SIGINT)
 	{
-		char	str[2];
-		signum = 1;
+		g_signum = 1;
 		str[0] = 4;
 		str[1] = 0;
 		ioctl(STDIN_FILENO, TIOCSTI, str);
@@ -67,7 +65,7 @@ static int	do_heredoc(char *file, t_pipex *data)
 	len = ft_strlen(delimiter);
 	data->sa.sa_handler = si_heredoc;
 	sigaction(SIGINT, &data->sa, NULL);
-	while (signum != 1)
+	while (g_signum != 1)
 	{
 		line = readline("> ");
 		if (!line || ft_strncmp(line, delimiter, len + 1) == 0)
@@ -77,7 +75,7 @@ static int	do_heredoc(char *file, t_pipex *data)
 	}
 	close(heredoc);
 	free(delimiter);
-	if (!line && signum != 1)
+	if (!line && g_signum != 1)
 		write(1, "\033[1A\033[2C", 9);
 	free(line);
 	return (0);
@@ -133,7 +131,7 @@ int	is_empty(char *string)
 int	handle_heredocs(t_node *process, t_pipex *data)
 {
 	int	i;
-	int heredoc;
+	int	heredoc;
 
 	i = 0;
 	heredoc = 0;
@@ -145,10 +143,10 @@ int	handle_heredocs(t_node *process, t_pipex *data)
 			heredoc = 1;
 			if (handle_heredoc(process->redirs[i], data) == -1)
 				return (data->exitcode);
-			if (signum == 1)
+			if (g_signum == 1)
 			{
 				data->execute = 0;
-				signum = 0;
+				g_signum = 0;
 				return (0);
 			}
 		}
