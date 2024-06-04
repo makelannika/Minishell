@@ -12,68 +12,6 @@
 
 #include "../include/minishell.h"
 
-char	*remove_quotes(char *cmd, int count)
-{
-	int		i;
-	int		j;
-	char	*new_string;
-	t_flags	f;
-
-	i = 0;
-	j = 0;
-	init_flags(&f);
-	new_string = ft_calloc(count, sizeof(char));
-	if (!new_string)
-		return (NULL);
-	while (cmd[i])
-	{
-		if (cmd[i] == '\'' && f.in_double == -1)
-			f.in_single *= -1;
-		else if (cmd[i] == '\"' && f.in_single == -1)
-			f.in_double *= -1;
-		else
-			new_string[j++] = cmd[i];
-		i++;
-	}
-	return (new_string);
-}
-
-int	count_quotes(char *string)
-{
-	int		i;
-	int		count;
-	t_flags	f;
-
-	i = 0;
-	count = 0;
-	init_flags(&f);
-	while (string[i])
-	{
-		if (string[i] == '\'' && f.in_double == -1)
-		{
-			count++;
-			f.in_single *= -1;
-		}
-		else if (string[i] == '\"' && f.in_single == -1)
-		{
-			count++;
-			f.in_double *= -1;
-		}
-		i++;
-	}
-	return (count);
-}
-
-char	*quote_remover(char *cmd)
-{
-	int		remove;
-	int		len;
-
-	remove = count_quotes(cmd);
-	len = ft_strlen(cmd) - remove + 1;
-	return (remove_quotes(cmd, len));
-}
-
 static void	space_handler(char *cmd)
 {
 	int		i;
@@ -102,5 +40,16 @@ int	parse_cmd(t_pipex *data, char **cmd)
 	data->cmd_str = quote_remover(*cmd);
 	if (!data->cmd_str)
 		return (set_exitcode(data, -1));
+	data->cmd = ft_split(data->cmd_str, 7);
+	if (!data->cmd)
+	{
+		ft_printf(2, "MOOshell: error: split failed\n");
+		return (set_exitcode(data, -1));
+	}
+	if (data->cmd[0] == '\0')
+	{
+		ft_printf(2, "MOOshell: %s: command not found\n", data->cmd_str);
+		return (set_exitcode(data, 127));
+	}
 	return (0);
 }

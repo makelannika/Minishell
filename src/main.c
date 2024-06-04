@@ -104,7 +104,7 @@ int	main(void)
 			}
 		}
 		add_history(line);
-		if (check_syntax_error(&data, line) != 0)
+		if (input_validation(&data, line) != 0)
 		{
 			free(line);
 			continue ;

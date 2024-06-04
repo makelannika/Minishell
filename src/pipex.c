@@ -12,9 +12,9 @@
 
 #include "../include/minishell.h"
 
-void	si_handler2(int g_signum)
+void	si_handler2(int signum)
 {
-	if (g_signum == SIGINT)
+	if (signum == SIGINT)
 	{
 		write(2, "\n", 1);
 		rl_replace_line("", 0);
@@ -179,7 +179,7 @@ int	pipex(t_node *processes, t_pipex *data)
 			return (close_and_free(data));
 		if (data->execute)
 		{
-			if (forking(data, processes) == -1
+			if (do_process(data, processes) == -1
 				|| (data->pids[data->count] == 0))
 				return (close_and_free(data));
 		}

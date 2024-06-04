@@ -12,9 +12,9 @@
 
 #include "../include/minishell.h"
 
-void	si_handler(int g_signum)
+void	si_handler(int signum)
 {
-	if (g_signum == SIGINT)
+	if (signum == SIGINT)
 	{
 		write(2, "\n", 1);
 		rl_replace_line("", 0);

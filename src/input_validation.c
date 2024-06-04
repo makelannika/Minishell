@@ -12,26 +12,6 @@
 
 #include "../include/minishell.h"
 
-int	quote_check(char *line)
-{
-	if (count_quotes(line) % 2 != 0)
-	{
-		ft_printf(2, "MOOshell: error: enclosed quotes\n");
-		return (-1);
-	}
-	return (0);
-}
-
-int	check_beginning(t_pipex *data, char *line)
-{
-	if (line[0] == '|')
-	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `|'\n");
-		return (set_exitcode(data, 258));
-	}
-	return (0);
-}
-
 int	check_pipes(t_pipex *data, char *line)
 {
 	int	i;
@@ -130,26 +110,13 @@ int	check_line(t_pipex *data, char *line)
 	return (0);
 }
 
-int	check_ending(t_pipex *data, char *line)
-{
-	int	len;
-
-	len = ft_strlen(line);
-	if (line[len - 1] == '|' || line[len - 1] == '<'
-		|| (line[len - 1] == '>'))
-	{
-		ft_printf(2,
-			"MOOshell: syntax error near unexpected token `newline'\n");
-		return (set_exitcode(data, 258));
-	}
-	return (0);
-}
-
-int	check_syntax_error(t_pipex *data, char *line)
+int	input_validation(t_pipex *data, char *line)
 {
 	int	i;
+	int	len;
 
 	i = 0;
+	len = ft_strlen(line);
 	if (quote_check(line) == -1)
 		return (-1);
 	if (line[0] == '|')
@@ -159,7 +126,12 @@ int	check_syntax_error(t_pipex *data, char *line)
 	}
 	if (check_line(data, line) == -1)
 		return (data->exitcode);
-	if (check_ending(data, line) == -1)
-		return (data->exitcode);
+	if (line[len - 1] == '|' || line[len - 1] == '<'
+		|| (line[len - 1] == '>'))
+	{
+		ft_printf(2,
+			"MOOshell: syntax error near unexpected token `newline'\n");
+		return (set_exitcode(data, 258));
+	}
 	return (0);
 }

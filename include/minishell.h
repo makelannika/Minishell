@@ -80,11 +80,11 @@ typedef struct s_pipex
 
 /******************--SIGNALS--******************/
 void	handle_signals(t_pipex *data);
-void	si_handler(int g_signum);
+void	si_handler(int signum);
 
 /****************--PARSING--********************/
 
-int		check_syntax_error(t_pipex *data, char *string);
+int		input_validation(t_pipex *data, char *string);
 t_node	**parse_input(char *line, t_node **processes);
 t_node	*create_node(void);
 int		count_quotes(char *string);
@@ -106,8 +106,11 @@ int		pipex(t_node *processes, t_pipex *data);
 int		get_fds(t_pipex *data, t_node *process);
 int		handle_heredocs(t_node *process, t_pipex *data);
 int		handle_redirs(t_node *process, t_pipex *data);
-int		forking(t_pipex *data, t_node *process);
+int		do_process(t_pipex *data, t_node *process);
 int		parse_cmd(t_pipex *data, char **cmd);
+_Bool	is_builtin(char *cmd);
+int		call_builtin(t_pipex *data, char *cmd);
+int		get_path(t_pipex *data);
 int		check_cmd(char *string);
 
 /************--CLEANING--*************************/

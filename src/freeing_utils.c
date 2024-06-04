@@ -12,7 +12,6 @@
 
 #include "../include/minishell.h"
 
-// frees an array of strings
 void	free_str_array(char **array)
 {
 	int	i;
