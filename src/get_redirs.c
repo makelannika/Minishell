@@ -61,46 +61,6 @@ int	get_redir_len(char	*str)
 	return (i + 1);
 }
 
-int	check_syntax_error(t_pipex *data, char *line)
-{
-	int	i;
-
-	i = 0;
-	if (count_quotes(line) % 2 != 0)
-	{
-		ft_printf(2, "MOOshell: error: enclosed quotes\n");
-		return (-1);
-	}
-	if (line[i] == '|')
-	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `|'\n");
-		return (set_exitcode(data, 258));
-	}
-	while (line[i])
-	{
-		if ((line[i] == '<' || line[i] == '>') && line[i + 1] == ' ' 
-			&& (line[i + 2] == '>' || line[i + 2] == '<'))
-		{
-			ft_printf(2, "MOOshell: syntax error near unexpected token `%c'\n", line[i + 2]);
-			return (set_exitcode(data, 258));
-		}
-		if ((line[i] == '>' && line[i + 1] == '<')
-			|| (line[i] == '|' && line[i + 1] == '|'))
-		{
-			ft_printf(2, "MOOshell: syntax error near unexpected token `%c'\n", line[i + 1]);
-			return (set_exitcode(data, 258));
-		}
-		i++;
-	}
-	if (line[i - 1] == '|' || line[i - 1] == '<' 
-		|| (line[i - 1] == '>' && line[i - 2] != '<'))
-		{
-			ft_printf(2, "MOOshell: syntax error near unexpected token `newline'\n");
-			return (set_exitcode(data, 258));
-		}
-	return (0);
-}
-
 // returns one redirection at a time to be stored in the 2d array
 static char	*get_redir(char *string)
 {
