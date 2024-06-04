@@ -43,7 +43,16 @@ void sort_strings(char **arr)
     }
 }
 
-_Bool   update_key(t_pipex *data, char **env, char *str)
+_Bool   check_key_exist(char *env, char *cmd)
+{
+    if (ft_strncmp(env, cmd, ft_strlen(cmd)) == 0)
+        return (1);
+    else if (ft_strncmp(env, cmd, ft_strlen(cmd) - 1) == 0 && cmd[ft_strlen(cmd) - 1] == '=')
+        return (0);
+    return (0);
+}
+
+_Bool   update_key(t_pipex *data, char **env, char *cmd)
 {
     char *equal;
     char **tmp;
@@ -55,14 +64,17 @@ _Bool   update_key(t_pipex *data, char **env, char *str)
     tmp = env;
     while (tmp[i])
     {
+        if (check_key_exist(tmp[i], cmd))
+            return (1);
         equal = ft_strchr(tmp[i], '=');
-        if (ft_strncmp(tmp[i], str, equal - tmp[i] + 1) == 0)
+        if (ft_strncmp(tmp[i], cmd, equal - tmp[i] + 1) == 0 || (!equal && ft_strncmp(tmp[i],
+            cmd, ft_strlen(tmp[i])) == 0 && cmd[ft_strlen(tmp[i])] == '='))
         {
             flag = 1;
             free(tmp[i]);
-            env[i] = ft_strdup(str);
+            env[i] = ft_strdup(cmd);
             if (!env[i])
-                data->exitcode = -1;
+                set_error_and_print(data, -1, "strdup failed in update_key");
         }
         i++;
     }
@@ -109,19 +121,28 @@ _Bool check_key(char *str)
     return (1);
 }
 
-void    print_export(char *str, int fd_out)
+void    print_export(char *env, int fd_out)
 {
-    char    *tmp;
+    char    *equal;
     int     i;
 
     i = 0;
-    tmp = ft_strchr(str, '=');
-    if (!tmp)
-        ft_printf(fd_out, "declare -x %s\n", str);
-    else if (*(tmp + 1) == '\0')
-        ft_printf(fd_out, "declare -x %s\"\"\n", str);
+    equal = ft_strchr(env, '=');
+    if (!equal)
+        ft_printf(fd_out, "declare -x %s\n", env);
+    else if (*(equal + 1) == '\0')
+        ft_printf(fd_out, "declare -x %s\"\"\n", env);
     else
-        printf("declare -x %.*s\"%s\"\n", (int)(tmp - str + 1), str, tmp + 1);
+    {
+        write(fd_out, "declare -x ", 11);
+        while (env[i] != '=')
+            write(fd_out, &env[i++], 1);
+        i++;
+        write(fd_out, "=\"", 2);
+        while (env[i])
+            write(fd_out, &env[i++], 1);
+        write(fd_out, "\"\n", 2);
+    }
 }
 
 void    do_export(t_pipex *data, char **env, char **cmd, int fd_out)

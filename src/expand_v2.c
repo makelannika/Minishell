@@ -118,8 +118,6 @@ int	expansion(char **cmd, t_pipex *data, int key_start)
 		return (-1);
 	}
 	end_of_value = key_start - 1 + ft_strlen(value);
-	// printf("cmd: %s\n", *cmd);
-	// printf("end_of_value: %d\n", end_of_value);
 	free(key);
 	return (end_of_value);
 }
@@ -195,8 +193,6 @@ int		expandable(char **cmd, t_pipex *data, int key, t_quote quote)
 		remove_dollar_sign(cmd, key - 1, 2);
 		key = key - 1;
 	}
-	// printf("cmd: %s\n", *cmd);
-	// printf("key: %d\n", key);
 	return (key);
 }
 

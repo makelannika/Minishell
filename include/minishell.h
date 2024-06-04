@@ -66,6 +66,8 @@ typedef struct s_pipex
 	int		execute;
 	_Bool	builtin;
 	struct sigaction sa;
+	char	*pwd;
+	char	*oldpwd;
 }	t_pipex;
 
 /*********************************--SIGNALS--**************************************/
@@ -113,11 +115,14 @@ void	do_export(t_pipex *data, char **env, char **cmd, int fd_out);
 void	do_echo(char **cmd, int fd_out, t_pipex *data);
 void	put_env(char **env, int fd_out, t_pipex *data);
 void	put_pwd(t_pipex *data, int	fd_out);
-void	do_cd(t_pipex *data, char *path, char **env);
+void	do_cd(t_pipex *data, char **path, char **env);
 void	do_unset(char **env, char **key, t_pipex *data);
 void	sort_strings(char **arr);
 char	**putstr_in_array(t_pipex *data, char **env, char *cmd);
 void	do_exit(char **cmd, t_pipex *data);
+
+/***************************--BUILT_IN_UTILS--**************************************/
+char	*get_value(char *key, t_pipex *data);
 
 /***********************************--MEM_FT--**************************************/
 

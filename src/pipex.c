@@ -26,13 +26,15 @@ static int	wait_children(int *pids, int count, int *exitcode)
 {
 	int	status;
 	int	i;
-	struct sigaction	data;
-
+	struct sigaction	si_data;
+	
 	i = 0;
 	status = 0;
-	data.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &data, NULL);
-	sigaction(SIGINT, &data, NULL);
+	si_data.sa_handler = SIG_IGN;
+	si_data.sa_flags = 0;
+	si_data.sa_mask = 0;
+	sigaction(SIGQUIT, &si_data, NULL);
+	sigaction(SIGINT, &si_data, NULL);
 	while (i < count)
 	{
 		if (pids[i] == -1)
@@ -51,8 +53,8 @@ static int	wait_children(int *pids, int count, int *exitcode)
 			ft_putstr_fd("^C\n", 2);
 		i++;
 	}
-	data.sa_handler = si_handler2;
-	sigaction(SIGINT, &data, NULL);
+	si_data.sa_handler = si_handler2;
+	sigaction(SIGINT, &si_data, NULL);
 	return (*exitcode);
 }
 
@@ -124,6 +126,10 @@ int	get_env(t_pipex *data)
 	i = 0;
 	while (environ[i])
 	{
+		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
+			data->pwd = ft_strdup(environ[i]);
+		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
+			data->oldpwd = ft_strdup(environ[i]);
 		data->env[i] = ft_strdup(environ[i]);
 		i++;
 	}
