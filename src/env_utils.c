@@ -6,13 +6,13 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:35:27 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 16:29:01 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:09:15 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	get_env(t_pipex *data)
+int	malloc_env(t_pipex *data)
 {
 	int			i;
 	extern char	**environ;
@@ -23,17 +23,32 @@ int	get_env(t_pipex *data)
 	data->env = ft_calloc(i + 1, sizeof(char *));
 	if (!data->env)
 		return (-1);
+	return (0);
+}
+
+int	get_env(t_pipex *data)
+{
+	int			i;
+	extern char	**environ;
+
+	if (malloc_env(data) == -1)
+		return (-1);
 	i = 0;
 	while (environ[i])
 	{
 		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
 			data->pwd = ft_strdup(environ[i]);
 		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
-			data->oldpwd = ft_strdup(environ[i]);
+		{
+			data->env[i] = ft_strdup("OLDPWD");
+			if (!data->env[i])
+				return (-1);
+			data->oldpwd = ft_strdup(environ[i++]);
+			continue ;
+		}
 		data->env[i] = ft_strdup(environ[i]);
-		if (!data->env[i])
+		if (!data->env[i++])
 			return (-1);
-		i++;
 	}
 	if (!data->pwd || !data->oldpwd)
 		return (-1);
