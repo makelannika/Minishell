@@ -12,6 +12,34 @@
 
 #include "../include/minishell.h"
 
+int	shlvl(t_pipex *data, char *line)
+{
+	int	i;
+	
+	i = 0;
+	while (data->env[i])
+	{
+		if (ft_strncmp(data->env[i], "SHLVL=", 6) == 0)
+		{
+			if (update_shlvl(&data->env[i]) == -1)
+			{
+				free(line);
+				return (free_env(data));
+			}
+			return (0);
+		}
+		i++;
+	}
+	return (0);
+}
+
+void	check_sigint(t_pipex *data)
+{
+	if (g_signum == 1)
+		data->exitcode = 1;
+	g_signum = 0;
+}
+
 int	main(void)
 {
 	char				*line;
@@ -28,9 +56,7 @@ int	main(void)
 	while (1)
 	{
 		line = readline("MOOshell: ");
-		if (g_signum == 1)
-			data.exitcode = 1;
-		g_signum = 0;
+		check_sigint(&data);
 		if (!line)
 		{
 			ft_printf(2, "exit\n");
@@ -42,21 +68,10 @@ int	main(void)
 			free(line);
 			continue ;
 		}
-		if (ft_strncmp (line, "./minishell", 11) == 0)
+		if (ft_strncmp (line, "./minishell", 12) == 0)
 		{
-			while (data.env[i])
-			{
-				if (ft_strncmp(data.env[i], "SHLVL=", 6) == 0)
-				{
-					if (update_shlvl(&data.env[i]) == -1)
-					{
-						free(line);
-						return (free_env(&data));
-					}
-					break ;
-				}
-				i++;
-			}
+			if (shlvl(&data, line) == -1)
+				return (-1);
 		}
 		add_history(line);
 		if (input_validation(&data, line) != 0)
