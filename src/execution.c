@@ -66,7 +66,7 @@ int	do_process(t_pipex *data, t_node *process)
 		{
 			data->sa.sa_handler = SIG_DFL;
 			sigaction(SIGQUIT, &data->sa, NULL);
-			if (do_cmd(data, process) == -1)
+			if (!data->execute || do_cmd(data, process) == -1)
 				return (-1);
 		}
 	}

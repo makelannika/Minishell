@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-static int	wait_children(t_pipex *data, int *pids, int count, int *exitcode)
+static int	wait_children(t_pipex *data, int *pids, int count)
 {
 	int					status;
 	int					i;
@@ -28,17 +28,17 @@ static int	wait_children(t_pipex *data, int *pids, int count, int *exitcode)
 			continue ;
 		}
 		waitpid(pids[i], &status, 0);
-		if (WIFEXITED(status) && i == count - 1)
-			*exitcode = WEXITSTATUS(status);
+		if (WIFEXITED(status))
+			data->exitcode = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-			*exitcode = WTERMSIG(status) + 128;
-		if (*exitcode == 131)
+			data->exitcode = WTERMSIG(status) + 128;
+		if (data->exitcode == 131)
 			ft_putstr_fd("^\\Quit: 3\n", 2);
-		else if (*exitcode == 130)
+		else if (data->exitcode == 130)
 			ft_putstr_fd("^C\n", 2);
 		i++;
 	}
-	return (*exitcode);
+	return (data->exitcode);
 }
 
 int	init_data(t_pipex *data, t_node *processes)
@@ -70,18 +70,15 @@ int	pipex(t_node *processes, t_pipex *data)
 		data->execute = check_cmd(processes->cmd);
 		if (get_fds(data, processes) == -1)
 			return (close_and_free(data));
-		if (data->execute)
-		{
-			if (do_process(data, processes) == -1
-				|| (data->pids[data->count] == 0))
-				return (close_and_free(data));
-		}
+		if (do_process(data, processes) == -1
+			|| (data->pids[data->count] == 0))
+			return (close_and_free(data));
 		close(data->ends[0]);
 		close(data->ends[1]);
 		data->count++;
 		processes = processes->next;
 	}
-	wait_children(data, data->pids, data->cmds, &data->exitcode);
+	wait_children(data, data->pids, data->cmds);
 	data->sa.sa_handler = si_handler;
 	sigaction(SIGINT, &data->sa, NULL);
 	return (data->exitcode);
