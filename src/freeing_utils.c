@@ -55,19 +55,8 @@ int	close_and_free(t_pipex *data)
 	close(data->ends[0]);
 	close(data->ends[1]);
 	close(data->read_end);
-	free_first_inits(data);
-	if (data->cmd_str)
-		free(data->cmd_str);
-	if (data->cmd)
-		free_str_array(data->cmd);
-	if (data->path)
-		free(data->path);
-	if (data->pids)
-		free(data->pids);
-	data->cmd_str = NULL;
-	data->cmd = NULL;
-	data->path = NULL;
-	data->pids = NULL;
+	free_parent(data);
+	free_env(data);
 	return (-1);
 }
 

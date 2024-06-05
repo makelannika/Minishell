@@ -79,9 +79,10 @@ typedef struct s_pipex
 }	t_pipex;
 
 /******************--SIGNALS--******************/
+
+void	si_handler(int signum);
 void	handle_signals(t_pipex *data);
 void	ignore_signals(t_pipex *data);
-void	si_handler(int signum);
 
 /****************--PARSING--********************/
 
@@ -99,7 +100,6 @@ char	*trim_cmd(char *cmd_str);
 char	*quote_remover(char *cmd);
 int		get_env(t_pipex *data);
 int		update_shlvl(char **env);
-int		first_inits(t_pipex *data);
 _Bool	is_builtin(char *cmd);
 
 /**************--PIPEX--*************************/
@@ -119,7 +119,7 @@ int		check_cmd(char *string);
 
 /************--CLEANING--*************************/
 
-int		free_first_inits(t_pipex *data);
+int		free_env(t_pipex *data);
 int		close_and_free(t_pipex *data);
 void	free_list(t_node **processes);
 void	free_str_array(char **array);

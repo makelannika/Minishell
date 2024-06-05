@@ -12,17 +12,12 @@
 
 #include "../include/minishell.h"
 
-int	free_first_inits(t_pipex *data)
+int	free_env(t_pipex *data)
 {
 	if (data->env)
 	{
 		free_str_array(data->env);
 		data->env = NULL;
-	}
-	if (data->paths)
-	{
-		free_str_array(data->paths);
-		data->paths = NULL;
 	}
 	if (data->pwd)
 	{
@@ -56,7 +51,7 @@ int	main(void)
 		if (!line)
 		{
 			ft_printf(2, "exit\n");
-			free_first_inits(&data);
+			free_env(&data);
 			return (0);
 		}
 		if (!*line)
@@ -73,7 +68,7 @@ int	main(void)
 					if (update_shlvl(&data.env[i]) == -1)
 					{
 						free(line);
-						return (free_first_inits(&data));
+						return (free_env(&data));
 					}
 					break ;
 				}
@@ -89,7 +84,7 @@ int	main(void)
 		parse_input(line, &processes);
 		free(line);
 		if (!processes)
-			return (free_first_inits(&data));
+			return (free_env(&data));
 		else if (pipex(processes, &data) == -1)
 			return (data.exitcode);
 		free_parent(&data);
