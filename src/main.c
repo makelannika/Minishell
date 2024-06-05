@@ -83,7 +83,10 @@ int	main(void)
 			return (0);
 		}
 		if (!*line)
+		{
 			free(line);
+			continue ;
+		}
 		if (ft_strncmp (line, "./minishell", 11) == 0)
 		{
 			while (data.env[i])
