@@ -117,8 +117,6 @@ void	do_exit(char **cmd, t_pipex *data)
 	t_my_printffd	my_printf;
 
 	my_printf = ft_printf;
-	if (data->count == 0 && data->cmds > 1)
-		return ;
 	if (!cmd[1])
 		exit (data->exitcode);
 	if (cmd[1])
