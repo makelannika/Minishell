@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:55:53 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/05 15:58:36 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 16:23:10 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,13 @@ void	freeing(char **str1, char **str2)
 {
 	free(*str1);
 	free(*str2);
+}
+
+void	swap_strings(char **a, char **b)
+{
+	char	*temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
 }

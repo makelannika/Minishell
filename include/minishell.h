@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 16:05:27 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 17:33:58 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,15 @@ void	sort_strings(char **arr);
 char	**putstr_in_array(t_pipex *data, char **env, char *cmd);
 void	do_exit(char **cmd, t_pipex *data);
 void	update_pwds(t_pipex *data, char **env, char *oldpwd);
+_Bool	update_key(t_pipex *data, char **env, char *cmd);
+_Bool	check_key_exist(char *env, char *cmd);
 
 /**********BUILT_IN_UTILS--************/
 char	*get_value(char *key, t_pipex *data);
 void	*ft_memcat(void *dst, const void *src);
 void	remove_string(char **env, int index);
+void	just_export_cmd(char **env, int fd_out);
+void	set_exitcode_and_env(t_pipex *data, char **env);
 
 /***************--UTILS--************/
 
@@ -157,6 +161,8 @@ void	free_and_exit(t_pipex *data, int exitcode);
 char	*set_error_return(t_pipex *data, int error, char *msg);
 _Bool	ft_isdigit_str(char *str);
 void	freeing(char **str1, char **str2);
+void	swap_strings(char **a, char **b);
+void	sort_strings(char **arr);
 
 /***************--EXPAND--************/
 char	*get_key(char **cmd, t_pipex *data, int key_start);

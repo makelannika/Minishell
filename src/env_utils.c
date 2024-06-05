@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:35:27 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 16:05:53 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 16:29:01 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,57 @@ void	update_pwds(t_pipex *data, char **env, char *oldpwd)
 		if (!*env)
 			return (set_error_and_print(data, -1, "strjoin failed"));
 	}
+}
+
+void	sort_strings(char **arr)
+{
+	int	swapped;
+	int	i;
+	int	size;
+
+	size = array_len(arr);
+	swapped = 1;
+	while (swapped)
+	{
+		swapped = 0;
+		i = 0;
+		while (i < size - 1)
+		{
+			if (ft_strncmp(arr[i], arr[i + 1],
+					ft_strlen(arr[i]) + ft_strlen(arr[i + 1])) > 0)
+			{
+				swap_strings(&arr[i], &arr[i + 1]);
+				swapped = 1;
+			}
+			i++;
+		}
+	}
+}
+
+_Bool	update_key(t_pipex *data, char **env, char *cmd)
+{
+	char	*equal;
+	int		i;
+	int		flag;
+
+	i = 0;
+	flag = 0;
+	while (env[i])
+	{
+		if (check_key_exist(env[i], cmd))
+			return (1);
+		equal = ft_strchr(env[i], '=');
+		if (ft_strncmp(env[i], cmd, equal - env[i] + 1) == 0
+			|| (!equal && ft_strncmp(env[i], cmd, ft_strlen(env[i]))
+				== 0 && cmd[ft_strlen(env[i])] == '='))
+		{
+			flag = 1;
+			free(env[i]);
+			env[i] = ft_strdup(cmd);
+			if (!env[i])
+				set_error_and_print(data, -1, "strdup failed in update_key");
+		}
+		i++;
+	}
+	return (flag);
 }
