@@ -51,6 +51,8 @@ int	do_process(t_pipex *data, t_node *process)
 {
 	if (data->cmds == 1 && process->builtin)
 	{
+		if (!data->execute)
+			return (data->exitcode);
 		if (do_cmd(data, process) == -1)
 			return (-1);
 	}
