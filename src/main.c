@@ -104,7 +104,7 @@ int	main(void)
 			}
 		}
 		add_history(line);
-		if (check_syntax_error(&data, line) != 0)
+		if (input_validation(&data, line) != 0)
 		{
 			free(line);
 			continue ;
@@ -116,7 +116,6 @@ int	main(void)
 		else if (pipex(processes, &data) == -1)
 			return (data.exitcode);
 		free_parent(&data);
-		unlink(".heredoc");
 		free_list(&processes);
 	}
 	return (data.exitcode);

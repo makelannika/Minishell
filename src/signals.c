@@ -12,15 +12,24 @@
 
 #include "../include/minishell.h"
 
-void	si_handler(int g_signum)
+void	si_handler(int signum)
 {
-	if (g_signum == SIGINT)
+	if (signum == SIGINT)
 	{
 		write(2, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
+}
+
+void	ignore_signals(t_pipex *data)
+{
+	data->sa.sa_handler = SIG_IGN;
+	data->sa.sa_flags = 0;
+	data->sa.sa_mask = 0;
+	sigaction(SIGQUIT, &data->sa, NULL);
+	sigaction(SIGINT, &data->sa, NULL);
 }
 
 void	carrot_char(int on)

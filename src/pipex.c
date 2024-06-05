@@ -12,30 +12,14 @@
 
 #include "../include/minishell.h"
 
-void	si_handler2(int g_signum)
-{
-	if (g_signum == SIGINT)
-	{
-		write(2, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-
-static int	wait_children(int *pids, int count, int *exitcode)
+static int	wait_children(t_pipex *data, int *pids, int count, int *exitcode)
 {
 	int					status;
 	int					i;
-	struct sigaction	si_data;
 
 	i = 0;
 	status = 0;
-	si_data.sa_handler = SIG_IGN;
-	si_data.sa_flags = 0;
-	si_data.sa_mask = 0;
-	sigaction(SIGQUIT, &si_data, NULL);
-	sigaction(SIGINT, &si_data, NULL);
+	ignore_signals(data);
 	while (i < count)
 	{
 		if (pids[i] == -1)
@@ -54,57 +38,7 @@ static int	wait_children(int *pids, int count, int *exitcode)
 			ft_putstr_fd("^C\n", 2);
 		i++;
 	}
-	si_data.sa_handler = si_handler2;
-	sigaction(SIGINT, &si_data, NULL);
 	return (*exitcode);
-}
-
-static int	add_slash(t_pipex *data)
-{
-	int		i;
-	char	*old;
-	char	*new;
-
-	i = 0;
-	while (data->paths[i])
-	{
-		old = data->paths[i];
-		new = ft_strjoin(old, "/");
-		if (new == NULL)
-			return (-1);
-		free(old);
-		data->paths[i] = new;
-		i++;
-	}
-	return (0);
-}
-
-static int	get_paths(t_pipex *data)
-{
-	int			i;
-	char		*envpaths;
-	extern char	**environ;
-
-	i = 0;
-	while (environ[i])
-	{
-		if (ft_strncmp(environ[i], "PATH=", 4) == 0)
-		{
-			envpaths = ft_substr(environ[i], 5, ft_strlen(environ[i]) - 5);
-			if (!envpaths)
-				return (-1);
-			data->paths = ft_split(envpaths, ':');
-			free(envpaths);
-			if (!data->paths)
-				return (-1);
-			if (add_slash(data) == -1)
-				return (-1);
-			return (0);
-		}
-		i++;
-	}
-	data->paths = NULL;
-	return (0);
 }
 
 int	get_env(t_pipex *data)
@@ -149,7 +83,7 @@ int	init_data(t_pipex *data, t_node *processes)
 	if (!data->pids)
 		return (close_and_free(data));
 	data->pids[0] = -1;
-	data->execute = 1;
+	data->execute = 0;
 	return (0);
 }
 
@@ -174,11 +108,12 @@ int	pipex(t_node *processes, t_pipex *data)
 		return (set_exitcode(data, -1));
 	while (data->count < data->cmds)
 	{
+		data->execute = check_cmd(processes->cmd);
 		if (get_fds(data, processes) == -1)
 			return (close_and_free(data));
 		if (data->execute)
 		{
-			if (forking(data, processes) == -1
+			if (do_process(data, processes) == -1
 				|| (data->pids[data->count] == 0))
 				return (close_and_free(data));
 		}
@@ -187,6 +122,8 @@ int	pipex(t_node *processes, t_pipex *data)
 		data->count++;
 		processes = processes->next;
 	}
-	wait_children(data->pids, data->cmds, &data->exitcode);
+	wait_children(data, data->pids, data->cmds, &data->exitcode);
+	data->sa.sa_handler = si_handler;
+	sigaction(SIGINT, &data->sa, NULL);
 	return (data->exitcode);
 }
