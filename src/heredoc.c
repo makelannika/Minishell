@@ -13,8 +13,6 @@
 #include "../include/minishell.h"
 #include <sys/ioctl.h>
 
-static int	g_signum = 0;
-
 static void	si_heredoc(int sig)
 {
 	char	str[2];
@@ -98,6 +96,7 @@ int	handle_heredocs(t_node *process, t_pipex *data)
 			if (g_signum == 1)
 			{
 				data->execute = 0;
+				data->exitcode = 1;
 				g_signum = 0;
 				return (0);
 			}

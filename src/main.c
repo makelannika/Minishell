@@ -48,6 +48,9 @@ int	main(void)
 	while (1)
 	{
 		line = readline("MOOshell: ");
+		if (g_signum == 1)
+			data.exitcode = 1;
+		g_signum = 0;
 		if (!line)
 		{
 			ft_printf(2, "exit\n");

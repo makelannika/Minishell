@@ -27,6 +27,8 @@
 # include <errno.h>
 # include "../libft/libft.h"
 
+int	g_signum;
+
 typedef int	(*t_my_printffd)(int fd, const char *format, ...);
 
 typedef struct s_heredoc
