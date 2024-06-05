@@ -71,6 +71,8 @@ int	get_env(t_pipex *data)
 
 int	init_data(t_pipex *data, t_node *processes)
 {
+	if (get_paths(data) == -1)
+		return (close_and_free(data));
 	data->cmds = get_list_length(processes);
 	data->count = 0;
 	data->ends[0] = dup(STDIN_FILENO);
@@ -84,21 +86,6 @@ int	init_data(t_pipex *data, t_node *processes)
 		return (close_and_free(data));
 	data->pids[0] = -1;
 	data->execute = 0;
-	return (0);
-}
-
-int	first_inits(t_pipex *data)
-{
-	if (!data->env)
-	{
-		if (get_env(data) == -1)
-			return (free_first_inits(data));
-	}
-	if (!data->paths)
-	{
-		if (get_paths(data) == -1)
-			return (free_first_inits(data));
-	}
 	return (0);
 }
 

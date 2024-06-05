@@ -71,10 +71,10 @@ int	main(void)
 	data = (t_pipex){0};
 	handle_signals(&data);
 	processes = NULL;
+	if (get_env(&data) == -1)
+		return (-1);
 	while (1)
 	{
-		if (first_inits(&data) == -1)
-			return (-1);
 		line = readline("MOOshell: ");
 		if (!line)
 		{

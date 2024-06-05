@@ -73,6 +73,8 @@ int	close_and_free(t_pipex *data)
 
 void	free_parent(t_pipex *data)
 {
+	if (data->paths)
+		free_str_array(data->paths);
 	if (data->cmd_str)
 		free(data->cmd_str);
 	if (data->cmd)
@@ -81,6 +83,7 @@ void	free_parent(t_pipex *data)
 		free(data->path);
 	if (data->pids)
 		free(data->pids);
+	data->paths = NULL;
 	data->cmd_str = NULL;
 	data->cmd = NULL;
 	data->path = NULL;
