@@ -34,7 +34,7 @@ static int	find_path(t_pipex *data)
 			i++;
 		}
 	}
-	ft_printf(2, "MOOshell: %s: command not found\n", data->cmd[0]);
+	ft_printf(2, "MOOshell: %s: No such file or directory\n", data->cmd[0]);
 	return (set_exitcode(data, 127));
 }
 
@@ -100,14 +100,13 @@ int	get_paths(t_pipex *data)
 {
 	int			i;
 	char		*envpaths;
-	extern char	**environ;
 
 	i = 0;
-	while (environ[i])
+	while (data->env[i])
 	{
-		if (ft_strncmp(environ[i], "PATH=", 4) == 0)
+		if (ft_strncmp(data->env[i], "PATH=", 4) == 0)
 		{
-			envpaths = ft_substr(environ[i], 5, ft_strlen(environ[i]) - 5);
+			envpaths = ft_substr(data->env[i], 5, ft_strlen(data->env[i]) - 5);
 			if (!envpaths)
 				return (-1);
 			data->paths = ft_split(envpaths, ':');

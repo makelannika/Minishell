@@ -6,7 +6,7 @@
 #    By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/06/05 12:30:16 by linhnguy         ###   ########.fr        #
+#    Updated: 2024/06/05 15:22:44 by linhnguy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ CFILES		=	src/input_parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c	
 				src/cmd_parsing.c		src/list_utils.c		src/get_redirs.c	src/main.c			\
 				src/string_utils.c		src/export.c			src/expand_v2.c		src/signals.c		\
 				src/input_validation.c	src/heredoc.c			src/path_utils.c	src/parsing_utils.c	\
-				src/builtin_utils.c		src/error_utils.c		src/expand_utils.c
+				src/builtin_utils.c		src/env_utils.c		src/error_utils.c		src/expand_utils.c
 
 OFILES		=	$(CFILES:.c=.o)
 
