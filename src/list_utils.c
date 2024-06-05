@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 19:46:20 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 21:49:06 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:50:20 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,3 @@ t_node	*create_node(void)
 	new_node->next = NULL;
 	return (new_node);
 }
-
