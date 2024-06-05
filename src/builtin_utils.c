@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 21:46:58 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/04 21:47:00 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/05 12:39:23 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,46 @@ _Bool	is_builtin(char *cmd)
 			return (1);
 	}
 	return (0);
+}
+
+void	*ft_memcat(void *dst, const void *src)
+{
+	char		*d;
+	const char	*s;
+
+	d = (char *)dst;
+	s = (const char *)src;
+	if (!dst || !src)
+		return (dst);
+	while (*d)
+		d++;
+	while (*s != '\0')
+		*d++ = *s++;
+	*d = '\0';
+	return (dst);
+}
+
+char	*get_value(char *key, t_pipex *data)
+{
+	int		i;
+	char	*value;
+	char	*key_wequal;
+
+	key_wequal = ft_strjoin(key, "=");
+	if (!key_wequal)
+		return (set_error_return(data, -1, "Malloc failed in get_value"));
+	value = NULL;
+	i = 0;
+	while (data->env[i])
+	{
+		if (key[0] != '\0' && ft_strncmp(key_wequal, data->env[i],
+				ft_strlen(key_wequal)) == 0)
+		{
+			value = (ft_strchr(data->env[i], '=') + 1);
+			break ;
+		}
+		i++;
+	}
+	free(key_wequal);
+	return (value);
 }

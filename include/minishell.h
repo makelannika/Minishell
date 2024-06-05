@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/04 13:46:39 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 12:34:16 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,16 +142,24 @@ void	do_exit(char **cmd, t_pipex *data);
 /**********BUILT_IN_UTILS--************/
 char	*get_value(char *key, t_pipex *data);
 void	*ft_memcat(void *dst, const void *src);
+void	remove_string(char **env, int index);
 
 /***************--UTILS--************/
 
 int		array_len(char **a);
-void	remove_string(char **src, int index);
 _Bool	ft_isdigit_str(char *str);
 void	set_error_and_print(t_pipex *data, int error, char *msg);
 void	print_error_and_exit(t_my_printffd my_printf, char *cmd0,
 			char *cmd1, int exitcode);
 void	free_and_exit(t_pipex *data, int exitcode);
 char	*set_error_return(t_pipex *data, int error, char *msg);
+_Bool	ft_isdigit_str(char *str);
+
+/***************--EXPAND--************/
+char	*get_key(char **cmd, t_pipex *data, int key_start);
+char	*replace_key(char *value, char **cmd, int key_start,
+			t_pipex *data);
+void	check_quotes(t_quote *quote, char c);
+void	remove_key(char **cmd, int start, int end);
 
 #endif
