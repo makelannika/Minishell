@@ -33,7 +33,7 @@ void	ignore_signals(t_pipex *data)
 	sigaction(SIGINT, &data->sa, NULL);
 }
 
-void	carrot_char(int on)
+static void	carrot_char(int on)
 {
 	struct termios	term;
 

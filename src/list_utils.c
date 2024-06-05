@@ -12,6 +12,34 @@
 
 #include "../include/minishell.h"
 
+static void	free_node(t_node *node)
+{
+	if (node->redirs)
+	{
+		free_str_array(node->redirs);
+		node->redirs = NULL;
+	}
+	if (node->cmd)
+		free(node->cmd);
+	free(node);
+}
+
+void	free_list(t_node **processes)
+{
+	t_node	*temp;
+
+	if (processes == NULL || *processes == NULL)
+		return ;
+	while ((*processes)->next != NULL)
+	{
+		temp = *processes;
+		*processes = (*processes)->next;
+		free_node(temp);
+	}
+	free_node(*processes);
+	*processes = NULL;
+}
+
 int	get_list_length(t_node *processes)
 {
 	int	length;

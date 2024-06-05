@@ -12,26 +12,6 @@
 
 #include "../include/minishell.h"
 
-int	free_env(t_pipex *data)
-{
-	if (data->env)
-	{
-		free_str_array(data->env);
-		data->env = NULL;
-	}
-	if (data->pwd)
-	{
-		free(data->pwd);
-		data->pwd = NULL;
-	}
-	if (data->oldpwd)
-	{
-		free(data->oldpwd);
-		data->oldpwd = NULL;
-	}
-	return (-1);
-}
-
 int	main(void)
 {
 	char				*line;
