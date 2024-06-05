@@ -6,26 +6,26 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:25:34 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/05 20:33:46 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:39:42 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-_Bool	check_option(char *a)
+_Bool	check_option(char *cmd)
 {
 	int	i;
 
 	i = 0;
-	if (!a[i])
+	if (!cmd[i])
 		return (1);
-	if (a[i] != '-')
+	if (cmd[i] != '-')
 		return (0);
-	if (a[i] == '-')
+	if (cmd[i] == '-')
 		i++;
-	while (a[i])
+	while (cmd[i])
 	{
-		if (a[i] != 'n')
+		if (cmd[i] != 'n')
 			return (0);
 		i++;
 	}
@@ -80,8 +80,11 @@ void	do_echo(char **cmd, int fd_out, t_pipex *data)
 	int		i;
 
 	i = 1;
-	while (check_option(cmd[i]))
-		i++;
+	if (cmd[i])
+	{
+		while (check_option(cmd[i]))
+			i++;
+	}
 	while (cmd[i])
 	{
 		if (cmd[i + 1] == '\0')

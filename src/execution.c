@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   forking.c                                          :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/04 13:56:59 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:36:28 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	do_process(t_pipex *data, t_node *process)
 {
 	if (data->cmds == 1 && process->builtin)
 	{
+		if (!data->execute)
+			return (data->exitcode);
 		if (do_cmd(data, process) == -1)
 			return (-1);
 	}

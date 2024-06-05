@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:36:08 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/05 12:27:19 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:34:59 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	expansion(char **cmd, t_pipex *data, int key_start)
 	if (!value)
 	{
 		remove_key(cmd, key_start - 1, key_start + ft_strlen(key));
+		free(key);
 		return (key_start - 1);
 	}
 	if (!replace_key(value, cmd, key_start, data))
