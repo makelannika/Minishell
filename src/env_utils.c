@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:35:27 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 21:09:15 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:46:30 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,31 +104,6 @@ void	update_pwds(t_pipex *data, char **env, char *oldpwd)
 		data->oldpwd = ft_strdup(*env);
 		if (!*env)
 			return (set_error_and_print(data, -1, "strjoin failed"));
-	}
-}
-
-void	sort_strings(char **arr)
-{
-	int	swapped;
-	int	i;
-	int	size;
-
-	size = array_len(arr);
-	swapped = 1;
-	while (swapped)
-	{
-		swapped = 0;
-		i = 0;
-		while (i < size - 1)
-		{
-			if (ft_strncmp(arr[i], arr[i + 1],
-					ft_strlen(arr[i]) + ft_strlen(arr[i + 1])) > 0)
-			{
-				swap_strings(&arr[i], &arr[i + 1]);
-				swapped = 1;
-			}
-			i++;
-		}
 	}
 }
 

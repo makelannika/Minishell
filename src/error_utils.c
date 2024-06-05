@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:48:53 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/05 12:01:18 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:49:15 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,18 @@ char	*set_error_return(t_pipex *data, int error, char *msg)
 	data->exitcode = error;
 	ft_printf(2, "%s\n", msg);
 	return (NULL);
+}
+
+void	remove_not_expandable(char **cmd, int key_start)
+{
+	int	i;
+
+	i = 0;
+	while ((*cmd)[key_start + i])
+	{
+		if ((*cmd)[key_start + i] == '$' || (*cmd)[key_start + i] == ' ')
+			remove_key(cmd, key_start, key_start - i);
+		i++;
+	}
+	(*cmd)[key_start + i] = '\0';
 }

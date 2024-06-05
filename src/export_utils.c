@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:33:25 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/05 17:35:07 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:48:33 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,42 @@ void	set_exitcode_and_env(t_pipex *data, char **env)
 {
 	data->env = env;
 	data->exitcode = 0;
+}
+
+void	sort_strings(char **arr)
+{
+	int	swapped;
+	int	i;
+	int	size;
+
+	size = array_len(arr);
+	swapped = 1;
+	while (swapped)
+	{
+		swapped = 0;
+		i = 0;
+		while (i < size - 1)
+		{
+			if (ft_strncmp(arr[i], arr[i + 1],
+					ft_strlen(arr[i]) + ft_strlen(arr[i + 1])) > 0)
+			{
+				swap_strings(&arr[i], &arr[i + 1]);
+				swapped = 1;
+			}
+			i++;
+		}
+	}
+}
+
+void	remove_key(char **cmd, int start, int end)
+{
+	int	i;
+
+	i = 0;
+	while ((*cmd)[end + i])
+	{
+		(*cmd)[start + i] = (*cmd)[end + i];
+		i++;
+	}
+	(*cmd)[start + i] = '\0';
 }

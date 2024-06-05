@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 19:46:20 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 12:27:48 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:49:06 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,29 +54,3 @@ t_node	*create_node(void)
 	return (new_node);
 }
 
-void	remove_key(char **cmd, int start, int end)
-{
-	int	i;
-
-	i = 0;
-	while ((*cmd)[end + i])
-	{
-		(*cmd)[start + i] = (*cmd)[end + i];
-		i++;
-	}
-	(*cmd)[start + i] = '\0';
-}
-
-void	remove_not_expandable(char **cmd, int key_start)
-{
-	int	i;
-
-	i = 0;
-	while ((*cmd)[key_start + i])
-	{
-		if ((*cmd)[key_start + i] == '$' || (*cmd)[key_start + i] == ' ')
-			remove_key(cmd, key_start, key_start - i);
-		i++;
-	}
-	(*cmd)[key_start + i] = '\0';
-}
