@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 12:35:27 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 12:35:29 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/05 16:05:53 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,33 @@ int	update_shlvl(char **env)
 	free(*env);
 	*env = tmp;
 	return (0);
+}
+
+void	update_pwds(t_pipex *data, char **env, char *oldpwd)
+{
+	char	*newpwd;
+
+	if (ft_strncmp(*env, "PWD=", 4) == 0
+		|| (ft_strncmp(*env, "PWD", 3) == 0))
+	{
+		newpwd = getcwd(NULL, 0);
+		if (!newpwd)
+			return (set_error_and_print(data, -1, "2getcwd failed"));
+		free(*env);
+		*env = ft_strjoin("PWD=", newpwd);
+		freeing(&newpwd, &data->pwd);
+		data->pwd = ft_strdup(*env);
+		if (!*env)
+			return (set_error_and_print(data, -1, "strjoin failed"));
+	}
+	else if (ft_strncmp(*env, "OLDPWD=", 7) == 0
+		|| (ft_strncmp(*env, "OLDPWD", 6) == 0))
+	{
+		free(*env);
+		*env = ft_strjoin("OLDPWD=", oldpwd);
+		freeing(&oldpwd, &data->oldpwd);
+		data->oldpwd = ft_strdup(*env);
+		if (!*env)
+			return (set_error_and_print(data, -1, "strjoin failed"));
+	}
 }

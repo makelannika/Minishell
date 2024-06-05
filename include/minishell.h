@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 12:34:16 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 16:05:27 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ void	do_unset(char **env, char **key, t_pipex *data);
 void	sort_strings(char **arr);
 char	**putstr_in_array(t_pipex *data, char **env, char *cmd);
 void	do_exit(char **cmd, t_pipex *data);
+void	update_pwds(t_pipex *data, char **env, char *oldpwd);
 
 /**********BUILT_IN_UTILS--************/
 char	*get_value(char *key, t_pipex *data);
@@ -155,6 +156,7 @@ void	print_error_and_exit(t_my_printffd my_printf, char *cmd0,
 void	free_and_exit(t_pipex *data, int exitcode);
 char	*set_error_return(t_pipex *data, int error, char *msg);
 _Bool	ft_isdigit_str(char *str);
+void	freeing(char **str1, char **str2);
 
 /***************--EXPAND--************/
 char	*get_key(char **cmd, t_pipex *data, int key_start);

@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/05 15:21:30 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 16:06:08 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,38 +38,7 @@ void	put_pwd(t_pipex *data, int fd_out)
 	data->exitcode = 0;
 }
 
-void	update_pwds(t_pipex *data, char *environ, char *oldpwd)
-{
-	char	*newpwd;
-
-	if (ft_strncmp(environ, "PWD=", 4) == 0
-		|| (ft_strncmp(environ, "PWD", 3) == 0))
-	{
-		newpwd = getcwd(NULL, 0);
-		if (!newpwd)
-			return (set_error_and_print(data, -1, "2getcwd failed"));
-		free(environ);
-		environ = ft_strjoin("PWD=", newpwd);
-		free (newpwd);
-		free (data->pwd);
-		data->pwd = ft_strdup(environ);
-		if (!environ)
-			return (set_error_and_print(data, -1, "strjoin failed"));
-	}
-	else if (ft_strncmp(environ, "OLDPWD=", 7) == 0
-		|| (ft_strncmp(environ, "OLDPWD", 6) == 0))
-	{
-		free(environ);
-		environ = ft_strjoin("OLDPWD=", oldpwd);
-		free (oldpwd);
-		free (data->oldpwd);
-		data->oldpwd = ft_strdup(environ);
-		if (!environ)
-			return (set_error_and_print(data, -1, "strjoin failed"));
-	}
-}
-
-void	do_cd(t_pipex *data, char **path, char**environ)
+void	do_cd(t_pipex *data, char **path, char**env)
 {
 	int		i;
 	char	*oldpwd;
@@ -87,8 +56,8 @@ void	do_cd(t_pipex *data, char **path, char**environ)
 		data->exitcode = 1;
 		return ;
 	}
-	while (environ[i])
-		update_pwds(data, environ[i++], oldpwd);
+	while (env[i])
+		update_pwds(data, &env[i++], oldpwd);
 	data->exitcode = 0;
 }
 
