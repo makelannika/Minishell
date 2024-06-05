@@ -12,7 +12,6 @@
 
 #include "../include/minishell.h"
 
-// opens and closes correct fds for last child process
 static int	last_child(t_pipex *data, t_node *process)
 {
 	dup2(data->read_end, data->ends[0]);
@@ -23,7 +22,6 @@ static int	last_child(t_pipex *data, t_node *process)
 	return (handle_redirs(process, data));
 }
 
-// opens and closes correct fds for middle child processes
 static int	middle_child(t_pipex *data, t_node *process)
 {
 	int	tmp;
@@ -42,7 +40,6 @@ static int	middle_child(t_pipex *data, t_node *process)
 	return (handle_redirs(process, data));
 }
 
-// opens and closes correct fds for first child process
 static int	first_child(t_pipex *data, t_node *process)
 {
 	if (pipe(data->ends) == -1)
@@ -57,7 +54,6 @@ static int	first_child(t_pipex *data, t_node *process)
 	return (handle_redirs(process, data));
 }
 
-// opens and closes correct fds based on the process
 int	get_fds(t_pipex *data, t_node *process)
 {
 	if (data->cmds == 1)
