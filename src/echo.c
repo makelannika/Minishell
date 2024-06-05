@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:25:34 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/05/23 17:08:44 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/05 16:20:17 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ _Bool	check_option(char *a)
 		i++;
 	}
 	return (1);
+}
+
+void	echo_empty_line(int fd_out, char *cmd)
+{
+	if (!cmd)
+		ft_printf(fd_out, "\n");
 }
 
 void	do_echo(char **cmd, int fd_out, t_pipex *data)
@@ -57,7 +63,6 @@ void	do_echo(char **cmd, int fd_out, t_pipex *data)
 				ft_printf(fd_out, "%s ", cmd[i++]);
 		}
 	}
-	if (!cmd[1])
-		ft_printf(fd_out, "\n");
+	echo_empty_line(fd_out, cmd[1]);
 	data->exitcode = 0;
 }
