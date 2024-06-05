@@ -37,29 +37,6 @@ int	free_first_inits(t_pipex *data)
 	return (-1);
 }
 
-int	update_shlvl(char **env)
-{
-	int		shlvl;
-	char	*new_shlvl;
-	char	*tmp;
-
-	shlvl = ft_atoi(*env + 6);
-	shlvl++;
-	new_shlvl = ft_itoa(shlvl);
-	if (!new_shlvl)
-		return (-1);
-	tmp = ft_strjoin("SHLVL=", new_shlvl);
-	if (!tmp)
-	{
-		free(new_shlvl);
-		return (-1);
-	}
-	free(new_shlvl);
-	free(*env);
-	*env = tmp;
-	return (0);
-}
-
 int	main(void)
 {
 	char				*line;

@@ -41,34 +41,6 @@ static int	wait_children(t_pipex *data, int *pids, int count, int *exitcode)
 	return (*exitcode);
 }
 
-int	get_env(t_pipex *data)
-{
-	int			i;
-	extern char	**environ;
-
-	i = 0;
-	while (environ[i])
-		i++;
-	data->env = ft_calloc(i + 1, sizeof(char *));
-	if (!data->env)
-		return (-1);
-	i = 0;
-	while (environ[i])
-	{
-		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
-			data->pwd = ft_strdup(environ[i]);
-		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
-			data->oldpwd = ft_strdup(environ[i]);
-		data->env[i] = ft_strdup(environ[i]);
-		if (!data->env[i])
-			return (-1);
-		i++;
-	}
-	if (!data->pwd || !data->oldpwd)
-		return (-1);
-	return (0);
-}
-
 int	init_data(t_pipex *data, t_node *processes)
 {
 	if (get_paths(data) == -1)

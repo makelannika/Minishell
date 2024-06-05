@@ -98,6 +98,7 @@ void	init_flags(t_flags *f);
 char	*trim_cmd(char *cmd_str);
 char	*quote_remover(char *cmd);
 int		get_env(t_pipex *data);
+int		update_shlvl(char **env);
 int		first_inits(t_pipex *data);
 _Bool	is_builtin(char *cmd);
 
