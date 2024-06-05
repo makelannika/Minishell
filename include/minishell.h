@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 17:33:58 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/05 17:57:17 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@
 # include <errno.h>
 # include "../libft/libft.h"
 
-int	g_signum;
-
+int			g_signum;
 typedef int	(*t_my_printffd)(int fd, const char *format, ...);
 
 typedef struct s_heredoc

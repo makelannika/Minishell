@@ -6,7 +6,7 @@
 #    By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/06/05 17:34:28 by linhnguy         ###   ########.fr        #
+#    Updated: 2024/06/05 17:59:31 by linhnguy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ READLINELIB	=	-L ~/.brew/Cellar/readline/8.2.10/lib/ -lreadline
 INCLUDE		=	-I /include
 
 CFLAGS		=	-Wall -Wextra -Werror
-DEBUGFLAGS	=	-Wall -Wextra -Werror -g3 #-fsanitize=address
+DEBUGFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
 CC			=	cc
 
 CFILES		=	src/input_parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c			\
