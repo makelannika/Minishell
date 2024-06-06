@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 21:23:13 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:46:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	main(void)
 		return (-1);
 	while (1)
 	{
+		ft_printf(2, "1 here\n");
 		line = readline("MOOshell: ");
 		if (g_signum == 1)
 			data.exitcode = 1;
@@ -90,6 +91,7 @@ int	main(void)
 			return (free_env(&data));
 		else if (pipex(processes, &data) == -1)
 			return (data.exitcode);
+		ft_printf(2, "before free_parent\n");
 		free_parent(&data);
 		free_list(&processes);
 	}
