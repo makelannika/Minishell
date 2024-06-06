@@ -29,7 +29,7 @@ CFILES		=	src/input_parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c	
 				src/string_utils.c		src/export.c			src/expand_v2.c		src/signals.c		\
 				src/input_validation.c	src/heredoc.c			src/path_utils.c	src/parsing_utils.c	\
 				src/builtin_utils.c		src/env_utils.c			src/redir_utils.c	src/error_utils.c	\
-				src/expand_utils.c		src/export_utils.c
+				src/expand_utils.c		src/export_utils.c		src/pwd_utils.c
 
 OFILES		=	$(CFILES:.c=.o)
 

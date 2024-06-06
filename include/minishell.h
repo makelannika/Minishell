@@ -87,6 +87,7 @@ void	ignore_signals(t_pipex *data);
 
 /****************--PARSING--********************/
 
+int		get_pwds(t_pipex *data);
 int		input_validation(t_pipex *data, char *string);
 int		quote_check(char *line);
 t_node	**parse_input(char *line, t_node **processes);
