@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 17:57:17 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/06 23:13:49 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # include "../libft/libft.h"
 
 int			g_signum;
-typedef int	(*t_my_printffd)(int fd, const char *format, ...);
 
 typedef struct s_heredoc
 {
@@ -154,15 +153,15 @@ void	*ft_memcat(void *dst, const void *src);
 void	remove_string(char **env, int index);
 void	just_export_cmd(char **env, int fd_out);
 void	set_exitcode_and_env(t_pipex *data, char **env);
+void	handle_two_args(t_pipex *data, char *cmd1);
 
 /***************--UTILS--************/
 
 int		array_len(char **a);
 _Bool	ft_isdigit_str(char *str);
 void	set_error_and_print(t_pipex *data, int error, char *msg);
-void	print_error_and_exit(t_my_printffd my_printf, char *cmd0,
-			char *cmd1, int exitcode);
-void	free_and_exit(t_pipex *data, int exitcode);
+void	print_error_and_exit(t_pipex *data, char *cmd1,
+			int exitcode, int option);
 char	*set_error_return(t_pipex *data, int error, char *msg);
 _Bool	ft_isdigit_str(char *str);
 void	freeing(char **str1, char **str2);

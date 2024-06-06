@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 14:10:49 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/06 11:59:49 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/06 20:16:22 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,15 @@ static int	wait_children(t_pipex *data, int *pids, int count)
 			continue ;
 		}
 		waitpid(pids[i], &status, 0);
-		if (WIFEXITED(status)){
-			ft_printf(2, "exit status: %d\n", WEXITSTATUS(status));	
-			perror("WIFEXITED");
+		if (WIFEXITED(status))
 			data->exitcode = WEXITSTATUS(status);
-		}
-		else if (WIFSIGNALED(status)){
-			ft_printf(2, "exit signal: %d\n", WTERMSIG(status));	
+		else if (WIFSIGNALED(status))
 			data->exitcode = WTERMSIG(status) + 128;
-		}
 		if (data->exitcode == 131)
 			ft_putstr_fd("^\\Quit: 3\n", 2);
 		else if (data->exitcode == 130)
 			ft_putstr_fd("^C\n", 2);
 		i++;
-		ft_putstr_fd("back to parent\n", 2);
 	}
 	return (data->exitcode);
 }

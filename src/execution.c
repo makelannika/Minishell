@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/06 11:55:38 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/06 20:16:43 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,6 @@ static int	do_cmd(t_pipex *data, t_node *process)
 		return (call_builtin(data, data->cmd[0]));
 	if (get_path(data) == -1)
 		return (-1);
-	for (int i = 0; data->cmd[i]; i++)
-		ft_printf(2, "cmd: %s\n", data->cmd[i]);
-	ft_printf(2, "path: %s\n", data->path);
 	execve(data->path, data->cmd, data->env);
 	if (access(data->cmd[0], F_OK) == 0)
 	{

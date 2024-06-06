@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:48:53 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/05 21:49:48 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/06 23:13:11 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,22 @@ void	set_error_and_print(t_pipex *data, int error, char *msg)
 	ft_printf(2, "%s\n", msg);
 }
 
-void	print_error_and_exit(t_my_printffd my_printf,
-		char *cmd0, char *cmd1, int exitcode)
+void	print_error_and_exit(t_pipex *data, char *cmd1,
+	int exitcode, int option)
 {
-	if (my_printf && cmd0 && cmd1)
-		my_printf(2, "%s %s: numeric argument required\n", cmd0, cmd1);
-	exit(exitcode);
-}
-
-void	free_and_exit(t_pipex *data, int exitcode)
-{
-	close_and_free(data);
-	exit(exitcode);
+	if (option == 1)
+	{
+		ft_printf(2, "exit\n");
+		close_and_free(data);
+		exit(exitcode);
+	}
+	else if (option == 2)
+	{
+		ft_printf(2, "exit\n");
+		ft_printf(2, "MOOshell: exit: %s: numeric argument required\n", cmd1);
+		close_and_free(data);
+		exit(exitcode);
+	}
 }
 
 char	*set_error_return(t_pipex *data, int error, char *msg)
@@ -51,4 +55,23 @@ void	remove_not_expandable(char **cmd, int key_start)
 		i++;
 	}
 	(*cmd)[key_start + i] = '\0';
+}
+
+void	handle_two_args(t_pipex *data, char *cmd1)
+{
+	long	code;
+
+	code = 0;
+	if (ft_isdigit_str(cmd1))
+	{
+		code = ft_atol(cmd1);
+		if (code < 0)
+			print_error_and_exit(data, cmd1, 255, 2);
+		else if (code > 255)
+			print_error_and_exit(data, NULL, code % 256, 1);
+		else
+			print_error_and_exit(data, NULL, code, 1);
+	}
+	else if (!ft_isdigit_str(cmd1))
+		print_error_and_exit(data, cmd1, 255, 2);
 }
