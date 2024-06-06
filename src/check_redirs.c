@@ -20,7 +20,7 @@ static int	expand_redir(t_pipex *data, char *redir)
 	i = 0;
 	while (redir[i] == '<' || redir[i] == '>')
 		i++;
-	tmp = &redir[i];
+	tmp = ft_strdup(&redir[i]);
 	expand_v2(data, &tmp);
 	if (!(*tmp))
 	{
@@ -28,6 +28,7 @@ static int	expand_redir(t_pipex *data, char *redir)
 		data->execute = 0;
 		return (-1);
 	}
+	free(tmp);
 	return (0);
 }
 

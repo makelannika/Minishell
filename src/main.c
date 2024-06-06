@@ -12,10 +12,10 @@
 
 #include "../include/minishell.h"
 
-int	shlvl(t_pipex *data)
+int	add_shlvl(t_pipex *data)
 {
 	int	i;
-	
+
 	i = 0;
 	while (data->env[i])
 	{
@@ -36,50 +36,52 @@ void	check_sigint(t_pipex *data)
 	g_signum = 0;
 }
 
+void	quit(t_pipex *data)
+{
+	ft_printf(2, "exit\n");
+	free_env(data);
+	exit(0);
+}
+
+void	readline_loop(t_pipex *data, t_node **processes)
+{
+	char	*line;
+
+	while (1)
+	{
+		line = readline("MOOshell: ");
+		add_history(line);
+		check_sigint(data);
+		if (!line)
+			quit(data);
+		if (!*line || input_validation(data, line) != 0)
+		{
+			free(line);
+			continue ;
+		}
+		parse_input(line, processes);
+		free(line);
+		if (!*processes)
+			exit(free_env(data));
+		else if (pipex(*processes, data) == -1)
+			exit(data->exitcode);
+		free_parent(data);
+		free_list(processes);
+	}
+}
+
 int	main(void)
 {
-	char				*line;
 	t_node				*processes;
 	t_pipex				data;
-	int					i;
 
-	i = 0;
 	data = (t_pipex){0};
 	handle_signals(&data);
 	processes = NULL;
 	if (get_env(&data) == -1)
-			return (-1);
-	if (shlvl(&data) == -1)
+		return (-1);
+	if (add_shlvl(&data) == -1)
 		return (free_env(&data));
-	while (1)
-	{
-		line = readline("MOOshell: ");
-		check_sigint(&data);
-		if (!line)
-		{
-			ft_printf(2, "exit\n");
-			free_env(&data);
-			return (0);
-		}
-		if (!*line)
-		{
-			free(line);
-			continue ;
-		}
-		add_history(line);
-		if (input_validation(&data, line) != 0)
-		{
-			free(line);
-			continue ;
-		}
-		parse_input(line, &processes);
-		free(line);
-		if (!processes)
-			return (free_env(&data));
-		else if (pipex(processes, &data) == -1)
-			return (data.exitcode);
-		free_parent(&data);
-		free_list(&processes);
-	}
+	readline_loop(&data, &processes);
 	return (data.exitcode);
 }
