@@ -117,7 +117,7 @@ int	input_validation(t_pipex *data, char *line)
 
 	i = 0;
 	len = ft_strlen(line);
-	if (quote_check(line) == -1)
+	if (quote_check(data, line) == -1)
 		return (-1);
 	if (line[0] == '|')
 	{

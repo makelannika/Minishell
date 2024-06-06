@@ -12,12 +12,12 @@
 
 #include "../include/minishell.h"
 
-int	quote_check(char *line)
+int	quote_check(t_pipex *data, char *line)
 {
 	if (count_quotes(line) % 2 != 0)
 	{
 		ft_printf(2, "MOOshell: error: enclosed quotes\n");
-		return (-1);
+		return (set_exitcode(data, 258));
 	}
 	return (0);
 }
