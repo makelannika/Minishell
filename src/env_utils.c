@@ -26,6 +26,63 @@ int	malloc_env(t_pipex *data)
 	return (0);
 }
 
+int	get_pwd(t_pipex *data, char	*env)
+{
+	data->pwd = ft_strdup(env);
+	if (!data->pwd)
+	{
+		free_str_array((data->env));
+		return (-1);
+	}
+	return (0);
+}
+
+int	get_oldpwd(t_pipex *data, char **env)
+{
+	char	*tmp;
+
+	tmp = *env;
+	data->oldpwd = ft_strdup(*env);
+	if (!data->oldpwd)
+	{
+		free(data->pwd);
+		free_str_array(data->env);
+		return (-1);
+	}
+	*env = ft_strdup("OLDPWD");
+	free(tmp);
+	if (!*env)
+	{
+		free(data->pwd);
+		free(data->oldpwd);
+		free_str_array(data->env);
+		return (-1);
+	}
+	return (0);
+}
+
+int	get_pwds(t_pipex *data)
+{
+	int			i;
+
+	i = 0;
+	while (data->env[i])
+	{
+		if (ft_strncmp(data->env[i], "PWD=", 4) == 0)
+		{
+			if (get_pwd(data, data->env[i]) == -1)
+				return (-1);
+		}
+		else if (ft_strncmp(data->env[i], "OLDPWD=", 7) == 0)
+		{
+			if (get_oldpwd(data, &data->env[i]) == -1)
+				return (-1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	get_env(t_pipex *data)
 {
 	int			i;
@@ -36,21 +93,14 @@ int	get_env(t_pipex *data)
 	i = 0;
 	while (environ[i])
 	{
-		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
-			data->pwd = ft_strdup(environ[i]);
-		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
-		{
-			data->env[i] = ft_strdup("OLDPWD");
-			if (!data->env[i])
-				return (-1);
-			data->oldpwd = ft_strdup(environ[i++]);
-			continue ;
-		}
 		data->env[i] = ft_strdup(environ[i]);
 		if (!data->env[i++])
+		{
+			free_str_array(data->env);
 			return (-1);
+		}
 	}
-	if (!data->pwd || !data->oldpwd)
+	if (get_pwds(data) == -1)
 		return (-1);
 	return (0);
 }

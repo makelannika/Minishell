@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-int	shlvl(t_pipex *data, char *line)
+int	shlvl(t_pipex *data)
 {
 	int	i;
 	
@@ -22,11 +22,7 @@ int	shlvl(t_pipex *data, char *line)
 		if (ft_strncmp(data->env[i], "SHLVL=", 6) == 0)
 		{
 			if (update_shlvl(&data->env[i]) == -1)
-			{
-				free(line);
 				return (free_env(data));
-			}
-			return (0);
 		}
 		i++;
 	}
@@ -52,7 +48,9 @@ int	main(void)
 	handle_signals(&data);
 	processes = NULL;
 	if (get_env(&data) == -1)
-		return (-1);
+			return (-1);
+	if (shlvl(&data) == -1)
+		return (free_env(&data));
 	while (1)
 	{
 		line = readline("MOOshell: ");
@@ -67,11 +65,6 @@ int	main(void)
 		{
 			free(line);
 			continue ;
-		}
-		if (ft_strncmp (line, "./minishell", 12) == 0)
-		{
-			if (shlvl(&data, line) == -1)
-				return (-1);
 		}
 		add_history(line);
 		if (input_validation(&data, line) != 0)
