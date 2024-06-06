@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/06 11:46:57 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/06 19:10:18 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	shlvl(t_pipex *data)
 {
 	int	i;
-	
+
 	i = 0;
 	while (data->env[i])
 	{
