@@ -12,24 +12,28 @@
 
 #include "../include/minishell.h"
 
-int	free_env(t_pipex *data)
+int	shlvl(t_pipex *data)
 {
-	if (data->env)
+	int	i;
+	
+	i = 0;
+	while (data->env[i])
 	{
-		free_str_array(data->env);
-		data->env = NULL;
+		if (ft_strncmp(data->env[i], "SHLVL=", 6) == 0)
+		{
+			if (update_shlvl(&data->env[i]) == -1)
+				return (free_env(data));
+		}
+		i++;
 	}
-	if (data->pwd)
-	{
-		free(data->pwd);
-		data->pwd = NULL;
-	}
-	if (data->oldpwd)
-	{
-		free(data->oldpwd);
-		data->oldpwd = NULL;
-	}
-	return (-1);
+	return (0);
+}
+
+void	check_sigint(t_pipex *data)
+{
+	if (g_signum == 1)
+		data->exitcode = 1;
+	g_signum = 0;
 }
 
 int	main(void)
@@ -44,14 +48,14 @@ int	main(void)
 	handle_signals(&data);
 	processes = NULL;
 	if (get_env(&data) == -1)
-		return (-1);
+			return (-1);
+	if (shlvl(&data) == -1)
+		return (free_env(&data));
 	while (1)
 	{
 		ft_printf(2, "1 here\n");
 		line = readline("MOOshell: ");
-		if (g_signum == 1)
-			data.exitcode = 1;
-		g_signum = 0;
+		check_sigint(&data);
 		if (!line)
 		{
 			ft_printf(2, "exit\n");
@@ -62,22 +66,6 @@ int	main(void)
 		{
 			free(line);
 			continue ;
-		}
-		if (ft_strncmp (line, "./minishell", 11) == 0)
-		{
-			while (data.env[i])
-			{
-				if (ft_strncmp(data.env[i], "SHLVL=", 6) == 0)
-				{
-					if (update_shlvl(&data.env[i]) == -1)
-					{
-						free(line);
-						return (free_env(&data));
-					}
-					break ;
-				}
-				i++;
-			}
 		}
 		add_history(line);
 		if (input_validation(&data, line) != 0)

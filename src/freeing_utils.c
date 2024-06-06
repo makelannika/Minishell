@@ -12,6 +12,26 @@
 
 #include "../include/minishell.h"
 
+int	free_env(t_pipex *data)
+{
+	if (data->env)
+	{
+		free_str_array(data->env);
+		data->env = NULL;
+	}
+	if (data->pwd)
+	{
+		free(data->pwd);
+		data->pwd = NULL;
+	}
+	if (data->oldpwd)
+	{
+		free(data->oldpwd);
+		data->oldpwd = NULL;
+	}
+	return (-1);
+}
+
 void	free_str_array(char **array)
 {
 	int	i;
@@ -20,34 +40,6 @@ void	free_str_array(char **array)
 	while (array[i])
 		free(array[i++]);
 	free(array);
-}
-
-static void	free_node(t_node *node)
-{
-	if (node->redirs)
-	{
-		free_str_array(node->redirs);
-		node->redirs = NULL;
-	}
-	if (node->cmd)
-		free(node->cmd);
-	free(node);
-}
-
-void	free_list(t_node **processes)
-{
-	t_node	*temp;
-
-	if (processes == NULL || *processes == NULL)
-		return ;
-	while ((*processes)->next != NULL)
-	{
-		temp = *processes;
-		*processes = (*processes)->next;
-		free_node(temp);
-	}
-	free_node(*processes);
-	*processes = NULL;
 }
 
 int	close_and_free(t_pipex *data)

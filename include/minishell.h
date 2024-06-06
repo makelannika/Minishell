@@ -87,6 +87,7 @@ void	ignore_signals(t_pipex *data);
 
 /****************--PARSING--********************/
 
+int		get_pwds(t_pipex *data);
 int		input_validation(t_pipex *data, char *string);
 int		quote_check(char *line);
 t_node	**parse_input(char *line, t_node **processes);
@@ -133,7 +134,6 @@ void	free_parent(t_pipex *data);
 
 /*************--BUILT_IN--***********************/
 
-int		expand_that_shit(char **cmd, char **env, t_pipex data);
 int		expand_v2(t_pipex *data, char **cmd);
 void	do_export(t_pipex *data, char **env, char **cmd, int fd_out);
 void	do_echo(char **cmd, int fd_out, t_pipex *data);

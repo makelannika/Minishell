@@ -36,21 +36,14 @@ int	get_env(t_pipex *data)
 	i = 0;
 	while (environ[i])
 	{
-		if (ft_strncmp(environ[i], "PWD=", 4) == 0)
-			data->pwd = ft_strdup(environ[i]);
-		else if (ft_strncmp(environ[i], "OLDPWD=", 7) == 0)
-		{
-			data->env[i] = ft_strdup("OLDPWD");
-			if (!data->env[i])
-				return (-1);
-			data->oldpwd = ft_strdup(environ[i++]);
-			continue ;
-		}
 		data->env[i] = ft_strdup(environ[i]);
 		if (!data->env[i++])
+		{
+			free_str_array(data->env);
 			return (-1);
+		}
 	}
-	if (!data->pwd || !data->oldpwd)
+	if (get_pwds(data) == -1)
 		return (-1);
 	return (0);
 }
