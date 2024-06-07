@@ -82,8 +82,11 @@ int	expandable(char **cmd, t_pipex *data, int key, t_quote quote)
 		return (end_of_value);
 	}
 	else if ((*cmd)[key] == '"' || ((*cmd)[key] == '\'' && quote != DOUBLE))
+	{
 		remove_dollar_sign(cmd, key - 1, 1);
-	else if ((*cmd)[key] == '?' )
+		return (key - 1);
+	}
+	else if ((*cmd)[key] == '?')
 	{
 		if (expand_exit_code(cmd, data, key) == -1)
 			return (-1);

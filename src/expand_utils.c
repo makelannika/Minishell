@@ -14,9 +14,6 @@
 
 void	check_quotes(t_quote *quote, char c)
 {
-	int	i;
-
-	i = 0;
 	if (c == '\'' || c == '"')
 	{
 		if (*quote == NONE)
