@@ -57,6 +57,33 @@ int	get_redirs(char *str, t_node *node)
 	return (1);
 }
 
+int	count_redirs(char *string)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (string[i])
+	{
+		if (string[i] == '<')
+		{
+			if (string[i + 1] != '>')
+				count++;
+			if (string[i + 1] == '<' || string[i + 1] == '>')
+				i++;
+		}
+		else if (string[i] == '>')
+		{
+			count++;
+			if (string[i + 1] == '>')
+				i ++;
+		}
+		i++;
+	}
+	return (count);
+}
+
 void	get_redir_arr(char *string, t_node *node)
 {
 	int	count;
