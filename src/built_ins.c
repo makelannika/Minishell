@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/07 14:05:29 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/07 16:25:04 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,12 @@ void	put_pwd(t_pipex *data, int fd_out)
 
 	s = getcwd(NULL, 0);
 	if (!s)
+	{
 		s = data->pwd;
+		ft_printf(fd_out, "%s\n", s);
+		data->exitcode = 0;
+		return ;
+	}
 	ft_printf(fd_out, "%s\n", s);
 	free (s);
 	data->exitcode = 0;

@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 13:36:08 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/07 14:06:39 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/07 16:26:35 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	expand_exit_code(char **cmd, t_pipex *data, int key)
 		return (-1);
 	}
 	free(exit_code);
+	printf(" pointer is %p\n", exit_code);
 	return (key);
 }
 
@@ -93,6 +94,7 @@ int	expandable(char **cmd, t_pipex *data, int key, t_quote quote)
 		remove_dollar_sign(cmd, key - 1, 2);
 		key = key - 1;
 	}
+	printf("expand\n");
 	return (key);
 }
 
