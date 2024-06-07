@@ -6,29 +6,22 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/05 17:57:17 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/07 16:47:19 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <term.h>
 # include <termios.h>
-# include <unistd.h>
 # include <curses.h>
-# include <string.h>
 # include <fcntl.h>
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <errno.h>
 # include "../libft/libft.h"
 
 int			g_signum;
-typedef int	(*t_my_printffd)(int fd, const char *format, ...);
 
 typedef struct s_heredoc
 {
@@ -79,13 +72,13 @@ typedef struct s_pipex
 	char				*oldpwd;
 }	t_pipex;
 
-/******************--SIGNALS--******************/
+/***************--SIGNALS--***************/
 
 void	si_handler(int signum);
 void	handle_signals(t_pipex *data);
 void	ignore_signals(t_pipex *data);
 
-/****************--PARSING--********************/
+/***************--PARSING--***************/
 
 int		get_pwds(t_pipex *data);
 int		input_validation(t_pipex *data, char *string);
@@ -108,7 +101,7 @@ int		get_env(t_pipex *data);
 int		update_shlvl(char **env);
 _Bool	is_builtin(char *cmd);
 
-/**************--PIPEX--*************************/
+/***************--PIPEX--***************/
 
 int		init_data(t_pipex *data, t_node *processes);
 int		get_paths(t_pipex *data);
@@ -126,7 +119,7 @@ int		call_builtin(t_pipex *data, char *cmd);
 int		get_path(t_pipex *data);
 int		check_cmd(char *string);
 
-/************--CLEANING--*************************/
+/***************--CLEANING--***************/
 
 int		free_env(t_pipex *data);
 int		close_and_free(t_pipex *data);
@@ -135,7 +128,7 @@ void	free_str_array(char **array);
 int		set_exitcode(t_pipex *data, int exitcode);
 void	free_parent(t_pipex *data);
 
-/*************--BUILT_IN--***********************/
+/***************--BUILT_IN--***************/
 
 int		expand_v2(t_pipex *data, char **cmd);
 void	do_export(t_pipex *data, char **env, char **cmd, int fd_out);
@@ -151,28 +144,29 @@ void	update_pwds(t_pipex *data, char **env, char *oldpwd);
 _Bool	update_key(t_pipex *data, char **env, char *cmd);
 _Bool	check_key_exist(char *env, char *cmd);
 
-/**********BUILT_IN_UTILS--************/
+/***************--BUILT_IN_UTILS--***************/
+
 char	*get_value(char *key, t_pipex *data);
 void	*ft_memcat(void *dst, const void *src);
 void	remove_string(char **env, int index);
 void	just_export_cmd(char **env, int fd_out);
 void	set_exitcode_and_env(t_pipex *data, char **env);
+void	handle_two_args(t_pipex *data, char *cmd1);
 
-/***************--UTILS--************/
+/***************--UTILS--***************/
 
 int		array_len(char **a);
 _Bool	ft_isdigit_str(char *str);
 void	set_error_and_print(t_pipex *data, int error, char *msg);
-void	print_error_and_exit(t_my_printffd my_printf, char *cmd0,
-			char *cmd1, int exitcode);
-void	free_and_exit(t_pipex *data, int exitcode);
+void	print_error_and_exit(t_pipex *data, char *cmd1,
+			int exitcode, int option);
 char	*set_error_return(t_pipex *data, int error, char *msg);
 _Bool	ft_isdigit_str(char *str);
 void	freeing(char **str1, char **str2);
 void	swap_strings(char **a, char **b);
 void	sort_strings(char **arr);
 
-/***************--EXPAND--************/
+/***************--EXPAND--***************/
 char	*get_key(char **cmd, t_pipex *data, int key_start);
 char	*replace_key(char *value, char **cmd, int key_start,
 			t_pipex *data);

@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/05 16:06:08 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/07 16:25:04 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,12 @@ void	put_pwd(t_pipex *data, int fd_out)
 
 	s = getcwd(NULL, 0);
 	if (!s)
+	{
 		s = data->pwd;
+		ft_printf(fd_out, "%s\n", s);
+		data->exitcode = 0;
+		return ;
+	}
 	ft_printf(fd_out, "%s\n", s);
 	free (s);
 	data->exitcode = 0;
@@ -87,28 +92,20 @@ void	do_unset(char **env, char **cmd, t_pipex *data)
 
 void	do_exit(char **cmd, t_pipex *data)
 {
-	long			code;
-	t_my_printffd	my_printf;
-
-	my_printf = ft_printf;
 	if (!cmd[1])
-		exit (data->exitcode);
-	if (cmd[1])
+		print_error_and_exit(data, cmd[0], 0, 1);
+	else if (cmd[2])
 	{
 		if (ft_isdigit_str(cmd[1]))
 		{
-			code = ft_atol(cmd[1]);
-			if (code < 0)
-				print_error_and_exit(my_printf, cmd[0], cmd[1], 255);
-			else if (code > 255)
-				free_and_exit(data, code % 256);
-			else
-				free_and_exit(data, code);
+			ft_printf(2, "exit\nMOOshell: exit: too many arguments\n");
+			data->exitcode = 1;
+			return ;
 		}
-		else if (!ft_isdigit_str(cmd[1]))
-			print_error_and_exit(my_printf, cmd[0], cmd[1], 255);
 		else
-			print_error_and_exit(my_printf, cmd[0], cmd[1], 127);
+			print_error_and_exit(data, cmd[1], 255, 2);
 	}
+	else if (cmd[1])
+		handle_two_args(data, cmd[1]);
 	data->exitcode = 0;
 }
