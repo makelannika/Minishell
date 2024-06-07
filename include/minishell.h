@@ -6,25 +6,19 @@
 /*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 19:04:40 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 15:24:31 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/06/07 16:47:19 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <term.h>
 # include <termios.h>
-# include <unistd.h>
 # include <curses.h>
-# include <string.h>
 # include <fcntl.h>
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <errno.h>
 # include "../libft/libft.h"
 
 int			g_signum;
