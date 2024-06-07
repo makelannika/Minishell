@@ -34,7 +34,7 @@ static int	find_path(t_pipex *data)
 			i++;
 		}
 	}
-	ft_printf(2, "MOOshell: %s: No such file or directory\n", data->cmd[0]);
+	ft_printf(2, "MOOshell: %s: command not found\n", data->cmd[0]);
 	return (set_exitcode(data, 127));
 }
 

@@ -12,62 +12,70 @@
 
 #include "../include/minishell.h"
 
-static int	expand_redir(t_pipex *data, char *redir)
+int	expand_redir(t_pipex *data, char **redir)
 {
 	int		i;
 	char	*tmp;
+	char	*copy;
 
 	i = 0;
-	while (redir[i] == '<' || redir[i] == '>')
+	copy = ft_strdup(*redir);
+	if (!copy)
+		return (set_exitcode(data, -1));
+	if (expand_v2(data, redir) == -1)
+		return (set_exitcode(data, -1));
+	tmp = *redir;
+	*redir = quote_remover(*redir);
+	free(tmp);
+	while ((*redir)[i] == '<' || (*redir)[i] == '>')
 		i++;
-	tmp = ft_strdup(&redir[i]);
-	expand_v2(data, &tmp);
-	if (!(*tmp))
+	if (!(*redir)[i] || (*redir)[i] == '/')
 	{
-		ft_printf(2, "Mooshell: %s: No such file or directory\n", tmp);
-		data->execute = 0;
+		print_redir_err(data, *redir + i, &copy[i]);
+		free(copy);
 		return (-1);
 	}
-	free(tmp);
+	free(copy);
 	return (0);
 }
 
-static int	redir_out(char *file, t_pipex *data)
+static int	redir_out(char **redir, t_pipex *data)
 {
 	int		i;
 
 	i = 1;
-	if (expand_redir(data, file) == -1)
-		return (set_exitcode(data, 1));
+	if (validate_redir(data, redir) == -1)
+		return (-1);
 	close(data->ends[1]);
-	if (file[1] == '>')
-		data->ends[1] = open(&file[2], O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if ((*redir)[1] == '>')
+		data->ends[1] = open(*redir + 2, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else
-		data->ends[1] = open(&file[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		data->ends[1] = open(*redir + 1, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (data->ends[1] < 0)
 	{
-		if (access(&file[1], F_OK) != 0)
-			ft_printf(2, "MOOshell: %s: No such file or directory\n", &file[1]);
+		if (access(redir[1], F_OK) != 0)
+			ft_printf(2, "MOOshell: %s: No such file or directory\n", redir[1]);
 		else
-			ft_printf(2, "MOOshell: %s: Permission denied\n", &file[1]);
+			ft_printf(2, "MOOshell: %s: Permission denied\n", redir[1]);
 		data->execute = 0;
 		return (set_exitcode(data, 1));
 	}
 	return (0);
 }
 
-static int	redir_in(char *file, t_pipex *data)
+static int	redir_in(char **redir, t_pipex *data)
 {
-	if (expand_redir(data, file) == -1)
-		return (set_exitcode(data, 1));
+	if (validate_redir(data, redir) == -1)
+		return (-1);
 	close(data->ends[0]);
-	data->ends[0] = open(&file[1], O_RDONLY);
+	data->ends[0] = open(*redir + 1, O_RDONLY);
 	if (data->ends[0] < 0)
 	{
-		if (access(&file[1], F_OK) != 0)
-			ft_printf(2, "MOOshell: %s: No such file or directory\n", &file[1]);
+		if (access(*redir + 1, F_OK) != 0)
+			ft_printf(2, "MOOshell: %s: No such file or directory\n",
+				*redir + 1);
 		else
-			ft_printf(2, "MOOshell: %s: Permission denied\n", &file[1]);
+			ft_printf(2, "MOOshell: %s: Permission denied\n", *redir + 1);
 		data->execute = 0;
 		return (set_exitcode(data, 1));
 	}
@@ -101,12 +109,12 @@ int	handle_redirs(t_node *process, t_pipex *data)
 		}
 		else if (ft_strncmp(process->redirs[i], "<", 1) == 0)
 		{
-			if (redir_in(process->redirs[i], data) == -1)
+			if (redir_in(&process->redirs[i], data) == -1)
 				return (data->exitcode);
 		}
 		else if (ft_strncmp(process->redirs[i], ">", 1) == 0)
 		{
-			if (redir_out(process->redirs[i], data) == -1)
+			if (redir_out(&process->redirs[i], data) == -1)
 				return (data->exitcode);
 		}
 		i++;

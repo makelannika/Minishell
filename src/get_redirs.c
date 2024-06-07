@@ -16,7 +16,6 @@ static char	*get_redir(char *string)
 {
 	int		len;
 	char	*redir_str;
-	char	*tmp;
 
 	len = get_redir_len(string);
 	if (len == -1)
@@ -25,9 +24,6 @@ static char	*get_redir(char *string)
 	if (!redir_str)
 		return (NULL);
 	redir_str = trim_redir(redir_str);
-	tmp = redir_str;
-	redir_str = quote_remover(redir_str);
-	free(tmp);
 	remove_redir(&string, 0, len);
 	return (redir_str);
 }
@@ -59,6 +55,33 @@ int	get_redirs(char *str, t_node *node)
 		i++;
 	}
 	return (1);
+}
+
+int	count_redirs(char *string)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (string[i])
+	{
+		if (string[i] == '<')
+		{
+			if (string[i + 1] != '>')
+				count++;
+			if (string[i + 1] == '<' || string[i + 1] == '>')
+				i++;
+		}
+		else if (string[i] == '>')
+		{
+			count++;
+			if (string[i + 1] == '>')
+				i ++;
+		}
+		i++;
+	}
+	return (count);
 }
 
 void	get_redir_arr(char *string, t_node *node)

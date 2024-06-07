@@ -12,37 +12,41 @@
 
 #include "../include/minishell.h"
 
-int	count_redirs(char *string)
+int	print_redir_err(t_pipex *data, char *redir, char *copy)
 {
-	int	i;
-	int	count;
+	if (*redir == '/')
+		ft_printf(2, "MOOshell: %s: Is a directory\n", redir);
+	else if (ft_strchr(copy, '\"'))
+		ft_printf(2, "MOOshell: : No such file or directory\n");
+	else
+		ft_printf(2, "MOOshell: %s: ambiguous redirect\n", copy);
+	data->execute = 0;
+	return (-1);
+}
 
-	i = 0;
-	count = 0;
-	while (string[i])
+int	validate_redir(t_pipex *data, char **redir)
+{
+	char	*tmp;
+
+	if (ft_strchr(*redir, '$'))
 	{
-		if (string[i] == '<')
-		{
-			if (string[i + 1] != '>')
-				count++;
-			if (string[i + 1] == '<' || string[i + 1] == '>')
-				i++;
-		}
-		else if (string[i] == '>')
-		{
-			count++;
-			if (string[i + 1] == '>')
-				i ++;
-		}
-		i++;
+		if (expand_redir(data, redir) == -1)
+			return (set_exitcode(data, 1));
 	}
-	return (count);
+	else
+	{
+		tmp = *redir;
+		*redir = quote_remover(*redir);
+		free(tmp);
+		if (!*redir)
+			return (set_exitcode(data, -1));
+	}
+	return (0);
 }
 
 int	get_redir_len(char	*str)
 {
 	int		i;
-	char	quote;
 
 	i = 1;
 	while (str[i])
@@ -51,13 +55,6 @@ int	get_redir_len(char	*str)
 			i++;
 		while (str[i] == ' ')
 			i++;
-		if (str[i] == '\'' || str[i] == '\"')
-		{
-			quote = str[i++];
-			while (str[i] && str[i] != quote)
-				i++;
-			return (i + 1);
-		}
 		while (str[i] && str[i] != ' ')
 			i++;
 		return (i);
