@@ -39,6 +39,8 @@ static int	builtin_check(char	*string, t_node *process)
 	char	*cmd;
 	char	*tmp;
 
+	if (*string == '\'' || *string == '\"')
+		return (0);
 	cmd = trim_cmd(string);
 	if (!cmd)
 		return (-1);
