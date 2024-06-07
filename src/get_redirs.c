@@ -16,7 +16,6 @@ static char	*get_redir(char *string)
 {
 	int		len;
 	char	*redir_str;
-	char	*tmp;
 
 	len = get_redir_len(string);
 	if (len == -1)
@@ -25,9 +24,6 @@ static char	*get_redir(char *string)
 	if (!redir_str)
 		return (NULL);
 	redir_str = trim_redir(redir_str);
-	tmp = redir_str;
-	redir_str = quote_remover(redir_str);
-	free(tmp);
 	remove_redir(&string, 0, len);
 	return (redir_str);
 }

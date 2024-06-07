@@ -42,7 +42,6 @@ int	count_redirs(char *string)
 int	get_redir_len(char	*str)
 {
 	int		i;
-	char	quote;
 
 	i = 1;
 	while (str[i])
@@ -51,13 +50,6 @@ int	get_redir_len(char	*str)
 			i++;
 		while (str[i] == ' ')
 			i++;
-		if (str[i] == '\'' || str[i] == '\"')
-		{
-			quote = str[i++];
-			while (str[i] && str[i] != quote)
-				i++;
-			return (i + 1);
-		}
 		while (str[i] && str[i] != ' ')
 			i++;
 		return (i);
