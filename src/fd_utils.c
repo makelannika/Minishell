@@ -3,70 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   fd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 17:47:58 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/15 16:11:13 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/07 14:06:52 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// opens and closes correct fds for last child process
-static int	last_child(t_pipex *data, t_node *processes)
+static int	last_child(t_pipex *data, t_node *process)
 {
 	dup2(data->read_end, data->ends[0]);
-	dup2(STDOUT_FILENO, data->ends[1]);
-	handle_redirs(processes, data);
-	return (0);
+	close(data->read_end);
+	data->ends[1] = dup(STDOUT_FILENO);
+	if (handle_heredocs(process, data) == -1)
+		return (-1);
+	return (handle_redirs(process, data));
 }
 
-// opens and closes correct fds for middle child processes
-static int	middle_child(t_pipex *data, t_node *processess)
+static int	middle_child(t_pipex *data, t_node *process)
 {
 	int	tmp;
 
 	if (pipe(data->ends) == -1)
 	{
-		ft_printf(2, "Error opening a pipe\n");
-		return (close_and_free(data));
+		ft_printf(2, "MOOshell: error opening a pipe\n");
+		return (set_exitcode(data, -1));
 	}
 	tmp = dup(data->read_end);
 	dup2(data->ends[0], data->read_end);
 	dup2(tmp, data->ends[0]);
-	if (tmp != -1)
-		close(tmp);
-	handle_redirs(processess, data);
-	return (0);
+	close(tmp);
+	if (handle_heredocs(process, data) == -1)
+		return (-1);
+	return (handle_redirs(process, data));
 }
 
-// opens and closes correct fds for first child process
-static int	first_child(t_pipex *data, t_node *processes)
+static int	first_child(t_pipex *data, t_node *process)
 {
+	if (pipe(data->ends) == -1)
+	{
+		ft_printf(2, "MOOshell: error opening a pipe\n");
+		return (set_exitcode(data, -1));
+	}
 	data->read_end = dup(data->ends[0]);
 	close(data->ends[0]);
-	handle_redirs(processes, data);
-	return (0);
+	if (handle_heredocs(process, data) == -1)
+		return (-1);
+	return (handle_redirs(process, data));
 }
 
-// opens and closes correct fds for parent process (only one builtin cmd)
-static int	parent(t_pipex *data, t_node *processes)
-{
-	dup2(STDIN_FILENO, data->ends[0]);
-	dup2(STDOUT_FILENO, data->ends[1]);
-	handle_redirs(processes, data);
-	return (0);
-}
-
-// opens and closes correct fds based on the process
-int	get_fds(t_pipex *data, t_node *processes)
+int	get_fds(t_pipex *data, t_node *process)
 {
 	if (data->cmds == 1)
-		return (parent(data, processes));
+	{
+		if (handle_heredocs(process, data) == -1)
+			return (-1);
+		return (handle_redirs(process, data));
+	}
 	if (data->count == 0)
-		return (first_child(data, processes));
+		return (first_child(data, process));
 	if (data->count == data->cmds - 1)
-		return (last_child(data, processes));
+		return (last_child(data, process));
 	else
-		return (middle_child(data, processes));
+		return (middle_child(data, process));
 }

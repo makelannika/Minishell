@@ -3,80 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:56:23 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 15:33:45 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/07 14:05:54 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// copies cmd without unwanted quotes to the parsed cmd string
-static void	remove_quotes(t_pipex *data, char *cmd)
-{
-	int i;
-	int	j;
-	int	in_quotes;
-	int	in_double_quotes;
-
-	i = 0;
-	j = 0;
-	in_quotes = -1;
-	in_double_quotes = -1;
-	while (cmd[i])
-	{
-		if (cmd[i] == '\'' && in_double_quotes == -1)
-			in_quotes *= -1;
-		else if (cmd[i] == '\"' && in_quotes == -1)
-			in_double_quotes *= -1;
-		else
-			data->cmd_str[j++] = cmd[i];
-		i++;
-	}
-}
-
-// counts quotes that need to be removed from the cmd str
-static int	count_removable_quotes(char *cmd)
-{
-	int	i;
-	int	count;
-	t_flags	f;
-
-	i = 0;
-	count = 0;
-	init_flags(&f);
-	while (cmd[i])
-	{
-		if (cmd[i] == '\'' && f.in_double == -1)
-		{
-			count++;
-			f.in_single *= -1;
-		}
-		else if (cmd[i] == '\"' && f.in_single == -1)
-		{
-			count++;
-			f.in_double *= -1;
-		}
-		i++;
-	}
-	return (count);
-}
-
-// creates a new parsed cmd str into pipex's struct 
-static char	*quote_remover(t_pipex *data, char *cmd)
-{
-	int	remove;
-
-	remove = count_removable_quotes(cmd);
-	data->cmd_str = ft_calloc(ft_strlen(cmd) -	remove + 1, sizeof(char));
-	if (!data->cmd_str)
-		return (NULL);
-	remove_quotes(data, cmd);
-	return (data->cmd_str);
-}
-
-// changes spaces outside of quotes to unprintable characters for split
 static void	space_handler(char *cmd)
 {
 	int		i;
@@ -97,18 +32,24 @@ static void	space_handler(char *cmd)
 	}
 }
 
-// handles spaces and quotes of the cmd
-void	parse_cmd(t_pipex *data, char *cmd)
+int	parse_cmd(t_pipex *data, char **cmd)
 {
-	
-	if (!cmd[0])
+	space_handler(*cmd);
+	if (expand_v2(data, cmd) == -1)
+		return (close_and_free(data));
+	data->cmd_str = quote_remover(*cmd);
+	if (!data->cmd_str)
+		return (set_exitcode(data, -1));
+	data->cmd = ft_split(data->cmd_str, 7);
+	if (!data->cmd)
 	{
-		ft_printf(2, "3permission denied: %s\n", cmd);
-		close_and_free(data);
-		// exit(126);
-		return ;
+		ft_printf(2, "MOOshell: error: split failed\n");
+		return (set_exitcode(data, -1));
 	}
-	space_handler(cmd);
-	// expand here?
-	data->cmd_str = quote_remover(data, cmd);
+	if (data->cmd[0] == '\0')
+	{
+		ft_printf(2, "MOOshell: %s: command not found\n", data->cmd_str);
+		return (set_exitcode(data, 127));
+	}
+	return (0);
 }

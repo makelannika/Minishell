@@ -3,99 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   get_redirs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:23:34 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/14 11:48:28 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/07 14:07:08 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// removes each redir after it's been saved to the redir_arr
-void	remove_redir(char **string, int start, int end)
+static char	*get_redir(char *string)
 {
-	while (start < end)
-	{
-		(*string)[start] = ' ';
-		start++;
-	}
+	int		len;
+	char	*redir_str;
+
+	len = get_redir_len(string);
+	if (len == -1)
+		return (NULL);
+	redir_str = ft_substr(string, 0, len);
+	if (!redir_str)
+		return (NULL);
+	redir_str = trim_redir(redir_str);
+	remove_redir(&string, 0, len);
+	return (redir_str);
 }
 
-// trims spaces from a redir string
-char *trim_redir(char *redir_str)
+int	get_redirs(char *str, t_node *node)
 {
 	int		i;
 	int		j;
-	int		trim;
-	char	*new_redir;
-	
-	i = 0;
-	j = 0;
-	trim = 0;
-	trim = counter(redir_str, ' ');
-	new_redir = ft_calloc(ft_strlen(redir_str) - trim + 1, sizeof(char));
-	if (!new_redir)
-		return (NULL);
-	i = 0;
-	while (redir_str[i])
-	{
-		while (redir_str[i] == ' ')
-			i++;
-		new_redir[j++] = redir_str[i++];
-	}
-	free(redir_str);
-	return (new_redir);
-}
-
-// returns one redirection at a time to be stored in the 2d array
-static char	*get_redir(char *string)
-{
-	int		i;
-	char	*redir_str;
-	
-	i = 1;
-	while (string[i])
-	{
-		if ((string[i] == '<' && string[i - 1] == '<')
-			|| (string[i] == '>' && string[i - 1] == '>'))
-			i++;
-		while (string[i] == ' ')
-			i++;
-		while (string[i] && string[i] != ' ')
-			i++;
-		redir_str = ft_substr(string, 0, i);
-		if (!redir_str)
-			return (NULL);
-		redir_str = trim_redir(redir_str);
-		remove_redir(&string, 0, i);
-		return (redir_str);
-	}
-	return (NULL);
-}
-
-// saves all redirs to the redir_arr
-int	get_redirs(char *string, t_node *node)
-{
-	int	i;
-	int	j;
 	t_flags	f;
 
 	i = 0;
 	j = 0;
 	init_flags(&f);
-	while (string[i])
+	while (str[i])
 	{
-		if (string[i] == '\'')
+		if (str[i] == '\'')
 			f.in_single *= -1;
-		else if (string[i] == '\"')
+		else if (str[i] == '\"')
 			f.in_double *= -1;
-		if ((string[i] == '<' || string[i] == '>') && (f.in_single == -1 & f.in_double == -1))
+		else if ((str[i] == '<' || str[i] == '>')
+			&& (f.in_single == -1 && f.in_double == -1))
 		{
-			node->redirs[j++] = get_redir(&string[i]); 
+			node->redirs[j++] = get_redir(&str[i]);
 			if (!node->redirs[j - 1])
 				return (-1);
-			if ((string[i] == '<' && string[i + 1] == '<') || (string[i] == '>' && string[i + 1] == '>'))
+			if (str[i + 1] == '<' || str[i + 1] == '>')
 				i++;
 		}
 		i++;
@@ -103,15 +57,44 @@ int	get_redirs(char *string, t_node *node)
 	return (1);
 }
 
-// makes a 2d array to store all redirections of a single process
-void	get_redir_arr(char	*string, t_node *node)
+int	count_redirs(char *string)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (string[i])
+	{
+		if (string[i] == '<')
+		{
+			if (string[i + 1] != '>')
+				count++;
+			if (string[i + 1] == '<' || string[i + 1] == '>')
+				i++;
+		}
+		else if (string[i] == '>')
+		{
+			count++;
+			if (string[i + 1] == '>')
+				i ++;
+		}
+		i++;
+	}
+	return (count);
+}
+
+void	get_redir_arr(char *string, t_node *node)
 {
 	int	count;
-	
-	count = counter(string, '<') + counter(string, '>');
+
+	count = count_redirs(string);
 	node->redirs = ft_calloc(count + 1, sizeof(char *));
-	if (!get_redirs(string, node))
+	if (get_redirs(string, node) == -1)
+	{
 		free_str_array(node->redirs);
+		node->redirs = NULL;
+	}
 	if (!node->redirs)
 		return ;
 }

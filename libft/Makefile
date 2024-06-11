@@ -3,14 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+         #
+#    By: amakela <amakela@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/10 19:33:06 by amakela           #+#    #+#              #
-#    Updated: 2024/01/01 18:12:31 by amakela          ###   ########.fr        #
+#    Updated: 2024/05/23 11:47:05 by amakela          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
+
+CFLAGS = -Wall -Wextra -Werror
 
 CFILES = ft_atoi.c			ft_bzero.c		ft_calloc.c		ft_isalnum.c	\
 		 ft_isalpha.c		ft_isascii.c	ft_isdigit.c	ft_isprint.c	\
@@ -22,7 +24,7 @@ CFILES = ft_atoi.c			ft_bzero.c		ft_calloc.c		ft_isalnum.c	\
 		 ft_strlcat.c		ft_strlcpy.c	ft_strlen.c		ft_strmapi.c	\
 		 ft_strncmp.c		ft_strnstr.c	ft_strrchr.c	ft_strtrim.c	\
 		 ft_substr.c		ft_tolower.c	ft_toupper.c					\
-		 get_next_line.c
+		 get_next_line.c	ft_atol.c
 
 BONUSES = ft_lstnew_bonus.c 	ft_lstadd_front_bonus.c		ft_lstsize_bonus.c		\
 		  ft_lstlast_bonus.c	ft_lstadd_back_bonus.c		ft_lstdelone_bonus.c	\
@@ -32,12 +34,15 @@ OFILES = $(CFILES:.c=.o)
 
 BOFILES = $(BONUSES:.c=.o)
 
+%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@ -I
+
 CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 	
 $(NAME): $(OFILES)
-	ar rcs $(NAME) $(OFILES)
+	@ar rcs $(NAME) $(OFILES)
 
 bonus : .bonus
 
@@ -46,10 +51,10 @@ bonus : .bonus
 	@touch .bonus
 
 clean:
-	rm -f $(OFILES) $(BOFILES) .bonus
+	@rm -f $(OFILES) $(BOFILES) .bonus
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean $(NAME)
 

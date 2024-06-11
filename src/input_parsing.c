@@ -3,39 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   input_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.42.fr>            +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:13:07 by amakela           #+#    #+#             */
-/*   Updated: 2024/05/11 17:52:37 by amakela          ###   ########.fr       */
+/*   Updated: 2024/06/07 14:07:24 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// for checking enclosed quotes
-int	count_quotes(char *string)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (string[i])
-	{
-		if (string[i] == '\'' || string[i] == '\"')
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-// returns the number of character c outside of quotes and single quotes in a string
 int	counter(char *string, char c)
 {
-	int	i;
-	int	count;
+	int		i;
+	int		count;
 	t_flags	f;
-	
+
 	i = 0;
 	count = 0;
 	init_flags(&f);
@@ -52,27 +34,48 @@ int	counter(char *string, char c)
 	return (count);
 }
 
-// parses one process at a time
+static int	builtin_check(char	*string, t_node *process)
+{
+	char	*cmd;
+	char	*tmp;
+
+	if (*string == '\'' || *string == '\"')
+		return (0);
+	cmd = trim_cmd(string);
+	if (!cmd)
+		return (-1);
+	tmp = cmd;
+	cmd = quote_remover(cmd);
+	free(tmp);
+	if (!cmd)
+		return (-1);
+	if (is_builtin(cmd))
+		process->builtin = 1;
+	free(cmd);
+	return (0);
+}
+
 static t_node	*parse_process(char	*string, t_node **processes)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	t_node	*node;
-	
+
 	i = 0;
 	j = 0;
 	node = create_node();
-	if(!node)
+	if (!node)
 	{
 		free(string);
+		free_list(processes);
 		return (NULL);
 	}
 	add_back(processes, node);
 	get_redir_arr(string, node);
 	node->cmd = string;
-	if (!node->redirs || !node->cmd)
+	if (builtin_check(string, node) == -1
+		|| !node->redirs || !node->cmd)
 	{
-		free(string);
 		free_list(processes);
 		return (NULL);
 	}
@@ -85,11 +88,10 @@ void	init_flags(t_flags *f)
 	f->in_double = -1;
 }
 
-// parses the complete line returned from readline
 t_node	**parse_input(char *line, t_node **processes)
 {
-	int	i;
-	int	start;
+	int		i;
+	int		start;
 	t_flags	f;
 
 	i = 0;
