@@ -53,10 +53,10 @@ static int	redir_out(char **redir, t_pipex *data)
 		data->ends[1] = open(*redir + 1, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (data->ends[1] < 0)
 	{
-		if (access(redir[1], F_OK) != 0)
-			ft_printf(2, "MOOshell: %s: No such file or directory\n", redir[1]);
+		if (access(*redir + 1, F_OK) != 0)
+			ft_printf(2, "MOOshell: %s: No such file or directory\n", *redir + 1);
 		else
-			ft_printf(2, "MOOshell: %s: Permission denied\n", redir[1]);
+			ft_printf(2, "MOOshell: %s: Permission denied\n", *redir + 1);
 		data->execute = 0;
 		return (set_exitcode(data, 1));
 	}
