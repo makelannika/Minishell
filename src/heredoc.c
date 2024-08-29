@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 17:46:23 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 14:07:16 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:15:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ static int	handle_heredoc(char *file, t_pipex *data)
 	close(data->ends[0]);
 	if (do_heredoc(file, data) == -1)
 	{
-		ft_printf(2, "MOOshell: heredoc failed\n");
+		ft_printf(2, "Minishell: heredoc failed\n");
 		return (set_exitcode(data, -1));
 	}
 	data->ends[0] = open(".heredoc", O_RDONLY);
 	if (data->ends[0] == -1)
 	{
-		ft_printf(2, "MOOshell: heredoc failed\n");
+		ft_printf(2, "Minishell: heredoc failed\n");
 		return (set_exitcode(data, -1));
 	}
 	return (0);

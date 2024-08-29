@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 11:48:53 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/07 14:06:19 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:15:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	print_error_and_exit(t_pipex *data, char *cmd1,
 	else if (option == 2)
 	{
 		ft_printf(2, "exit\n");
-		ft_printf(2, "MOOshell: exit: %s: numeric argument required\n", cmd1);
+		ft_printf(2, "Minishell: exit: %s: numeric argument required\n", cmd1);
 		close_and_free(data);
 		exit(exitcode);
 	}

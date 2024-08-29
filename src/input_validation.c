@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 17:24:13 by amakela           #+#    #+#             */
-/*   Updated: 2024/08/29 18:14:52 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:15:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	check_pipes(t_pipex *data, char *line)
 		i++;
 	if (line[i] == '|')
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `|'\n");
+		ft_printf(2, "Minishell: syntax error near unexpected token `|'\n");
 		return (set_exitcode(data, 258));
 	}
 	return (0);
@@ -32,24 +32,24 @@ int	check_in(t_pipex *data, char *line)
 	if (ft_strncmp(line, ">>", 2) == 0 || ft_strncmp(line, " >>", 3) == 0
 		|| ft_strncmp(line, "<>>", 3) == 0 || ft_strncmp(line, "< >>", 4) == 0)
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `>>'\n");
+		ft_printf(2, "Minishell: syntax error near unexpected token `>>'\n");
 		return (set_exitcode(data, 258));
 	}
 	else if (ft_strncmp(line, " <<", 3) == 0 || ft_strncmp(line, "<<<", 3) == 0)
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `<<'\n");
+		ft_printf(2, "Minishell: syntax error near unexpected token `<<'\n");
 		return (set_exitcode(data, 258));
 	}
 	else if (ft_strncmp(line, ">", 1) == 0 || ft_strncmp(line, " >", 2) == 0
 		|| ft_strncmp(line, "< >", 3) == 0)
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `>'\n");
+		ft_printf(2, "Minishell: syntax error near unexpected token `>'\n");
 		return (set_exitcode(data, 258));
 	}
 	else if (ft_strncmp(line, " <", 2) == 0 || ft_strncmp(line, "<<", 2) == 0
 		|| ft_strncmp(line, "< <", 3) == 0)
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `<'\n");
+		ft_printf(2, "Minishell: syntax error near unexpected token `<'\n");
 		return (set_exitcode(data, 258));
 	}
 	return (0);
@@ -59,25 +59,25 @@ int	check_out(t_pipex *data, char *line)
 {
 	if (ft_strncmp(line, ">>>", 3) == 0 || ft_strncmp(line, " >>", 3) == 0)
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `>>'\n");
+		ft_printf(2, "Minishell: syntax error near unexpected token `>>'\n");
 		return (set_exitcode(data, 258));
 	}
 	else if (ft_strncmp(line, "<<", 2) == 0 || ft_strncmp(line, " <<", 3) == 0
 		|| ft_strncmp(line, "><<", 3) == 0 || ft_strncmp(line, "> <<", 4) == 0)
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `<<'\n");
+		ft_printf(2, "Minishell: syntax error near unexpected token `<<'\n");
 		return (set_exitcode(data, 258));
 	}
 	else if (ft_strncmp(line, ">>", 2) == 0 || ft_strncmp(line, " >", 2) == 0
 		|| ft_strncmp(line, "> >", 3) == 0)
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `>'\n");
+		ft_printf(2, "Minishell: syntax error near unexpected token `>'\n");
 		return (set_exitcode(data, 258));
 	}
 	else if (ft_strncmp(line, "<", 1) == 0 || ft_strncmp(line, " <", 2) == 0
 		|| ft_strncmp(line, "> <", 3) == 0)
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `<'\n");
+		ft_printf(2, "Minishell: syntax error near unexpected token `<'\n");
 		return (set_exitcode(data, 258));
 	}
 	return (0);
@@ -119,7 +119,7 @@ int	input_validation(t_pipex *data, char *line)
 		return (-1);
 	if (line[0] == '|')
 	{
-		ft_printf(2, "MOOshell: syntax error near unexpected token `|'\n");
+		ft_printf(2, "Minishell: syntax error near unexpected token `|'\n");
 		return (set_exitcode(data, 258));
 	}
 	if (check_line(data, line) == -1)
@@ -128,7 +128,7 @@ int	input_validation(t_pipex *data, char *line)
 		|| (line[len - 1] == '>'))
 	{
 		ft_printf(2,
-			"MOOshell: syntax error near unexpected token `newline'\n");
+			"Minishell: syntax error near unexpected token `newline'\n");
 		return (set_exitcode(data, 258));
 	}
 	return (0);

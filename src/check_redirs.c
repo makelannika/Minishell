@@ -6,7 +6,7 @@
 /*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/08/29 18:13:57 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:15:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ static int	redir_out(char **redir, t_pipex *data)
 	if (data->ends[1] < 0)
 	{
 		if (access(*redir + 1, F_OK) != 0)
-			ft_printf(2, "MOOshell: %s: No such file or directory\n", *redir + 1);
+			ft_printf(2, "Minishell: %s: No such file or directory\n", *redir + 1);
 		else
-			ft_printf(2, "MOOshell: %s: Permission denied\n", *redir + 1);
+			ft_printf(2, "Minishell: %s: Permission denied\n", *redir + 1);
 		data->execute = 0;
 		return (set_exitcode(data, 1));
 	}
@@ -69,10 +69,10 @@ static int	redir_in(char **redir, t_pipex *data)
 	if (data->ends[0] < 0)
 	{
 		if (access(*redir + 1, F_OK) != 0)
-			ft_printf(2, "MOOshell: %s: No such file or directory\n",
+			ft_printf(2, "Minishell: %s: No such file or directory\n",
 				*redir + 1);
 		else
-			ft_printf(2, "MOOshell: %s: Permission denied\n", *redir + 1);
+			ft_printf(2, "Minishell: %s: Permission denied\n", *redir + 1);
 		data->execute = 0;
 		return (set_exitcode(data, 1));
 	}

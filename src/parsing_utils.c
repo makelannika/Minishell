@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 21:37:49 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 14:07:58 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:15:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	quote_check(t_pipex *data, char *line)
 {
 	if (count_quotes(line) % 2 != 0)
 	{
-		ft_printf(2, "MOOshell: error: enclosed quotes\n");
+		ft_printf(2, "Minishell: error: enclosed quotes\n");
 		return (set_exitcode(data, 258));
 	}
 	return (0);

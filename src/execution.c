@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:26:09 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 14:06:28 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:15:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ static int	do_cmd(t_pipex *data, t_node *process)
 	execve(data->path, data->cmd, data->env);
 	if (access(data->cmd[0], F_OK) == 0)
 	{
-		ft_printf(2, "MOOshell: %s: is a directory\n", data->cmd[0]);
+		ft_printf(2, "Minishell: %s: is a directory\n", data->cmd[0]);
 		return (set_exitcode(data, 126));
 	}
-	ft_printf(2, "MOOshell: %s: Permission denied\n", data->cmd[0]);
+	ft_printf(2, "Minishell: %s: Permission denied\n", data->cmd[0]);
 	return (set_exitcode(data, 1));
 }
 
@@ -61,7 +61,7 @@ int	do_process(t_pipex *data, t_node *process)
 		data->pids[data->count] = fork();
 		if (data->pids[data->count] < 0)
 		{
-			ft_printf(2, "MOOshell: error: fork failed\n");
+			ft_printf(2, "Minishell: error: fork failed\n");
 			return (set_exitcode(data, -1));
 		}
 		if (data->pids[data->count] == 0)

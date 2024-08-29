@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/08/29 16:33:00 by amakela          ###   ########.fr       */
+/*   Updated: 2024/08/29 19:28:41 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	readline_loop(t_pipex *data, t_node **processes)
 
 	while (1)
 	{
-		line = readline("MOOshell: ");
+		line = readline("Minishell: ");
 		add_history(line);
 		check_sigint(data);
 		if (!line)

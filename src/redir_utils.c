@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:55:25 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 14:08:28 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:15:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int	print_redir_err(t_pipex *data, char *redir, char *copy)
 {
 	if (*redir == '/')
-		ft_printf(2, "MOOshell: %s: Is a directory\n", redir);
+		ft_printf(2, "Minishell: %s: Is a directory\n", redir);
 	else if (ft_strchr(copy, '\"'))
-		ft_printf(2, "MOOshell: : No such file or directory\n");
+		ft_printf(2, "Minishell: : No such file or directory\n");
 	else
-		ft_printf(2, "MOOshell: %s: ambiguous redirect\n", copy);
+		ft_printf(2, "Minishell: %s: ambiguous redirect\n", copy);
 	data->execute = 0;
 	return (-1);
 }

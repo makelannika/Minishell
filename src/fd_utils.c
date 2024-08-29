@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/20 17:47:58 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 14:06:52 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:15:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	middle_child(t_pipex *data, t_node *process)
 
 	if (pipe(data->ends) == -1)
 	{
-		ft_printf(2, "MOOshell: error opening a pipe\n");
+		ft_printf(2, "Minishell: error opening a pipe\n");
 		return (set_exitcode(data, -1));
 	}
 	tmp = dup(data->read_end);
@@ -44,7 +44,7 @@ static int	first_child(t_pipex *data, t_node *process)
 {
 	if (pipe(data->ends) == -1)
 	{
-		ft_printf(2, "MOOshell: error opening a pipe\n");
+		ft_printf(2, "Minishell: error opening a pipe\n");
 		return (set_exitcode(data, -1));
 	}
 	data->read_end = dup(data->ends[0]);

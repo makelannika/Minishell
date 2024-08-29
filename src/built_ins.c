@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 19:02:26 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/07 16:25:04 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:15:31 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	do_exit(char **cmd, t_pipex *data)
 	{
 		if (ft_isdigit_str(cmd[1]))
 		{
-			ft_printf(2, "exit\nMOOshell: exit: too many arguments\n");
+			ft_printf(2, "exit\nMinishell: exit: too many arguments\n");
 			data->exitcode = 1;
 			return ;
 		}

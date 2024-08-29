@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 21:43:23 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 15:19:44 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:15:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	find_path(t_pipex *data)
 			i++;
 		}
 	}
-	ft_printf(2, "MOOshell: %s: command not found\n", data->cmd[0]);
+	ft_printf(2, "Minishell: %s: command not found\n", data->cmd[0]);
 	return (set_exitcode(data, 127));
 }
 
@@ -47,7 +47,7 @@ static int	path_check(t_pipex *data)
 		start--;
 	if (is_builtin(&data->cmd[0][start + 1]))
 	{
-		ft_printf(2, "MOOshell: %s: No such file or directory\n", data->cmd[0]);
+		ft_printf(2, "Minishell: %s: No such file or directory\n", data->cmd[0]);
 		return (set_exitcode(data, 127));
 	}
 	if (access(data->cmd[0], F_OK) == 0)
@@ -57,7 +57,7 @@ static int	path_check(t_pipex *data)
 			return (set_exitcode(data, -1));
 		return (0);
 	}
-	ft_printf(2, "MOOshell: %s: No such file or directory\n", data->cmd[0]);
+	ft_printf(2, "Minishell: %s: No such file or directory\n", data->cmd[0]);
 	return (set_exitcode(data, 127));
 }
 
