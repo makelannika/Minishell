@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:25:34 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/07 14:05:58 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 16:01:15 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	do_echo(char **cmd, int fd_out, t_pipex *data)
 	}
 	while (cmd[i])
 	{
-		if (cmd[i + 1] == '\0')
+		if (cmd[i + 1] == NULL)
 		{
 			if (!(echo_one_string(cmd[1], cmd[i++], fd_out, data)))
 				return ;

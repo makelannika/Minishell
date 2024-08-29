@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+         #
+#    By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/06/07 12:58:48 by linhnguy         ###   ########.fr        #
+#    Updated: 2024/08/29 16:37:55 by amakela          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,9 @@ NAME		=	minishell
 LIBFTDIR	=	libft
 LIBFT		=	$(LIBFTDIR)/libft.a
 
-READLINEH	=	-I ~/.brew/Cellar/readline/8.2.10/include
-READLINELIB	=	-L ~/.brew/Cellar/readline/8.2.10/lib/ -lreadline
+READLINEH    = $(shell pkg-config --cflags readline)
+READLINELIB  = $(shell pkg-config --libs readline)
+
 INCLUDE		=	-I /include
 
 CFLAGS		=	-Wall -Wextra -Werror

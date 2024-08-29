@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 13:23:06 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 14:08:34 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 16:41:44 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	g_signum = 0;
 
 void	si_handler(int signum)
 {
@@ -28,7 +30,6 @@ void	ignore_signals(t_pipex *data)
 {
 	data->sa.sa_handler = SIG_IGN;
 	data->sa.sa_flags = 0;
-	data->sa.sa_mask = 0;
 	sigaction(SIGQUIT, &data->sa, NULL);
 	sigaction(SIGINT, &data->sa, NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 16:56:23 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 14:05:54 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 16:05:00 by amakela          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	parse_cmd(t_pipex *data, char **cmd)
 		ft_printf(2, "MOOshell: error: split failed\n");
 		return (set_exitcode(data, -1));
 	}
-	if (data->cmd[0] == '\0')
+	if (data->cmd[0] == NULL)
 	{
 		ft_printf(2, "MOOshell: %s: command not found\n", data->cmd_str);
 		return (set_exitcode(data, 127));

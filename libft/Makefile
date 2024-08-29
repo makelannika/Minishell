@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amakela <amakela@student.42.fr>            +#+  +:+       +#+         #
+#    By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/10 19:33:06 by amakela           #+#    #+#              #
-#    Updated: 2024/05/23 11:47:05 by amakela          ###   ########.fr        #
+#    Updated: 2024/08/29 16:08:59 by amakela          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ OFILES = $(CFILES:.c=.o)
 BOFILES = $(BONUSES:.c=.o)
 
 %.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@ -I
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 CFLAGS = -Wall -Wextra -Werror
 
