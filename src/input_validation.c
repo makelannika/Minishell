@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_validation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 17:24:13 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 14:07:35 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 18:14:52 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,8 @@ int	check_line(t_pipex *data, char *line)
 
 int	input_validation(t_pipex *data, char *line)
 {
-	int	i;
 	int	len;
 
-	i = 0;
 	len = ft_strlen(line);
 	if (quote_check(data, line) == -1)
 		return (-1);

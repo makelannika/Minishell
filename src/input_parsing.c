@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 14:13:07 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 14:07:24 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 18:13:12 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,8 @@ static int	builtin_check(char	*string, t_node *process)
 
 static t_node	*parse_process(char	*string, t_node **processes)
 {
-	int		i;
-	int		j;
 	t_node	*node;
-
-	i = 0;
-	j = 0;
+	
 	node = create_node();
 	if (!node)
 	{

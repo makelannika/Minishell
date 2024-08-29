@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amakela <amakela@student.hive.fi>          +#+  +:+       +#+         #
+#    By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/08/29 16:37:55 by amakela          ###   ########.fr        #
+#    Updated: 2024/08/29 18:38:08 by linhnguy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ OFILES		=	$(CFILES:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OFILES) $(LIBFT) 
-	$(CC) $(CFLAGS) $(READLINELIB) $(OFILES) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OFILES) $(LIBFT) $(READLINELIB) -o $(NAME)
 	
 $(LIBFT):
 	make -C $(LIBFTDIR)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 17:38:41 by linhnguy          #+#    #+#             */
-/*   Updated: 2024/06/07 14:06:34 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 18:15:38 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,8 @@ void	check_quotes(t_quote *quote, char c)
 char	*get_key(char **cmd, t_pipex *data, int key_start)
 {
 	int		i;
-	int		k;
 	char	*key;
 
-	k = 0;
 	i = key_start;
 	while (ft_isalnum((*cmd)[i]) || (*cmd)[i] == '_')
 		i++;

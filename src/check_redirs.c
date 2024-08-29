@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redirs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: linhnguy <linhnguy@hive.student.fi>        +#+  +:+       +#+        */
+/*   By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:10:30 by amakela           #+#    #+#             */
-/*   Updated: 2024/06/07 15:20:46 by linhnguy         ###   ########.fr       */
+/*   Updated: 2024/08/29 18:13:57 by linhnguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,6 @@ int	expand_redir(t_pipex *data, char **redir)
 
 static int	redir_out(char **redir, t_pipex *data)
 {
-	int		i;
-
-	i = 1;
 	if (validate_redir(data, redir) == -1)
 		return (-1);
 	close(data->ends[1]);
