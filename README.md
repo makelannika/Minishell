@@ -35,3 +35,6 @@ Please note that the usual Ctrl+C command for terminating a process won’t work
 ## Additional Notes
 Subshells: Minishell supports running subshells, allowing you to execute commands in nested shell environments.
 Signal Handling: Special care has been taken to intercept and manage signals like Ctrl+C, ensuring that they behave similarly to a standard Bash shell.
+
+![Screenshot from 2024-08-29 20-18-03](https://github.com/user-attachments/assets/8bf73365-34f7-481c-9ed1-d62d273ce71c)
+
