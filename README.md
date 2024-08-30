@@ -23,9 +23,10 @@ To install Minishell, use Docker to build the environment:
 The build process will download the necessary dependencies and set up the Docker container. This may take a few minutes, depending on your internet speed.
 
 ## Running Minishell
-Power up your minishell Docker container with this command:
+Power up your minishell Docker container in a terminal interface with this command:
 
 ```docker run -it minishell```
+To exit the container use the command ```exit```.
 
 After the installation is complete, you can run the program using:
 
