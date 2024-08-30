@@ -6,7 +6,7 @@
 #    By: linhnguy <linhnguy@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/24 18:22:03 by amakela           #+#    #+#              #
-#    Updated: 2024/08/29 18:38:08 by linhnguy         ###   ########.fr        #
+#    Updated: 2024/08/30 13:53:51 by linhnguy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,9 @@ NAME		=	minishell
 LIBFTDIR	=	libft
 LIBFT		=	$(LIBFTDIR)/libft.a
 
-READLINEH    = $(shell pkg-config --cflags readline)
-READLINELIB  = $(shell pkg-config --libs readline)
-
 INCLUDE		=	-I /include
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror 
 DEBUGFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
 CC			=	cc
 
@@ -35,18 +32,18 @@ CFILES		=	src/input_parsing.c		src/freeing_utils.c		src/built_ins.c		src/echo.c	
 OFILES		=	$(CFILES:.c=.o)
 
 %.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@ $(READLINEH) $(INCLUDE)
+	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
 
 all: $(NAME)
 
 $(NAME): $(OFILES) $(LIBFT) 
-	$(CC) $(CFLAGS) $(OFILES) $(LIBFT) $(READLINELIB) -o $(NAME)
+	$(CC) $(OFILES) $(LIBFT) $(CFLAGS) -lreadline -o $(NAME)
 	
 $(LIBFT):
 	make -C $(LIBFTDIR)
 
 debug: $(OFILES) $(LIBFT)
-	$(CC) $(DEBUGFLAGS) $(READLINELIB) $(OFILES) $(LIBFT) -o debug_minishell
+	$(CC) $(DEBUGFLAGS) $(OFILES) $(LIBFT) -o debug_minishell
 
 clean:
 	@rm -f $(OFILES)
