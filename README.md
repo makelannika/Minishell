@@ -28,9 +28,12 @@ Power up your minishell Docker container in a terminal interface with this comma
 ```docker run -it minishell```
 To exit the container use the command ```exit```.
 
-After the installation is complete, you can run the program using:
+ Once the container is running, you can run the program using:
 
 ```./minishell```
+
+![Screenshot from 2024-08-30 15-04-20](https://github.com/user-attachments/assets/90201b01-dbfa-47c0-87ce-905bbbf1fbdf)
+
 ## Exiting the Shell
 To exit MiniShell, you can either:
 
